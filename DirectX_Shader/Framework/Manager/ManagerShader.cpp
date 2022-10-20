@@ -1,6 +1,6 @@
-#include "ManagerShader.h"
+#include "../Manager/ManagerShader.h"
 #include "CShader.h"
-#include "CDxRenderer.h"
+#include "../LowLevel/CDxRenderer.h"
 #include <vector>
 
 std::map<std::string, CShader*> ManagerShader:: m_ShaderList;

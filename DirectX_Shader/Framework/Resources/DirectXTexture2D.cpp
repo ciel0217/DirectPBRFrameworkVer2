@@ -1,5 +1,5 @@
 #include "DirectXTexture2D.h"
-#include "CDxRenderer.h"
+#include "../LowLevel/CDxRenderer.h"
 
 DirectXTexture2D::DirectXTexture2D(ID3D11Texture2D * texture) : m_Texture(texture)
 {

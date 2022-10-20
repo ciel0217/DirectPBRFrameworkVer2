@@ -1,14 +1,14 @@
 #pragma once
-#include "CGameObject.h"
+#include "../Resources/CGameObject.h"
 #include "ObjectTag.h"
 #include <list>
 #include "enum.h"
-#include "CPostEffect.h"
+#include "../Resources/CPostEffect.h"
 #include "DeferredRenderer.h"
 #include "SkyBox.h"
 #include "PostEffectToneMap.h"
-#include "ManagerLight.h"
-#include "CameraRenderer.h"
+#include "../Manager/ManagerLight.h"
+#include "../Renderer/CameraRenderer.h"
 
 
 class CBuffer;

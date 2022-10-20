@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
-#include "DirectX.h"
+#include "../LowLevel/DirectX.h"
 #include "struct.h"
 
 class CMaterial;

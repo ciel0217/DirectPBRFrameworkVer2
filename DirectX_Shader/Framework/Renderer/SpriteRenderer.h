@@ -1,6 +1,6 @@
 #pragma once
-#include "CRenderer.h"
-#include "DirectX.h"
+#include "../Resources/CRenderer.h"
+#include "../LowLevel/DirectX.h"
 
 class SpriteRenderer : public CRenderer {
 private:

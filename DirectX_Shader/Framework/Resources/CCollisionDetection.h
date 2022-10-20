@@ -1,5 +1,5 @@
 #pragma once
-#include "DirectX.h"
+#include "../LowLevel/DirectX.h"
 
 class CCollision;
 

@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
-#include "DirectX.h"
-#include "CGameObject.h"
+#include "../LowLevel/DirectX.h"
+#include "../Resources/CGameObject.h"
 #include <vector>
 #include "DirectXTexture2D.h"
 

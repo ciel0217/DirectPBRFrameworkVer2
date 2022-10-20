@@ -1,9 +1,9 @@
 #pragma once
 #include <memory>
 #include <string>
-#include "DirectX.h"
+#include "../LowLevel/DirectX.h"
 #include "CMaterial.h"
-#include "CBuffer.h"
+#include "../Resources/CBuffer.h"
 #include <vector>
 
 class CGameObject;

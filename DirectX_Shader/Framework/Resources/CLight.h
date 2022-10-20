@@ -1,7 +1,7 @@
 #pragma once
 #include "struct.h"
 #include "CTransform.h"
-#include "CGameObject.h"
+#include "../Resources/CGameObject.h"
 
 #define DIRECTIONAL_LIGHT 0
 #define POINT_LIGHT 1

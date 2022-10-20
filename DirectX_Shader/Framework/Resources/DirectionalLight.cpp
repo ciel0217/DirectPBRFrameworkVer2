@@ -1,5 +1,5 @@
 #include "DirectionalLight.h"
-#include "CDxRenderer.h"
+#include "../LowLevel/CDxRenderer.h"
 #include "CShader.h"
 
 void DirectionalLight::Config()

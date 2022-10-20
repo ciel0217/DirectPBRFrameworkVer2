@@ -1,5 +1,5 @@
 #include "BoxCollision.h"
-#include "CGameObject.h"
+#include "../Resources/CGameObject.h"
 
 void BoxCollision::UpdateCollision()
 {

@@ -1,7 +1,7 @@
-#include "ManagerCollsionDetection.h"
+#include "../Manager/ManagerCollsionDetection.h"
 #include "CommonProcess.h"
 #include "CCollision.h"
-#include "CGameObject.h"
+#include "../Resources/CGameObject.h"
 #include "BoxAndBoxDetection.h"
 
 #define TARGET_RADIUS 200.0f

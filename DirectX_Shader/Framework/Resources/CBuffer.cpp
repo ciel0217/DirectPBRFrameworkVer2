@@ -1,5 +1,5 @@
 #include "CBuffer.h"
-#include "CDxRenderer.h"
+#include "../LowLevel/CDxRenderer.h"
 
 ID3D11Buffer * CBuffer::CreateBuffer(UINT byte_width, UINT bind_flags, const void * data)
 {

@@ -1,12 +1,12 @@
 #include "SkyBox.h"
-#include "ManagerShader.h"
+#include "../Manager/ManagerShader.h"
 #include "enum.h"
-#include "CDxRenderer.h"
+#include "../LowLevel/CDxRenderer.h"
 #include "CShader.h"
 #include "CCubeMap.h"
-#include "CBuffer.h"
-#include "ManagerScene.h"
-#include "ManagerMaterial.h"
+#include "../Resources/CBuffer.h"
+#include "../Manager/ManagerScene.h"
+#include "../Manager/ManagerMaterial.h"
 
 void SkyBox::Config()
 {

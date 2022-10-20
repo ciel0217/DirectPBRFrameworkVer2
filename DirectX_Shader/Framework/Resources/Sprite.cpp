@@ -1,7 +1,7 @@
 #include "Sprite.h"
-#include "CDxRenderer.h"
-#include "CBuffer.h"
-#include "ManagerScene.h"
+#include "../LowLevel/CDxRenderer.h"
+#include "../Resources/CBuffer.h"
+#include "../Manager/ManagerScene.h"
 
 
 Microsoft::WRL::ComPtr<ID3D11Buffer> Sprite2D::m_VertexBuffer;

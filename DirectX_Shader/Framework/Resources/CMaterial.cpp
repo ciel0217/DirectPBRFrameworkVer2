@@ -1,6 +1,6 @@
 
 #include "CMaterial.h"
-#include "ManagerShader.h"
+#include "../Manager/ManagerShader.h"
 
 void CMaterial::SetShader(std::string shader_name)
 {

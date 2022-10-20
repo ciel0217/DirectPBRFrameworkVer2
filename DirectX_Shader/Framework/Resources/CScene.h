@@ -4,7 +4,7 @@
 #include <type_traits>
 #include "Camera.h"
 #include "enum.h"
-#include "ManagerCollsionDetection.h"
+#include "../Manager/ManagerCollsionDetection.h"
 
 class CScene
 {

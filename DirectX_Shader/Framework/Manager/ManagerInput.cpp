@@ -1,5 +1,5 @@
-#include "ManagerInput.h"
-#include "DirectX.h"
+#include "../Manager/ManagerInput.h"
+#include "../LowLevel/DirectX.h"
 
 ManagerInput* ManagerInput::m_Instance;
 

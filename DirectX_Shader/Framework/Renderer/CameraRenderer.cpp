@@ -1,12 +1,12 @@
-#include "CameraRenderer.h"
-#include "ManagerLight.h"
+#include "../Renderer/CameraRenderer.h"
+#include "../Manager/ManagerLight.h"
 #include "PostEffectToneMap.h"
-#include "CPostEffect.h"
-#include "CBuffer.h"
+#include "../Resources/CPostEffect.h"
+#include "../Resources/CBuffer.h"
 #include "GBufferPass.h"
-#include "CDxRenderer.h"
-#include "CRenderer.h"
-#include "ManagerMaterial.h"
+#include "../LowLevel/CDxRenderer.h"
+#include "../Resources/CRenderer.h"
+#include "../Manager/ManagerMaterial.h"
 
 #include <vector>
 #include <memory>

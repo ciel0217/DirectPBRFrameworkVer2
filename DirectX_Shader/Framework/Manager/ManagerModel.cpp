@@ -4,15 +4,15 @@
 #pragma comment(lib, "shlwapi.lib")
 
 #include "ManagerModel.h"
-#include "CDxRenderer.h"
-#include "CBuffer.h"
+#include "../LowLevel/CDxRenderer.h"
+#include "../Resources/CBuffer.h"
 #include <assert.h>
 #include <sstream>
 #include <istream>
-#include "ManagerTexture.h"
+#include "../Manager/ManagerTexture.h"
 #include "Mesh.h"
-#include "ManagerMaterial.h"
-#include "ManagerShader.h"
+#include "../Manager/ManagerMaterial.h"
+#include "../Manager/ManagerShader.h"
 #include "enum.h"
 
 std::unordered_map <std::string , std::pair<std::shared_ptr<Mesh>, std::vector<unsigned int>>> ManagerModel::m_ModelList;

@@ -1,5 +1,5 @@
 #pragma once
-#include "DirectX.h"
+#include "../LowLevel/DirectX.h"
 
 
 #define	NUM_KEY_MAX			(256)

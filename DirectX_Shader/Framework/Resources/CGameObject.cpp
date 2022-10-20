@@ -1,8 +1,8 @@
 #include "CGameObject.h"
-#include "CDxRenderer.h"
+#include "../LowLevel/CDxRenderer.h"
 #include "Sprite.h"
-#include "ManagerTexture.h"
-#include "ManagerModel.h"
+#include "../Manager/ManagerTexture.h"
+#include "../Manager/ManagerModel.h"
 #include "CShader.h"
 #include "CBuffer.h"
 

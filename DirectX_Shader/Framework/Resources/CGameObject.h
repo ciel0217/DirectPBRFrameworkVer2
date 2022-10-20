@@ -1,6 +1,6 @@
 #pragma once
 #include "CTransform.h"
-#include "ManagerModel.h"
+#include "../Manager/ManagerModel.h"
 #include "ObjectTag.h"
 
 class CBuffer;

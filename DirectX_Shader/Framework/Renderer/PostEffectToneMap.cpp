@@ -1,7 +1,7 @@
 #include "PostEffectToneMap.h"
-#include "CDxRenderer.h"
-#include "ManagerShader.h"
-#include "ManagerScene.h"
+#include "../LowLevel/CDxRenderer.h"
+#include "../Manager/ManagerShader.h"
+#include "../Manager/ManagerScene.h"
 #include "CShader.h"
 #include "SkyBox.h"
 

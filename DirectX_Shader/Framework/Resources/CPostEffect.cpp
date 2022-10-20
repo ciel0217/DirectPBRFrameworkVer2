@@ -1,4 +1,4 @@
-#include "CPostEffect.h"
+#include "../Resources/CPostEffect.h"
 
 bool CPostEffect::Release()
 {

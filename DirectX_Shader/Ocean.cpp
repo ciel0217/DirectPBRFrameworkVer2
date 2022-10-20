@@ -1,7 +1,7 @@
 #include "Ocean.h"
-#include "ManagerTexture.h"
-#include "CBuffer.h"
-#include "CDxRenderer.h"
+#include "../Manager/ManagerTexture.h"
+#include "../Resources/CBuffer.h"
+#include "../LowLevel/CDxRenderer.h"
 #include "CShader.h"
 
 void Ocean::Config()

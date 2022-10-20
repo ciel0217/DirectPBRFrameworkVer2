@@ -1,6 +1,6 @@
 #pragma once
 #include "CCollision.h"
-#include "DirectX.h"
+#include "../LowLevel/DirectX.h"
 
 class CGameObject;
 

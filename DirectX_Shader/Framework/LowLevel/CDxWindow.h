@@ -1,5 +1,5 @@
 #pragma once
-#include "DirectX.h"
+#include "../LowLevel/DirectX.h"
 #define WINDOW_NAME		"‚ ‚ ‚ "
 #define CLASS_NAME		"App"
 

@@ -6,7 +6,7 @@
 #include "DeferredRenderer.h"
 #include "SkyBox.h"
 #include <string>
-#include "ManagerLight.h"
+#include "../Manager/ManagerLight.h"
 #include <type_traits>
 #include <memory>
 #include "CMaterial.h"

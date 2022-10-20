@@ -1,9 +1,9 @@
 #include "MeshRenderer.h"
 #include "Mesh.h"
 #include "ManagerModel.h"
-#include "CBuffer.h"
-#include "ManagerMaterial.h"
-#include "CDxRenderer.h"
+#include "../Resources/CBuffer.h"
+#include "../Manager/ManagerMaterial.h"
+#include "../LowLevel/CDxRenderer.h"
 #include "CShader.h"
 #include "enum.h"
 

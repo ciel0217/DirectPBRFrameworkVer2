@@ -1,6 +1,6 @@
 #include "GBufferPass.h"
-#include "CDxRenderer.h"
-#include "CRenderer.h"
+#include "../LowLevel/CDxRenderer.h"
+#include "../Resources/CRenderer.h"
 #include "CMaterial.h"
 
 

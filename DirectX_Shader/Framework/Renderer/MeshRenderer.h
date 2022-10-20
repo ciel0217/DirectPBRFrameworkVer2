@@ -1,5 +1,5 @@
 #pragma once
-#include "CRenderer.h"
+#include "../Resources/CRenderer.h"
 
 class Mesh;
 class CBuffer;

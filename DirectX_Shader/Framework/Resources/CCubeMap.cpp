@@ -1,9 +1,9 @@
 #include "CCubeMap.h"
-#include "CDxRenderer.h"
-#include "ManagerTexture.h"
-#include "CDxRenderer.h"
+#include "../LowLevel/CDxRenderer.h"
+#include "../Manager/ManagerTexture.h"
+#include "../LowLevel/CDxRenderer.h"
 #include "CShader.h"
-#include "ManagerShader.h"
+#include "../Manager/ManagerShader.h"
 #include "CBuffer.h"
 
 

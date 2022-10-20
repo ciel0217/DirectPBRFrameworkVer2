@@ -1,13 +1,13 @@
 #include "SpriteRenderer.h"
-#include "ManagerTexture.h"
+#include "../Manager/ManagerTexture.h"
 #include "SquareSprite.h"
-#include "CDxRenderer.h"
+#include "../LowLevel/CDxRenderer.h"
 #include "enum.h"
 #include "CShader.h"
-#include "CBuffer.h"
+#include "../Resources/CBuffer.h"
 #include "Sprite.h"
-#include "ManagerMaterial.h"
-#include "ManagerShader.h"
+#include "../Manager/ManagerMaterial.h"
+#include "../Manager/ManagerShader.h"
 
 SpriteRenderer::~SpriteRenderer()
 {

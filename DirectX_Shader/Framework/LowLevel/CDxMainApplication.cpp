@@ -1,15 +1,15 @@
 #include "CDxMainApplication.h"
 #include <time.h>
-#include "CDxRenderer.h"
-#include "ManagerTexture.h"
-#include "Sprite.h"
-#include "ManagerScene.h"
-#include "ManagerInput.h"
-#include "ManagerShader.h"
-#include "CameraRenderer.h"
-#include "ManagerCollsionDetection.h"
-#include "CGameObject.h"
-#include "CRenderer.h"
+#include "../LowLevel/CDxRenderer.h"
+#include "../Manager/ManagerTexture.h"
+#include "../Resources/Sprite.h"
+#include "../Manager/ManagerScene.h"
+#include "../Manager/ManagerInput.h"
+#include "../Manager/ManagerShader.h"
+#include "../Renderer/CameraRenderer.h"
+#include "../Manager/ManagerCollsionDetection.h"
+#include "../Resources/CGameObject.h"
+#include "../Renderer/CRenderer.h"
 
 CDxMainApplication *pApp = nullptr;
 

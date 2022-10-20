@@ -1,5 +1,5 @@
-#include "ManagerTexture.h"
-#include "CDxRenderer.h"
+#include "../Manager/ManagerTexture.h"
+#include "../LowLevel/CDxRenderer.h"
 #include <sstream>
 #include <istream>
 

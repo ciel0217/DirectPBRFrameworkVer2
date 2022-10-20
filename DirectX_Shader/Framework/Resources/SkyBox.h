@@ -1,5 +1,5 @@
 #pragma once
-#include "CGameObject.h"
+#include "../Resources/CGameObject.h"
 #include "CCubeMap.h"
 #include "MeshRenderer.h"
 

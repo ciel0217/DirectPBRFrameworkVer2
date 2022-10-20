@@ -1,10 +1,10 @@
 #include "DeferredRenderer.h"
-#include "ManagerShader.h"
-#include "CDxRenderer.h"
+#include "../Manager/ManagerShader.h"
+#include "../LowLevel/CDxRenderer.h"
 #include "CShader.h"
-#include "ManagerScene.h"
+#include "../Manager/ManagerScene.h"
 #include "CommonProcess.h"
-#include "CBuffer.h"
+#include "../Resources/CBuffer.h"
 #include "SkyBox.h"
 
 

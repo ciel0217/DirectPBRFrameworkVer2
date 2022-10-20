@@ -1,5 +1,5 @@
-#include "CRenderer.h"
-#include "CBuffer.h"
+#include "../Resources/CRenderer.h"
+#include "../Resources/CBuffer.h"
 #include "struct.h"
 
 std::unique_ptr<CBuffer> CRenderer::m_MaterialCBuffer;

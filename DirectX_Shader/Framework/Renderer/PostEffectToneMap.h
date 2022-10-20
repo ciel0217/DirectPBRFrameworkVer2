@@ -1,5 +1,5 @@
 #pragma once
-#include "CPostEffect.h"
+#include "../Resources/CPostEffect.h"
 #include <vector>
 #include "struct.h"
 

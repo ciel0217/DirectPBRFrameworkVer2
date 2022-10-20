@@ -1,6 +1,6 @@
 #include "CScene.h"
 #include "Camera.h"
-#include "CameraRenderer.h"
+#include "../Renderer/CameraRenderer.h"
 
 void CScene::Config()
 {
