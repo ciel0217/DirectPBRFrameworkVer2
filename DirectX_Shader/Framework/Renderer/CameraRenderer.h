@@ -1,5 +1,4 @@
 #pragma once
-#include "CommonProcess.h"
 #include "ObjectTag.h"
 #include <list>
 #include "enum.h"
