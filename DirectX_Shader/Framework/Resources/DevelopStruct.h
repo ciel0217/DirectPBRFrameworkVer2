@@ -1,59 +1,5 @@
 #pragma once
 #include "../LowLevel/DirectX.h"
-//*********************************************************
-// マクロ定義
-//*********************************************************
-#define LIGHT_MAX		(10)
-
-
-enum BLEND_MODE
-{
-	BLEND_MODE_NONE,		//ブレンド無し
-	BLEND_MODE_ALPHABLEND,	//αブレンド
-	BLEND_MODE_ADD,			//加算ブレンド
-	BLEND_MODE_SUBTRACT,	//減算ブレンド
-
-	BLEDD_MODE_NUM
-};
-
-enum CULL_MODE
-{
-	CULL_MODE_NONE,			//カリング無し
-	CULL_MODE_FRONT,		//表のポリゴンを描画しない(CW)
-	CULL_MODE_BACK,			//裏のポリゴンを描画しない(CCW)
-
-	CULL_MODE_NUM
-};
-
-enum ADDRESS_MODE
-{
-	ADDRESS_MODE_WRAP,
-	ADDRESS_MODE_MIRROR,
-	ADDRESS_MODE_CLAMP,
-	ADDRESS_MODE_BORDER,
-
-	ADDRESS_MODE_NUM
-};
-
-enum FILTER_MODE
-{
-	FILTER_MODE_POINT,
-	FILTER_MODE_LINEAR,
-	FILTER_MODE_ANISOTROPIC,
-
-	FILTER_MODE_NUM
-};
-
-enum SCENE_TEXTURE 
-{
-	eBaseColor = 0,
-	eNormal,
-	eRoughnessAndMeralicAndSpecular,
-	eEmmision,
-
-	eToneMap,
-	eSceneMax,
-};
 
 //*********************************************************
 // 構造体
@@ -68,7 +14,7 @@ struct VERTEX_3D
 	D3DXCOLOR   Diffuse;//頂点カラー
 	D3DXVECTOR3 Tangent;//tangent(接ベクトル？なんていうか分からんw)
 	D3DXVECTOR3 Binormal;//従法線
-	
+
 };
 
 // ライト構造体
@@ -147,4 +93,3 @@ struct VertexShaderRelated {
 	Microsoft::WRL::ComPtr<ID3D11InputLayout>  Layout;
 	Microsoft::WRL::ComPtr<ID3D11ShaderReflection> ShaderRF;
 };
-

@@ -167,9 +167,10 @@
     <ClInclude Include="Framework\Resources\CScene.h" />
     <ClInclude Include="Framework\Resources\CShader.h" />
     <ClInclude Include="Framework\Resources\CTransform.h" />
+    <ClInclude Include="Framework\Resources\DevelopEnum.h" />
+    <ClInclude Include="Framework\Resources\DevelopStruct.h" />
     <ClInclude Include="Framework\Resources\DirectionalLight.h" />
     <ClInclude Include="Framework\Resources\DirectXTexture2D.h" />
-    <ClInclude Include="Framework\Resources\enum.h" />
     <ClInclude Include="Framework\Resources\Mesh.h" />
     <ClInclude Include="Framework\Resources\MeshFilter.h" />
     <ClInclude Include="Framework\Resources\ObjectTag.h" />
@@ -177,7 +178,6 @@
     <ClInclude Include="Framework\Resources\Sprite.h" />
     <ClInclude Include="Framework\Resources\SpriteType.h" />
     <ClInclude Include="Framework\Resources\SquareSprite.h" />
-    <ClInclude Include="Framework\Resources\struct.h" />
     <ClInclude Include="Math\Quaternion.h" />
     <ClInclude Include="Ocean.h" />
     <ClInclude Include="TestScene.h" />

@@ -138,9 +138,6 @@
     <ClInclude Include="Framework\Resources\DirectXTexture2D.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Framework\Resources\enum.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Framework\Resources\Mesh.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -162,10 +159,13 @@
     <ClInclude Include="Framework\Resources\SquareSprite.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Framework\Resources\struct.h">
+    <ClInclude Include="Math\Quaternion.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Math\Quaternion.h">
+    <ClInclude Include="Framework\Resources\DevelopStruct.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Resources\DevelopEnum.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
