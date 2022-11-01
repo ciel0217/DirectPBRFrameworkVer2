@@ -1,6 +1,6 @@
 #include "../Resources/CRenderer.h"
 #include "../Resources/CBuffer.h"
-#include "struct.h"
+#include "../Resources/DevelopStruct.h"
 
 std::unique_ptr<CBuffer> CRenderer::m_MaterialCBuffer;
 std::unique_ptr<CBuffer> CRenderer::m_WorldMatrixCBuffer;

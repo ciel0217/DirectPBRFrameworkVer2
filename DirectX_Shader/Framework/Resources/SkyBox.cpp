@@ -1,6 +1,6 @@
 #include "SkyBox.h"
 #include "../Manager/ManagerShader.h"
-#include "enum.h"
+#include "../Resources/DevelopEnum.h"
 #include "../LowLevel/CDxRenderer.h"
 #include "CShader.h"
 #include "CCubeMap.h"

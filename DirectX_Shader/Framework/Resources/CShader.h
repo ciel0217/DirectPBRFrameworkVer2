@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "struct.h"
+#include "../Resources/DevelopStruct.h"
 
 
 class CShader {

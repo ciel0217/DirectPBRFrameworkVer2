@@ -2,11 +2,11 @@
 #include "../Resources/CGameObject.h"
 #include "ObjectTag.h"
 #include <list>
-#include "enum.h"
+#include "../Resources/DevelopEnum.h"
 #include "../Resources/CPostEffect.h"
-#include "DeferredRenderer.h"
+#include "../Renderer/DeferredRenderer.h"
 #include "SkyBox.h"
-#include "PostEffectToneMap.h"
+#include "../Renderer/PostEffectToneMap.h"
 #include "../Manager/ManagerLight.h"
 #include "../Renderer/CameraRenderer.h"
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "struct.h"
+#include "../Resources/DevelopStruct.h"
 #include "CTransform.h"
 #include "../Resources/CGameObject.h"
 

@@ -1,5 +1,5 @@
 #include "TestScene.h"
-#include "enum.h"
+#include "../Resources/DevelopEnum.h"
 #include "DirectionalLight.h"
 #include "SkyBox.h"
 #include "CCubeMap.h"

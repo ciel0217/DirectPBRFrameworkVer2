@@ -2,7 +2,7 @@
 #include "../Manager/ManagerTexture.h"
 #include "SquareSprite.h"
 #include "../LowLevel/CDxRenderer.h"
-#include "enum.h"
+#include "../Resources/DevelopEnum.h"
 #include "CShader.h"
 #include "../Resources/CBuffer.h"
 #include "Sprite.h"

@@ -3,7 +3,7 @@
 #include <typeinfo>
 #include <type_traits>
 #include "Camera.h"
-#include "enum.h"
+#include "../Resources/DevelopEnum.h"
 #include "../Manager/ManagerCollsionDetection.h"
 
 class CScene

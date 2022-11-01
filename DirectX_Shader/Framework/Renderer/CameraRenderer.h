@@ -1,14 +1,14 @@
 #pragma once
-#include "ObjectTag.h"
+#include "../Resources/ObjectTag.h"
 #include <list>
-#include "enum.h"
+#include "../Resources/DevelopEnum.h"
 #include "DeferredRenderer.h"
-#include "SkyBox.h"
+#include "../Resources/SkyBox.h"
 #include <string>
 #include "../Manager/ManagerLight.h"
 #include <type_traits>
 #include <memory>
-#include "CMaterial.h"
+#include "../Resources/CMaterial.h"
 
 enum RenderPattern {
 	eForward = 0,

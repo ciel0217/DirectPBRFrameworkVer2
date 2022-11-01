@@ -1,10 +1,10 @@
 #pragma once
-#include "TestScene.h"
-#include "TitleScene.h"
-#include "ResultScene.h"
+#include "../../TestScene.h"
+
 #include <vector>
 
 class CScene;
+class Camera;
 
 class ManagerScene
 {
@@ -16,7 +16,7 @@ private:
 
 	void CheckNextScene();
 public:
-	ManagerScene() { m_CurrentScene = new TitleScene();}
+	ManagerScene() { m_CurrentScene = new TestScene();}
 	
 	static void Create() {
 		if (_instance == nullptr) {

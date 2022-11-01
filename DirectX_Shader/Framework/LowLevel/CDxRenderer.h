@@ -1,8 +1,7 @@
 #pragma once
 
 #include "../LowLevel/DirectX.h"
-#include "struct.h"
-#include "CCubeMap.h"
+#include "../Resources/DevelopStruct.h"
 
 #include <string>
 

@@ -4,7 +4,7 @@
 #include <string>
 #include <unordered_map>
 #include "../LowLevel/DirectX.h"
-#include "struct.h"
+#include "../Resources/DevelopStruct.h"
 
 class CMaterial;
 class CShader;

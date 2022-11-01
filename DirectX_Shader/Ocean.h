@@ -1,6 +1,6 @@
 #pragma once
 #include "../Resources/CGameObject.h"
-#include "struct.h"
+#include "../Resources/DevelopStruct.h"
 #include "MeshRenderer.h"
 
 class CBuffer;

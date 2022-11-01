@@ -2,7 +2,7 @@
 #include <memory>
 #include <string>
 #include "../LowLevel/DirectX.h"
-#include "CMaterial.h"
+#include "../Resources/CMaterial.h"
 #include "../Resources/CBuffer.h"
 #include <vector>
 

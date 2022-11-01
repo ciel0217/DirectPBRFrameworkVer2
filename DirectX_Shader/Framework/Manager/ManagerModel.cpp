@@ -13,7 +13,7 @@
 #include "Mesh.h"
 #include "../Manager/ManagerMaterial.h"
 #include "../Manager/ManagerShader.h"
-#include "enum.h"
+#include "../Resources/DevelopEnum.h"
 
 std::unordered_map <std::string , std::pair<std::shared_ptr<Mesh>, std::vector<unsigned int>>> ManagerModel::m_ModelList;
 CBuffer* ManagerModel::m_ModelCBuffer;

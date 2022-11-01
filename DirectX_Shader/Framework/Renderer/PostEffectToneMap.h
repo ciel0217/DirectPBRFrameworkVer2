@@ -1,7 +1,7 @@
 #pragma once
 #include "../Resources/CPostEffect.h"
 #include <vector>
-#include "struct.h"
+#include "../Resources/DevelopStruct.h"
 
 class PostEffectToneMap : public CPostEffect {
 private:

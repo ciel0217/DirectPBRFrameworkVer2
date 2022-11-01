@@ -181,6 +181,7 @@
     <ClInclude Include="Math\Quaternion.h" />
     <ClInclude Include="Ocean.h" />
     <ClInclude Include="TestScene.h" />
+    <ClInclude Include="UserEnum.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Framework\LowLevel\CDxMainApplication.cpp" />

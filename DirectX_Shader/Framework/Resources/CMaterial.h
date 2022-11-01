@@ -1,7 +1,7 @@
 #pragma once
 #include "../LowLevel/DirectX.h"
-#include "struct.h"
-#include "enum.h"
+#include "../Resources/DevelopStruct.h"
+#include "../Resources/DevelopEnum.h"
 #include <string>
 
 class CShader;

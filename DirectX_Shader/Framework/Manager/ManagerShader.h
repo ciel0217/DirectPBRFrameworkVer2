@@ -2,7 +2,7 @@
 #include <map>
 #include <string>
 #include "../LowLevel/DirectX.h"
-#include "struct.h"
+#include "../Resources/DevelopStruct.h"
 
 #define SHADER_MAX 10
 

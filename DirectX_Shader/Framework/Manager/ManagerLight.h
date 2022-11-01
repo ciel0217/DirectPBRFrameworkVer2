@@ -1,9 +1,10 @@
 #pragma once
-#include "CLight.h"
+//#include "CLight.h"
 #include <list>
-#define LIGHT_MAX 10
 
 class CBuffer;
+class CLight;
+
 class ManagerLight {
 private:
 	std::list<CLight*> m_Lights;

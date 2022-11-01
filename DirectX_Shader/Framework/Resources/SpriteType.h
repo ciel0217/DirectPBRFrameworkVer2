@@ -1,7 +1,7 @@
 #pragma once
 #include "../LowLevel/DirectX.h"
 #include <vector>
-#include "struct.h"
+#include "../Resources/DevelopStruct.h"
 
 class SpriteType {
 protected:
