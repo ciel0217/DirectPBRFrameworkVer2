@@ -1,7 +1,7 @@
 #pragma once
 #include "CLight.h"
 #include "../Resources/CommonProcess.h"
-#include "CRenderInfo.h"
+//#include "CRenderInfo.h"
 
 class DirectionalLight : public CLight
 {

@@ -2,7 +2,7 @@
 #include "../LowLevel/CDxRenderer.h"
 #include "../Manager/ManagerTexture.h"
 #include "../LowLevel/CDxRenderer.h"
-#include "CShader.h"
+#include "../Resources/CShader.h"
 #include "../Manager/ManagerShader.h"
 #include "CBuffer.h"
 

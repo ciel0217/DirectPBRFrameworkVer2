@@ -3,7 +3,7 @@
 #include "Sprite.h"
 #include "../Manager/ManagerTexture.h"
 #include "../Manager/ManagerModel.h"
-#include "CShader.h"
+#include "../Resources/CShader.h"
 #include "CBuffer.h"
 
 

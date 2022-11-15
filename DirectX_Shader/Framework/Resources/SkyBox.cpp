@@ -2,7 +2,7 @@
 #include "../Manager/ManagerShader.h"
 #include "../Resources/DevelopEnum.h"
 #include "../LowLevel/CDxRenderer.h"
-#include "CShader.h"
+#include "../Resources/CShader.h"
 #include "CCubeMap.h"
 #include "../Resources/CBuffer.h"
 #include "../Manager/ManagerScene.h"

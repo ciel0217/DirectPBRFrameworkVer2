@@ -1,8 +1,8 @@
 #include "TestScene.h"
-#include "../Resources/DevelopEnum.h"
-#include "DirectionalLight.h"
-#include "SkyBox.h"
-#include "CCubeMap.h"
+#include "Framework/Resources/DevelopEnum.h"
+#include "Framework/Resources/DirectionalLight.h"
+#include "Framework/Resources/SkyBox.h"
+#include "Framework/Resources/CCubeMap.h"
 #include "Ocean.h"
 #include "GameSceneCamera.h"
 

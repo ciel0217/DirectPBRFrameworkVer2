@@ -3,14 +3,14 @@
 #include <shlwapi.h>
 #pragma comment(lib, "shlwapi.lib")
 
-#include "ManagerModel.h"
+#include "../Manager/ManagerModel.h"
 #include "../LowLevel/CDxRenderer.h"
 #include "../Resources/CBuffer.h"
 #include <assert.h>
 #include <sstream>
 #include <istream>
 #include "../Manager/ManagerTexture.h"
-#include "Mesh.h"
+#include "../Resources/Mesh.h"
 #include "../Manager/ManagerMaterial.h"
 #include "../Manager/ManagerShader.h"
 #include "../Resources/DevelopEnum.h"

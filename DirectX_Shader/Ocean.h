@@ -1,7 +1,7 @@
 #pragma once
-#include "../Resources/CGameObject.h"
-#include "../Resources/DevelopStruct.h"
-#include "MeshRenderer.h"
+#include "Framework/Resources/CGameObject.h"
+#include "Framework/Resources/DevelopStruct.h"
+#include "Framework/Renderer/MeshRenderer.h"
 
 class CBuffer;
 

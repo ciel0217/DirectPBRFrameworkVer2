@@ -2,7 +2,7 @@
 #include "../Resources/CBuffer.h"
 #include "../Resources/DevelopStruct.h"
 #include "../LowLevel/CDxRenderer.h"
-
+#include "../Resources/CLight.h"
 
 ManagerLight::ManagerLight()
 {

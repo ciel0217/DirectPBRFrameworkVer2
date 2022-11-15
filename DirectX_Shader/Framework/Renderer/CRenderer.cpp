@@ -1,4 +1,4 @@
-#include "../Resources/CRenderer.h"
+#include "CRenderer.h"
 #include "../Resources/CBuffer.h"
 #include "../Resources/DevelopStruct.h"
 

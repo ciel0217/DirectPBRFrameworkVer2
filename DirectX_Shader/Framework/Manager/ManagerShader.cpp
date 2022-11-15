@@ -1,5 +1,5 @@
 #include "../Manager/ManagerShader.h"
-#include "CShader.h"
+#include "../Resources/CShader.h"
 #include "../LowLevel/CDxRenderer.h"
 #include <vector>
 

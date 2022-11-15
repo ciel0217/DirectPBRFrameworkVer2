@@ -3,7 +3,7 @@
 #include "SquareSprite.h"
 #include "../LowLevel/CDxRenderer.h"
 #include "../Resources/DevelopEnum.h"
-#include "CShader.h"
+#include "../Resources/CShader.h"
 #include "../Resources/CBuffer.h"
 #include "Sprite.h"
 #include "../Manager/ManagerMaterial.h"

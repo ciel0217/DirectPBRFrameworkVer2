@@ -1,6 +1,6 @@
 #include "../Manager/ManagerMaterial.h"
-#include "CMaterial.h"
-#include "CShader.h"
+#include "../Resources/CMaterial.h"
+#include "../Resources/CShader.h"
 
 
 std::unordered_map<unsigned int, std::shared_ptr<CMaterial>> ManagerMaterial::m_MaterialList;

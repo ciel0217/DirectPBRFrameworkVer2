@@ -1,5 +1,5 @@
 #include "../Manager/ManagerScene.h"
-#include "CScene.h"
+#include "../Resources/CScene.h"
 
 ManagerScene* ManagerScene::_instance = nullptr;
 

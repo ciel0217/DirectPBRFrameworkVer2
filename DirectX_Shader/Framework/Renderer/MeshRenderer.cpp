@@ -1,10 +1,10 @@
 #include "MeshRenderer.h"
-#include "Mesh.h"
-#include "ManagerModel.h"
+#include "../Resources/Mesh.h"
+#include "../Manager/ManagerModel.h"
 #include "../Resources/CBuffer.h"
 #include "../Manager/ManagerMaterial.h"
 #include "../LowLevel/CDxRenderer.h"
-#include "CShader.h"
+#include "../Resources/CShader.h"
 #include "../Resources/DevelopEnum.h"
 
 void MeshRenderer::CalcBuffer()

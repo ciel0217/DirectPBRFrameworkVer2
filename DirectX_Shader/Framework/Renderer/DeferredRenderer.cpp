@@ -1,11 +1,11 @@
 #include "DeferredRenderer.h"
 #include "../Manager/ManagerShader.h"
 #include "../LowLevel/CDxRenderer.h"
-#include "CShader.h"
+#include "../Resources/CShader.h"
 #include "../Manager/ManagerScene.h"
 #include "../Resources/CommonProcess.h"
 #include "../Resources/CBuffer.h"
-#include "SkyBox.h"
+#include "../Resources/SkyBox.h"
 
 
 DeferredRenderer::~DeferredRenderer()
