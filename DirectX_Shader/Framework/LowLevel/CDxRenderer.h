@@ -2,6 +2,7 @@
 
 #include "../LowLevel/DirectX.h"
 #include "../Resources/DevelopStruct.h"
+#include "../Resources/DevelopEnum.h"
 
 #include <string>
 

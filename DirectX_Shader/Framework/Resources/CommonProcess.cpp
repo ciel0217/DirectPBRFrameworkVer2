@@ -1,4 +1,4 @@
-#include "CommonProcess.h"
+#include "../Resources/CommonProcess.h"
 
 //ƒQ[ƒ€’†‚Éíœ‚·‚é‚Æ‚«
 bool CommonProcess::Destroy()

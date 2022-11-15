@@ -1,8 +1,8 @@
 #include "../Manager/ManagerCollsionDetection.h"
-#include "CommonProcess.h"
-#include "CCollision.h"
+#include "../Resources/CommonProcess.h"
+#include "../Resources/CCollision.h"
 #include "../Resources/CGameObject.h"
-#include "BoxAndBoxDetection.h"
+#include "../Resources/BoxAndBoxDetection.h"
 
 #define TARGET_RADIUS 200.0f
 
@@ -59,10 +59,5 @@ void ManagerCollisionDetection::CollisionCheck(std::list<CGameObject*> gameobjec
 
 			}
 		}
-	}
-
-	if (count > 50) {
-		int a = 0;
-		a = 1;
 	}
 }

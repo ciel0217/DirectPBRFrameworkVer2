@@ -3,7 +3,7 @@
 #include "../LowLevel/CDxRenderer.h"
 #include "CShader.h"
 #include "../Manager/ManagerScene.h"
-#include "CommonProcess.h"
+#include "../Resources/CommonProcess.h"
 #include "../Resources/CBuffer.h"
 #include "SkyBox.h"
 

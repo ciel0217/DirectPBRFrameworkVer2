@@ -1,4 +1,4 @@
-#include "BoxAndBoxDetection.h"
+#include "../Resources/BoxAndBoxDetection.h"
 #include "BoxCollision.h"
 
 bool BoxAndBoxDetection::IsHit(CCollision * obj1, CCollision * obj2)

@@ -1,5 +1,5 @@
 #pragma once
-#include "CCollision.h"
+#include "../Resources/CCollision.h"
 #include "../LowLevel/DirectX.h"
 
 class CGameObject;
