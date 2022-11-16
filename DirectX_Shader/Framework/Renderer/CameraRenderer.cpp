@@ -7,6 +7,8 @@
 #include "../LowLevel/CDxRenderer.h"
 #include "CRenderer.h"
 #include "../Manager/ManagerMaterial.h"
+#include "../Resources/CLight.h"
+#include "../Resources/CommonProcess.h"
 
 #include <vector>
 #include <memory>
@@ -186,24 +188,24 @@ void CameraRenderer::CalcRenderingOrder(std::list<CGameObject *> gameobject[])
 	}
 
 	m_TransparentList.sort([](std::tuple<CRenderer*, unsigned int, std::shared_ptr<CMaterial>> a, std::tuple<CRenderer*, unsigned int, std::shared_ptr<CMaterial>> b)
-		{
+	{
 			int a_render = std::get<2>(a)->GetRenderQueue();
 			int b_render = std::get<2>(b)->GetRenderQueue();
 
 			return a < b;
-		});
+	});
 
 	D3DXVECTOR3 pos = m_CameraPos;
 
 	m_TransparentList.sort([pos](std::tuple<CRenderer*, unsigned int, std::shared_ptr<CMaterial>> a, std::tuple<CRenderer*, unsigned int, std::shared_ptr<CMaterial>> b)
-		{
-			if (std::get<2>(a)->GetRenderQueue() != std::get<2>(b)->GetRenderQueue())return false;
+	{
+		if (std::get<2>(a)->GetRenderQueue() != std::get<2>(b)->GetRenderQueue())return false;
 
-			D3DXVECTOR3 a_dis = pos - ((CommonProcess*)std::get<0>(a))->GetPosition();
-			D3DXVECTOR3 b_dis = pos - ((CommonProcess*)std::get<0>(b))->GetPosition();
+		D3DXVECTOR3 a_dis = pos - ((CommonProcess*)std::get<0>(a))->GetPosition();
+		D3DXVECTOR3 b_dis = pos - ((CommonProcess*)std::get<0>(b))->GetPosition();
 
-			return D3DXVec3LengthSq(&a_dis) > D3DXVec3LengthSq(&b_dis);
-		});
+		return D3DXVec3LengthSq(&a_dis) > D3DXVec3LengthSq(&b_dis);
+	});
 
 
 	

@@ -30,9 +30,9 @@
 #pragma comment (lib, "dinput8.lib")
 
 #if _DEBUG
-#pragma comment (lib, "DirectXTex/x86/Debug/DirectXTex.lib")
+#pragma comment (lib, "DirectXTex/Header/x86/Debug/DirectXTex.lib")
 #else
-#pragma comment (lib, "DirectXTex/x86/Release/DirectXTex.lib")
+#pragma comment (lib, "DirectXTex/Header/x86/Release/DirectXTex.lib")
 #endif
 
 #define SCREEN_WIDTH	(960)

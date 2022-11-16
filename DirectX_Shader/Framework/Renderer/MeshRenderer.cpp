@@ -6,6 +6,7 @@
 #include "../LowLevel/CDxRenderer.h"
 #include "../Resources/CShader.h"
 #include "../Resources/DevelopEnum.h"
+#include "../Resources/CGameObject.h"
 
 void MeshRenderer::CalcBuffer()
 {

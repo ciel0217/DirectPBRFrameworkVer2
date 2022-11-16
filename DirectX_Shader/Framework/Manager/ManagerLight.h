@@ -1,6 +1,7 @@
 #pragma once
 //#include "CLight.h"
 #include <list>
+#include "../LowLevel/DirectX.h"
 
 class CBuffer;
 class CLight;

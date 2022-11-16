@@ -1,7 +1,6 @@
 #pragma once
 #include "../LowLevel/DirectX.h"
 
-#define LIGNT_MAX (10)
 
 //*********************************************************
 // ç\ë¢ëÃ
@@ -63,7 +62,7 @@ struct LIGHTFLAGS
 struct LIGHT_CBUFFER
 {
 	D3DXCOLOR GlobalAmbient;
-	LIGHT Lights[LIGHT_MAX];
+	LIGHT Lights[10];
 };
 
 struct DEFERRED_CBUFFER
