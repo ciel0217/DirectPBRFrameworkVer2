@@ -22,6 +22,7 @@ protected:
 public:
 	static std::unique_ptr<CBuffer> m_MaterialCBuffer;
 	static std::unique_ptr<CBuffer> m_WorldMatrixCBuffer;
+	static std::unique_ptr<CBuffer> m_InverseWorldMatrixCBuffer;
 
 
 	static void SetUpRenderer();

@@ -81,7 +81,7 @@ void MeshRenderer::Draw(unsigned int index)
 
 		CShader* shader = material->GetShader();
 		D3DXMATRIX mtxScl, mtxRot, mtxTranslate;
-		D3DXMATRIX mtxWorld;
+		D3DXMATRIX mtxWorld, mtxInverseWorld;
 
 		D3DXVECTOR3 position = m_Self->GetPosition();
 		D3DXVECTOR3 scale = m_Self->GetScale();
@@ -101,10 +101,16 @@ void MeshRenderer::Draw(unsigned int index)
 		D3DXMatrixTranslation(&mtxTranslate, position.x, position.y, position.z);
 		D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxTranslate);
 
+		D3DXMatrixInverse(&mtxInverseWorld, nullptr, &mtxWorld);
+
 		D3DXMatrixTranspose(&mtxWorld, &mtxWorld);
+		D3DXMatrixTranspose(&mtxInverseWorld, &mtxInverseWorld);
 
 		m_WorldMatrixCBuffer->UpdateBuffer(&mtxWorld);
 		m_WorldMatrixCBuffer->VSSetCBuffer(0);
+
+		m_InverseWorldMatrixCBuffer->UpdateBuffer(&mtxInverseWorld);
+		m_InverseWorldMatrixCBuffer->VSSetCBuffer(6);
 
 		//ƒJƒŠƒ“ƒO‚È‚µ
 		CDxRenderer::GetRenderer()->SetCullingMode(CULL_MODE_NONE);
