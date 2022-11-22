@@ -248,7 +248,8 @@ void ManagerModel::LoadObj(const char* FileName, MODEL * Model)
 	if (sc != 0)
 		Model->SubsetArray[sc - 1].IndexNum = ic - Model->SubsetArray[sc - 1].StartIndex;
 
-	for (unsigned int i = 0; i < indexNum; i+=3) {
+	for (unsigned int i = 0; i < indexNum; i+=3) 
+	{
 		unsigned int index1 = Model->IndexArray[i];
 		unsigned int index2 = Model->IndexArray[i + 1];
 		unsigned int index3 = Model->IndexArray[i + 2];
@@ -474,7 +475,7 @@ std::pair<std::shared_ptr<Mesh>, std::vector<unsigned int>> ManagerModel::Load(s
 			std::string material_name = model.SubsetArray[i].Material.Name;
 			
 			ID3D11ShaderResourceView* texture = ManagerTexture::LoadTexture(filename);
-			CShader* shader = ManagerShader::GetShader("shader.hlsl");
+			CShader* shader = ManagerShader::GetShader("Shader/shader.hlsl");
 
 			unsigned int material_id = ManagerMaterial::CreateMaterial(eOpacity, material_value, shader, texture, material_name);
 			if (material_id == 0)continue;

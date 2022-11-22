@@ -49,7 +49,7 @@ void SkyBox::DrawByCubeMap()
 	m_ModelName = "asset/model/SkyBox.obj";
 	SetUpModel(m_ModelName, this);
 
-	/*m_ShaderCubeMap = ManagerShader::GetShader("CubeMap.hlsl");
+	/*m_ShaderCubeMap = ManagerShader::GetShader("Shader/CubeMap.hlsl");
 	m_ShaderIrradianceMap = ManagerShader::GetShader("IrradianceMap.hlsl");
 	m_ShaderPreFilterMap = ManagerShader::GetShader("SpecularMap.hlsl");*/
 	m_ShaderBrdfLUT = ManagerShader::GetShader("BrdfLUT.hlsl");
@@ -120,7 +120,7 @@ void SkyBox::DrawByCubeMap()
 	}
 
 	m_CubeMap->SetViewPort();
-	default_material->SetShader("CubeMap.hlsl");
+	default_material->SetShader("Shader/CubeMap.hlsl");
 
 	for (int i = 0; i < 6; i++) {
 		
@@ -235,6 +235,6 @@ void SkyBox::DrawByCubeMap()
 	CDxRenderer::GetRenderer()->SetCullingMode(CULL_MODE_BACK);
 
 	//最後普通に描画するときのシェーダーに戻す
-	default_material->SetShader("DefaultModel.hlsl");
+	default_material->SetShader("Shader/DefaultModel.hlsl");
 
 }

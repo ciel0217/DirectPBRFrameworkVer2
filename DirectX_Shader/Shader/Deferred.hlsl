@@ -2,28 +2,12 @@
 #include "BRDF.hlsli"
 #include "CalcLight.hlsli"
 
-//static const float2 arrBasePos[4] =
-//{
-//	float2(-1.0, 1.0),
-//	float2(1.0, 1.0),
-//	float2(-1.0, -1.0),
-//	float2(1.0, -1.0),
-//};
-static const float2 arrDepth[4] =
-{
-	float2(0.0, 1.0),
-	float2(1.0, 1.0),
-	float2(1.0, 0.0),
-	float2(0.0, 0.0),
-	
-};
-
-cbuffer ViewBuffer : register(b6)
+cbuffer ViewBuffer : register(b7)
 {
 	matrix View;
 }
 
-cbuffer ProjectionBuffer : register(b7)
+cbuffer ProjectionBuffer : register(b8)
 {
 	matrix Projection;
 }
@@ -40,7 +24,7 @@ struct DEFERRED_CBUFFER
 	int Dummy[2];
 };
 
-cbuffer DeferredBuffer : register(b8)
+cbuffer DeferredBuffer : register(b9)
 {
 	DEFERRED_CBUFFER DeferredBuffer;
 }
@@ -49,7 +33,6 @@ struct Output_VS
 {
 	float4 pos : SV_POSITION;
 	float2 texcoord : TEXCOORD0;
-	float2 depthcoord : TEXCOORD0;
 	
 };
 
@@ -79,21 +62,23 @@ SamplerState	g_SamplerState	: register(s0);
 
 float4 CalculateWorldFromDepth(float2 texcoord, float depth)
 {
-	// clip space between [-1, 1]
-	// flip y so that +ve y is upwards
+	// -1 ~ 1のクリップ空間
+	// yを反転させて、上向きにする
 	float2 clipXY = texcoord * 2.0 - 1.0;
-	//clipXY = -clipXY;
 	clipXY.y = -clipXY.y;
-	// NOTE: depth is not linearized
-	// Also in range [0, 1] due to DirectX Convention
+
+	// NOTE : 深度値が線形じゃない
+	// 範囲[0 ~ 1]
 	float4 clipSpace = float4(clipXY, depth, 1);
 	
 	float4 viewSpace = mul(Projection, clipSpace);
+	
 
-	// perspective divide
+	// クリップ座標をwで割るとNDC座標になる
 	viewSpace /= viewSpace.w;
 
 	float4 worldSpace = mul(View, viewSpace);
+
 	return worldSpace;
 }
 
@@ -104,11 +89,7 @@ Output_VS VS_main(
 {
 	Output_VS output;
 	output.pos = float4(arrBasePos[VertexID].xy, 0.0, 1.0);
-	/*float3 eye = normalize(output.pos.xyz - float3(.0f, 1.0f, -1.0f));
-	output.reflect = reflect(eye , inNormal);*/
-	
 	output.texcoord = arrUV[VertexID].xy;
-	output.depthcoord = arrDepth[VertexID].xy;
 
 	return output;
 }
@@ -135,6 +116,7 @@ Output_PS PS_main(Output_VS vs)
 	surf.WorldPosition = CalculateWorldFromDepth(vs.texcoord, depth);
 	surf.Normal = normal;
 	surf.EyeV = normalize(CameraPos.xyz - surf.WorldPosition.xyz);
+	//surf.EyeV = normalize(surf.WorldPosition.xyz - CameraPos.xyz);
 	surf.NdotV = dot(surf.Normal, surf.EyeV);
 
 	float3 Lo = float3(.0f, .0f, .0f);
@@ -147,45 +129,48 @@ Output_PS PS_main(Output_VS vs)
 			continue;
 		LightingInfo light_info;
 		CalcLight(surf, Lights[i], light_info);
-		
+
 		float d = NormalDistributionGGX(saturate(light_info.NdotH), roughness);
 		float g = GeometrySmith(saturate(surf.NdotV), saturate(light_info.NdotL), roughness);
 		float3 f = FresnelSchlick(F0, saturate(dot(light_info.HalfV, surf.EyeV)));
-		
+
 		float3 ks = f;
-		float3 kd = 1.0f - ks;
-		kd *= (1.0f - metalic);
+		float3 kd = (1.0f - ks) * (1.0f - metalic);
 
 		float3 numerator = d * g * f;
 		float denominator = 4.0f * saturate(surf.NdotV) * saturate(light_info.NdotL);
 		float3 specularBRDF = numerator / max(denominator, 0.001f);
-		Lo += (kd * albedo / PI +  specularBRDF) * Lights[i].Diffuse.rgb * light_info.Attenuation * saturate(light_info.NdotL) ;
+		Lo += (kd * albedo / PI + specularBRDF) * Lights[i].Diffuse.rgb * light_info.Attenuation * saturate(light_info.NdotL);
 
 	}
 
 	float3 ambient = GlobalAmbient.rgb * albedo;
 	if (DeferredBuffer.UseEnvMap == 1) {
 		float3 ks = FresnelSchlickRoughness(F0, saturate(surf.NdotV), roughness);
-		float3 kd = 1.0f - ks;
+		float3 kd = (1.0f - ks);
 		kd *= 1.0f - metalic;
-
+		
 		float3 irradiance = g_IrradianceTex.Sample(g_SamplerState, surf.Normal).rgb;
 		float3 diffuse = irradiance * albedo;
 
-		float3 R = normalize(reflect(surf.EyeV, surf.Normal));
+		float3 R = normalize(reflect(-surf.EyeV, surf.Normal));
 		float3 prefiltercolor = g_SpecularMap.SampleLevel(g_SamplerState, R, roughness * 5.0f).rgb;//5.0fは、事前計算の時に i / 5.0fでラフネスを計算したため
 		float2 brdflut = g_BrdfLUTex.Sample(g_SamplerState, float2(saturate(surf.NdotV), roughness)).rg;
 		
 		float3 specular = prefiltercolor * (ks * brdflut.x + brdflut.y);
 		ambient = (kd * diffuse + specular);
+	
 		
 	}
 	
 
-	//output.color = float4(ambient , 1.0f);
+	//output.color = float4(F0 , 1.0f);
 	
 	output.color = float4(Lo + ambient + emmisive, 1.0f);
 	
+
+	//output.color = float4(depth, depth, depth, 1.0f);
+//	output.color = float4(ambient, 1.0f);
 	
 	/*if (.Enable == 1) {
 		for (int i = 0; i < 10; i++) {

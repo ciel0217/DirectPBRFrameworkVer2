@@ -56,7 +56,7 @@ cbuffer Roughness : register(b4)
 
 float4 PS_main(Output_VS vs) : SV_Target0
 {
-	float3 N = normalize(vs.normal);
+	float3 N = normalize(vs.texcoord);
 	float3 R = N;
 	float3 V = R;
 

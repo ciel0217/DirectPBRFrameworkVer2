@@ -63,6 +63,11 @@ cbuffer CameraPos : register(b5)
 	float4 CameraPos;
 }
 
+cbuffer InverseWorldBuffer : register(b6)
+{
+	matrix InverseWorld;
+}
+
 struct Output_VS
 {
 	float4 pos : SV_POSITION;
@@ -103,7 +108,13 @@ Output_VS VS_main(in  float3 inPosition		: POSITION0,
 	float4 pos = float4(inPosition, 1.0f);
 	output.wpos = mul(pos, World);
 	output.pos = mul(pos, wvp);
-	output.normal = normalize(mul(float4(inNormal, .0), World).xyz);
+
+	float4 worldNormal, normal;
+	normal = float4(inNormal, 0.0f);
+	worldNormal = mul(normal, World);
+	worldNormal = normalize(worldNormal);
+	output.normal = worldNormal.xyz;
+
 	output.texcoord = inTexCoord;
 	output.color = inDiffuse;
 	output.tangent = inTangent;

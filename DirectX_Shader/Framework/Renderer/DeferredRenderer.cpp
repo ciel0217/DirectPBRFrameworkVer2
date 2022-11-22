@@ -16,7 +16,7 @@ DeferredRenderer::~DeferredRenderer()
 void DeferredRenderer::Config()
 {
 	ZeroMemory(&m_CBufferValue, sizeof(m_CBufferValue));
-	m_Shader = ManagerShader::GetShader("Deferred.hlsl");
+	m_Shader = ManagerShader::GetShader("Shader/Deferred.hlsl");
 	if (!m_DeferredCBuffer) {
 		m_DeferredCBuffer = new CBuffer(CBuffer::CreateBuffer(sizeof(DEFERRED_CBUFFER), D3D11_BIND_CONSTANT_BUFFER, nullptr));
 	}

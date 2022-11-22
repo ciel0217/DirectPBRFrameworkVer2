@@ -24,7 +24,8 @@ struct Output_VS
 	float2 texcoord : TEXCOORD0;
 };
 
-struct Output_PS {
+struct Output_PS
+{
 	float4 color : SV_TARGET0;
 };
 

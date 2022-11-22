@@ -1,4 +1,51 @@
-#include "common.hlsli"
+
+
+//*****************************************************************************
+// 定数バッファ
+//*****************************************************************************
+
+// マトリクスバッファ
+cbuffer WorldBuffer : register(b0)
+{
+	matrix World;
+}
+
+cbuffer ViewBuffer : register(b1)
+{
+	matrix View;
+}
+
+cbuffer ProjectionBuffer : register(b2)
+{
+	matrix Projection;
+}
+
+// マテリアルバッファ
+struct MATERIAL
+{
+	float4  	BaseColor;
+	float4  	Normal;
+	float    	Roughness;
+	float    	Metaric;
+	float   	Specular;
+	int			noTexSampling;
+	int			UseAlbedoMap;
+	int			UseOccMetalRough;
+	int			UseAoMap;
+	int			UseEmmisive;
+	int			NormalState;
+	int			Dummy[3];
+};
+
+cbuffer MaterialBuffer : register(b3)
+{
+	MATERIAL	Material;
+}
+
+cbuffer InverseWorldBuffer : register(b6)
+{
+	matrix InverseWorld;
+}
 
 
 struct Output_VS 
@@ -35,7 +82,14 @@ Output_VS VS_main(in  float3 inPosition		: POSITION0,
 	float4 pos = float4(inPosition, 1.0f);
 	
 	output.pos = mul(pos, wvp);
-	output.normal = normalize(mul(float4(inNormal, .0), World).xyz);
+
+	float4 worldNormal, normal;
+	normal = float4(inNormal, 0.0f);
+	worldNormal = mul(normal, InverseWorld);
+	worldNormal = normalize(worldNormal);
+	output.normal = worldNormal.xyz;
+	
+	
 	output.texcoord = inTexCoord;
 
 	output.color = inDiffuse;
@@ -63,9 +117,9 @@ SamplerState	g_SamplerState : register(s0);
 Output_PS PS_main(Output_VS a)
 {
 	Output_PS output;
-	float4 color;
+	float4 color = 0.0;
 
-	if (Material.UseAlbedoMap == 1)
+	if (Material.noTexSampling == 0)
 	{
 		color = g_Texture.Sample(g_SamplerState, a.texcoord);
 		//color = Material.Roughness;
@@ -74,18 +128,19 @@ Output_PS PS_main(Output_VS a)
 	}
 	else
 	{
-		color = a.color;
-		color = float4(1.0f, 0.0f, 1.0f, 1.0f);
+		//color = a.color;
+		color = float4(1.0f,1.0f, 1.0f, 1.0f);
 		
 	}
 
 	
 	
 	output.color = color;
-	output.normal = float4(normalize(a.normal)* 0.5 + 0.5, 1);
+	output.normal = float4(a.normal* 0.5f + 0.5f, 1);
+	//output.normal = float4(a.normal, 1);
 	output.rough_meta_spe = float4(Material.Roughness, Material.Metaric, Material.Specular, 1.0f);
 
-	//output.color = float4(Material.Roughness, Material.Metaric, Material.Specular, 1.0f);
+	//output.color = float4(Material.Metaric, Material.Metaric, Material.Metaric, 1.0f);
 	//output.color = float4(.0f, 0.0f, 1.0f, 1.0f);
 	return output;
 }

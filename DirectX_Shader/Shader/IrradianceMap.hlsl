@@ -61,9 +61,9 @@ float4 PS_main(Output_VS vs) : SV_Target0
 	{
 		for (float theta = 0.0; theta < 0.5 * PI; theta += SAMPLE_DELTA)
 		{
-			// spherical to cartesian (in tangent space)
+			// 球面座標から直交座標
 			float3 tangentSample = float3(sin(theta) * cos(phi), sin(theta) * sin(phi), cos(theta));
-			// tangent space to world
+			// タンジェント空間
 			float3 sampleVec = tangentSample.x * right + tangentSample.y * up + tangentSample.z * normal;
 			irradiance += g_CubeMap.Sample(g_SamplerState, sampleVec).rgb * cos(theta) * sin(theta);
 			nrSamples++;

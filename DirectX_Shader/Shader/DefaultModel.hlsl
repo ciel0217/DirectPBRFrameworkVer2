@@ -1,23 +1,49 @@
-#include "common.hlsli"
 
 
-//// ライト用バッファ
-//struct LIGHT
-//{
-//	float4		Direction[10];
-//	float4		Position[10];
-//	float4		Diffuse[10];
-//	float4		Ambient[10];
-//	float4		Attenuation[10];
-//	int4		Flags[10];
-//	int			Enable;
-//	int			Dummy[3];//16byte境界用
-//};
-//
-//cbuffer LightBuffer : register(b4)
-//{
-//	LIGHT		Light;
-//}
+//*****************************************************************************
+// 定数バッファ
+//*****************************************************************************
+
+// マトリクスバッファ
+cbuffer WorldBuffer : register(b0)
+{
+	matrix World;
+}
+
+cbuffer ViewBuffer : register(b1)
+{
+	matrix View;
+}
+
+cbuffer ProjectionBuffer : register(b2)
+{
+	matrix Projection;
+}
+
+// マテリアルバッファ
+struct MATERIAL
+{
+	float4  	BaseColor;
+	float4  	Normal;
+	float    	Roughness;
+	float    	Metaric;
+	float   	Specular;
+	int			noTexSampling;
+	int			UseAlbedoMap;
+	int			UseOccMetalRough;
+	int			UseAoMap;
+	int			UseEmmisive;
+	int			NormalState;
+	int			Dummy[3];
+	//float		Dummy[2];	//16byte境界用
+};
+
+cbuffer MaterialBuffer : register(b3)
+{
+	MATERIAL	Material;
+}
+
+
 
 struct Output_VS
 {
@@ -74,7 +100,7 @@ Output_PS PS_main(Output_VS a)
 	Output_PS output;
 	float4 color;
 
-	if (Material.UseAlbedoMap == 1)
+	if (Material.noTexSampling == 0)
 	{
 		color = g_Texture.Sample(g_SamplerState, a.texcoord);
 		//color = Material.Roughness;

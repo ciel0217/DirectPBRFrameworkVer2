@@ -4,26 +4,25 @@ struct SurfaceInfo
 {
 	float4 WorldPosition;
 	float3 Normal;
-	//float3 T;
-	//float3 B;
+	//float3 T; //tangent使ってないからコメントアウトしておく
+	//float3 B; //binormal使ってないからコメントアウトしておく
 	float3 EyeV;
 	float NdotV;
 };
 
 struct LightingInfo
 {
-	// general terms
+	// 共通項
 	float3 LightV;
 
 	float3 HalfV;
 	float NdotH;
 	float NdotL;
 
-	//currently for directional light source
+	//DirectionlLight用
 	float ShadowFactor;
 
-	// for point sources
-	
+	//ポイントライト用
 	float Distance;
 	float Attenuation;
 };
@@ -38,7 +37,7 @@ void CalcCommonLightInfo(SurfaceInfo surf,  inout LightingInfo info)
 
 void CalcDirectionalLight(SurfaceInfo surf, LIGHT light, inout LightingInfo info)
 {
-	info.LightV = normalize(light.Direction.xyz);
+	info.LightV = normalize(-light.Direction.xyz);
 	info.Distance = -1;
 	info.Attenuation = 1;
 	//info.ShadowFactor = (light.Status == LIGHT_ENABLED_SHADOW) ? 1 - ShadowFactor(surf.WorldPosition) : 1;
@@ -51,6 +50,8 @@ void CalcSpotLight(SurfaceInfo surf, LIGHT light, inout LightingInfo info)
 	info.Distance = length(info.LightV);
 	info.LightV = normalize(info.LightV);
 	info.Attenuation = 1.0f / (light.ConstantAtt + light.LinearAtt * info.Distance + light.QuadAtt * (info.Distance * info.Distance));
+
+	//未実装
 
 	//float minCos = cos(light.spotAngle);
 	//float maxCos = (minCos + 1.0f) / 2.0f; // squash between [0, 1]
@@ -75,13 +76,16 @@ void CalcPointLight(SurfaceInfo surf, LIGHT light, inout LightingInfo info)
 void CalcLight(SurfaceInfo surf, LIGHT light, inout LightingInfo info)
 {
 	info = (LightingInfo)0;
-	if (light.LightType == DIRECTIONAL_LIGHT) {
+	if (light.LightType == DIRECTIONAL_LIGHT)
+	{
 		CalcDirectionalLight(surf, light, info);
 	}
-	else if (light.LightType == SPOT_LIGHT) {
+	else if (light.LightType == SPOT_LIGHT)
+	{
 		CalcSpotLight(surf, light, info);
 	}
-	else if (light.LightType == POINT_LIGHT) {
+	else if (light.LightType == POINT_LIGHT) 
+	{
 		CalcPointLight(surf, light, info);
 	}
 }

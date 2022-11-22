@@ -2,7 +2,8 @@
 
 static const float PI = 3.14159265359;
 
-float RadicalInverse_VdC(uint bits) {
+float RadicalInverse_VdC(uint bits) 
+{
 	bits = (bits << 16u) | (bits >> 16u);
 	bits = ((bits & 0x55555555u) << 1u) | ((bits & 0xAAAAAAAAu) >> 1u);
 	bits = ((bits & 0x33333333u) << 2u) | ((bits & 0xCCCCCCCCu) >> 2u);
@@ -11,7 +12,8 @@ float RadicalInverse_VdC(uint bits) {
 	return float(bits) * 2.3283064365386963e-10; // / 0x100000000
 }
 
-float2 Hammersley2d(uint i, uint N) {
+float2 Hammersley2d(uint i, uint N)
+{
 	return float2(float(i) / float(N), RadicalInverse_VdC(i));
 }
 
@@ -23,13 +25,13 @@ float3 ImportanceSampleGGX(float2 st, float3 N, float roughness)
 	float cosTheta = sqrt((1.0 - st.y) / (1.0 + (a * a - 1.0) * st.y));
 	float sinTheta = sqrt(1.0 - cosTheta * cosTheta);
 
-	// from spherical coordinates to cartesian coordinates
+	//　球面座標から直交座標に変換
 	float3 H;
 	H.x = cos(phi) * sinTheta;
 	H.y = sin(phi) * sinTheta;
 	H.z = cosTheta;
 
-	// from tangent-space vector to world-space sample vector
+	// タンジェント空間からワールド空間ベクトルに変換
 	float3 up = abs(N.z) < 0.999 ? float3(0.0, 0.0, 1.0) : float3(1.0, 0.0, 0.0);
 	float3 tangent = normalize(cross(up, N));
 	float3 bitangent = cross(N, tangent);
@@ -52,7 +54,7 @@ float CalculateGeometrySmithIBL(float dot, float roughness)
 float CalculateGeometrySmith(float dot, float roughness)
 {
 	float r = (roughness + 1.0);
-	float k = (r * r) / 8.0;
+	float k = (r * r) / 8.0f;
 
 
 	float numerator = dot;
@@ -92,7 +94,7 @@ float NormalDistributionGGX(float NdotH, float roughness)
 float3 FresnelSchlick(float3 F0, float VdotH)
 {
 	float3 ret;
-	ret = F0 + (1.0f - F0) * pow(1.0f - VdotH, 5.0);
+	ret = F0 + (1.0f - F0) * pow(1.0f - VdotH, 5.0f);
 	return ret;
 }
 
