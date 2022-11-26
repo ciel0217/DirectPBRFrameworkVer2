@@ -1,51 +1,4 @@
-
-
-//*****************************************************************************
-// 定数バッファ
-//*****************************************************************************
-
-// マトリクスバッファ
-cbuffer WorldBuffer : register(b0)
-{
-	matrix World;
-}
-
-cbuffer ViewBuffer : register(b1)
-{
-	matrix View;
-}
-
-cbuffer ProjectionBuffer : register(b2)
-{
-	matrix Projection;
-}
-
-// マテリアルバッファ
-struct MATERIAL
-{
-	float4  	BaseColor;
-	float4  	Normal;
-	float    	Roughness;
-	float    	Metaric;
-	float   	Specular;
-	int			noTexSampling;
-	int			UseAlbedoMap;
-	int			UseOccMetalRough;
-	int			UseAoMap;
-	int			UseEmmisive;
-	int			NormalState;
-	int			Dummy[3];
-};
-
-cbuffer MaterialBuffer : register(b3)
-{
-	MATERIAL	Material;
-}
-
-cbuffer InverseWorldBuffer : register(b6)
-{
-	matrix InverseWorld;
-}
+#include "common.hlsli"
 
 
 struct Output_VS 
@@ -119,7 +72,7 @@ Output_PS PS_main(Output_VS a)
 	Output_PS output;
 	float4 color = 0.0;
 
-	if (Material.noTexSampling == 0)
+	if (Material.UseAlbedoTex == 1)
 	{
 		color = g_Texture.Sample(g_SamplerState, a.texcoord);
 		//color = Material.Roughness;

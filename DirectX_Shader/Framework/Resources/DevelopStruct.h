@@ -43,7 +43,7 @@ struct MATERIAL_CBUFFER
 	float    	Roughness;
 	float    	Metaric;
 	float   	Specular;
-	int			UseAlbedoMap;
+	int			UseAlbedoTex;
 	int			UseOccMetalRough;
 	int			UseAoMap;
 	int			UseEmmisive;

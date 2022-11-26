@@ -46,13 +46,13 @@ void SkyBox::Update()
 
 void SkyBox::DrawByCubeMap()
 {
-	m_ModelName = "asset/model/SkyBox.obj";
+	m_ModelName = "Asset/model/SkyBox.obj";
 	SetUpModel(m_ModelName, this);
 
 	/*m_ShaderCubeMap = ManagerShader::GetShader("Shader/CubeMap.hlsl");
 	m_ShaderIrradianceMap = ManagerShader::GetShader("IrradianceMap.hlsl");
 	m_ShaderPreFilterMap = ManagerShader::GetShader("SpecularMap.hlsl");*/
-	m_ShaderBrdfLUT = ManagerShader::GetShader("BrdfLUT.hlsl");
+	m_ShaderBrdfLUT = ManagerShader::GetShader("Shader/BrdfLUT.hlsl");
 
 	//普通の描画に使うようShaderに変える(デフォルトのままだとGBuffer用のShaderになっているから)
 	std::shared_ptr<CMaterial> default_material = ManagerMaterial::GetMaterial(m_MaterialIds[0]);
@@ -146,7 +146,7 @@ void SkyBox::DrawByCubeMap()
 	}
 
 	m_IrradianceMap->SetViewPort();
-	default_material->SetShader("IrradianceMap.hlsl");
+	default_material->SetShader("Shader/IrradianceMap.hlsl");
 	for (int i = 0; i < 6; i++) {
 		CDxRenderer::GetRenderer()->GetDeviceContext()->OMSetRenderTargets(1, m_IrradianceMap->GetRenderTargetViewPointerPointer(i), nullptr);
 
@@ -178,7 +178,7 @@ void SkyBox::DrawByCubeMap()
 
 	float map_size = CUBE_MAP_SIZE;
 	m_RoughnessCBuffer->PSSetCBuffer(0);
-	default_material->SetShader("SpecularMap.hlsl");
+	default_material->SetShader("Shader/SpecularMap.hlsl");
 
 	for (int i = 0; i < 6; i++) {
 		float roughness = (float)i / 5.0f;

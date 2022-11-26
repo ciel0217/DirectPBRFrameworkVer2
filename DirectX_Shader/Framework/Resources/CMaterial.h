@@ -33,7 +33,7 @@ public:
 	CMaterial(int render, MATERIAL_CBUFFER material, CShader* shader, ID3D11ShaderResourceView* texture, std::string name) :
 		m_RenderQueue(render), m_Shader(shader), m_MaterialName(name), m_MaterialValue(material) {
 		m_AlbedoTexture.Attach(texture);
-		m_MaterialValue.UseAlbedoMap = 1;
+		m_MaterialValue.UseAlbedoTex = 1;
 	}
 
 	void SetMaterialValue(MATERIAL_CBUFFER value) { m_MaterialValue = value; }

@@ -22,7 +22,7 @@ struct MATERIAL
 	float    	Roughness;
 	float    	Metaric;
 	float   	Specular;
-	int			UseAlbedoMap;
+	int			UseAlbedoTex;
 	int			UseOccMetalRough;
 	int			UseAoMap;
 	int			UseEmmisive;
@@ -32,4 +32,9 @@ struct MATERIAL
 cbuffer MaterialBuffer : register(b3)
 {
 	MATERIAL	Material;
+}
+
+cbuffer InverseWorldBuffer : register(b6)
+{
+	matrix InverseWorld;
 }

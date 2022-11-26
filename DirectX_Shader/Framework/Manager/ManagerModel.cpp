@@ -351,6 +351,11 @@ void ManagerModel::LoadMaterial(char* FileName, MODEL_MATERIAL ** MaterialArray,
 		if (feof(file) != 0)
 			break;
 
+		materialArray[mc].Material.UseAlbedoTex = false;
+		materialArray[mc].Material.UseAoMap = false;
+		materialArray[mc].Material.UseEmmisive = false;
+		materialArray[mc].Material.UseOccMetalRough = false;
+		materialArray[mc].Material.NormalState = NORMAL_UNUSED;
 
 		if (strcmp(str, "newmtl") == 0)
 		{
@@ -358,7 +363,6 @@ void ManagerModel::LoadMaterial(char* FileName, MODEL_MATERIAL ** MaterialArray,
 			mc++;
 			fscanf(file, "%s", materialArray[mc].Name);
 			strcpy(materialArray[mc].TextureName, "");
-			materialArray[mc].Material.UseAlbedoMap = 1;
 		}
 		else if (strcmp(str, "Ka") == 0)
 		{
@@ -413,19 +417,14 @@ void ManagerModel::LoadMaterial(char* FileName, MODEL_MATERIAL ** MaterialArray,
 			fscanf(file, "%s", str);
 
 			char path[256];
-			strcpy(path, "asset/texture/");
+			strcpy(path, "Asset/texture/");
 			strcat(path, str);
 
 			strcat(materialArray[mc].TextureName, path);
 
-			materialArray[mc].Material.UseAlbedoMap = 1;
+			materialArray[mc].Material.UseAlbedoTex = 1;
 		}
-		//エミッシブ（自己発光）
-		materialArray[mc].Material.UseAlbedoMap = false;
-		materialArray[mc].Material.UseAoMap = false;
-		materialArray[mc].Material.UseEmmisive = false;
-		materialArray[mc].Material.UseOccMetalRough = false;
-		materialArray[mc].Material.NormalState = NORMAL_UNUSED;
+		
 
 	}
 

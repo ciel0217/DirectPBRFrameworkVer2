@@ -133,7 +133,7 @@ void MeshRenderer::Draw(unsigned int index)
 		m_MaterialCBuffer->UpdateBuffer(&material->GetMaterialValue());
 		m_MaterialCBuffer->PSSetCBuffer(3);
 
-		if (material->GetMaterialValue().UseAlbedoMap == 1)
+		if (material->GetMaterialValue().UseAlbedoTex == 1)
 			CDxRenderer::GetRenderer()->GetDeviceContext()->PSSetShaderResources(0, 1, material->GetAlbedoTexture().GetAddressOf());
 		if (material->GetMaterialValue().UseAoMap == 1)
 			CDxRenderer::GetRenderer()->GetDeviceContext()->PSSetShaderResources(1, 1, material->GetAoTexture().GetAddressOf());
