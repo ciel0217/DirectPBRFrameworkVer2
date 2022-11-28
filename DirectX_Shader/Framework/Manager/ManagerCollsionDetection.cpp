@@ -24,6 +24,7 @@ ManagerCollisionDetection::~ManagerCollisionDetection()
 
 void ManagerCollisionDetection::CollisionCheck(std::list<CGameObject*> gameobject)
 {
+	//üŒ`8•ª–Ø
 	int count = 0;
 	for (auto itr = gameobject.cbegin(); itr != gameobject.cend(); itr++) 
 	{

@@ -171,6 +171,7 @@
     <ClInclude Include="Framework\Resources\DevelopStruct.h" />
     <ClInclude Include="Framework\Resources\DirectionalLight.h" />
     <ClInclude Include="Framework\Resources\DirectXTexture2D.h" />
+    <ClInclude Include="Framework\Resources\LinerOctree.h" />
     <ClInclude Include="Framework\Resources\Mesh.h" />
     <ClInclude Include="Framework\Resources\MeshFilter.h" />
     <ClInclude Include="Framework\Resources\ObjectTag.h" />
