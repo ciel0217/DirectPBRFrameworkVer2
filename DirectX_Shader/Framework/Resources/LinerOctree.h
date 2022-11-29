@@ -7,12 +7,15 @@ class LinerOctree{
 
 private:
 	const unsigned int MAX_DIMENSION_LEVEL = 7;
+	const unsigned int POWER_NUMBER[8] ={1, 8, 64, 512, 4096, 32768, 262144, 2097152};//8‚Ì‚×‚«æ
+
 	unsigned int m_DimensionLevel = 2;
 
 	D3DXVECTOR3 m_Min;
 	D3DXVECTOR3 m_Max;
 	D3DXVECTOR3 m_UnitLen; //Å¬—Ìˆæ‚Ì’·‚³
-	
+	unsigned int m_SpaceNum;
+
 	std::vector<std::vector<CGameObject*>> m_ObjectList;
 
 public:
@@ -21,7 +24,8 @@ public:
 
 	void Init();
 
-	std::vector<std::vector<CGameObject*>> CalcOctree();
+	//update–ˆ‚ÉŒÄ‚Ô
+	void CalcOctree(CGameObject* object);
 
 	// ƒrƒbƒg•ªŠ„ŠÖ”
 	DWORD BitSeparateFor3D(BYTE n)

@@ -216,6 +216,7 @@
     <ClCompile Include="Framework\Resources\CScene.cpp" />
     <ClCompile Include="Framework\Resources\DirectionalLight.cpp" />
     <ClCompile Include="Framework\Resources\DirectXTexture2D.cpp" />
+    <ClCompile Include="Framework\Resources\LinerOctree.cpp" />
     <ClCompile Include="Framework\Resources\Mesh.cpp" />
     <ClCompile Include="Framework\Resources\MeshFilter.cpp" />
     <ClCompile Include="Framework\Resources\SkyBox.cpp" />

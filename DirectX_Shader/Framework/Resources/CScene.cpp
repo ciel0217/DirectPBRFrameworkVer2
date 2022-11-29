@@ -53,24 +53,25 @@ void CScene::Update()
 		camera->Update();
 	}
 
-	for (int i = 0; i < eMaxLayer; i++) {
-		for (auto gameobject : m_GameObjects[i]) {
-			gameobject->Update();
-		}
-	}
-
-	HitCheck();
+	
 	
 	for (int i = 0; i < eMaxLayer; i++) {
-		m_GameObjects[i].remove_if([](CGameObject* obj) {
-
+		//オブジェクトを削除
+		m_GameObjects[i].remove_if([](CGameObject* obj) 
+		{
 			bool destroy = obj->Destroy();
 			if (destroy) {
 				delete obj;
 			}
 			return destroy;
 		});
+
+		for (auto gameobject : m_GameObjects[i]) {
+			gameobject->Update();
+		}
 	}
+	HitCheck();
+	
 
 }
 
