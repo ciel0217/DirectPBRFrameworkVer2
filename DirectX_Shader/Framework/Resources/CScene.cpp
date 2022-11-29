@@ -1,6 +1,7 @@
 #include "CScene.h"
 #include "Camera.h"
 #include "../Renderer/CameraRenderer.h"
+#include "LinerOctree.h"
 
 void CScene::Config()
 {
@@ -49,13 +50,15 @@ void CScene::Uninit()
 
 void CScene::Update()
 {
-	for (auto camera : m_SceneCameras) {
+	for (auto camera : m_SceneCameras)
+	{
 		camera->Update();
 	}
 
 	
 	
-	for (int i = 0; i < eMaxLayer; i++) {
+	for (int i = 0; i < eMaxLayer; i++) 
+	{
 		//オブジェクトを削除
 		m_GameObjects[i].remove_if([](CGameObject* obj) 
 		{
@@ -66,8 +69,11 @@ void CScene::Update()
 			return destroy;
 		});
 
-		for (auto gameobject : m_GameObjects[i]) {
+		for (auto gameobject : m_GameObjects[i])
+		{
 			gameobject->Update();
+			if (eMaxLayer == e3DObject && !m_LinerOctree.get())
+				m_LinerOctree->CalcOctree(gameobject);
 		}
 	}
 	HitCheck();
@@ -77,7 +83,10 @@ void CScene::Update()
 
 void CScene::HitCheck()
 {
-	m_ManagerCollisionDetection->CollisionCheck(m_GameObjects[e3DObject]);
+	if (m_LinerOctree.get())
+		m_LinerOctree->Init();//変更して
+	else
+		m_ManagerCollisionDetection->CollisionCheck(m_GameObjects[e3DObject]);
 }
 
 void CScene::Draw()

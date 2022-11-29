@@ -5,6 +5,9 @@
 #include "Camera.h"
 #include "../Resources/DevelopEnum.h"
 #include "../Manager/ManagerCollsionDetection.h"
+#include <memory>
+
+class LinerOctree;
 
 class CScene
 {
@@ -16,6 +19,7 @@ protected:
 	std::list<Camera*> m_SceneCameras;
 	Camera* m_CurrentMainCamera;
 	std::list<CGameObject *> m_GameObjects[eMaxLayer];				//ゲームオブジェクトのすべて
+	std::unique_ptr<LinerOctree> m_LinerOctree;
 
 public:
 	
