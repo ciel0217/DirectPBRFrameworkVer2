@@ -31,4 +31,5 @@ public:
 	static ManagerCollisionDetection* GetInstance() { return _instance; }
 
 	void CollisionCheck(std::list<CGameObject*> gameobject);
+	void CollisionCheckByOctree(std::vector<std::vector<CGameObject*>> object_list);
 };

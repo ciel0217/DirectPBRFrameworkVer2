@@ -18,15 +18,6 @@ private:
 
 	std::vector<std::vector<CGameObject*>> m_ObjectList;
 
-public:
-	LinerOctree() = delete;
-	LinerOctree(int level, D3DXVECTOR3 min, D3DXVECTOR3 max) : m_DimensionLevel(level), m_Min(min), m_Max(max) {};
-
-	void Init();
-
-	//update毎に呼ぶ
-	void CalcOctree(CGameObject* object);
-
 	// ビット分割関数
 	DWORD BitSeparateFor3D(BYTE n)
 	{
@@ -52,4 +43,18 @@ public:
 			(BYTE)((p.z - m_Min.z) / m_UnitLen.z)
 		);
 	}
+
+public:
+	LinerOctree() = delete;
+	LinerOctree(int level, D3DXVECTOR3 min, D3DXVECTOR3 max) : m_DimensionLevel(level), m_Min(min), m_Max(max) {};
+
+	void Init();
+
+	//Calc呼ぶ前に呼ぶ(1回だけでいい)
+	void ClearList();
+	//update毎に呼ぶ
+	void CalcOctree(CGameObject* object);
+
+	std::vector<std::vector<CGameObject*>> GetObjectList() { return m_ObjectList; }
+	
 };
