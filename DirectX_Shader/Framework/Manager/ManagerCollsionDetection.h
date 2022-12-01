@@ -11,6 +11,10 @@ class ManagerCollisionDetection
 private:
 	static ManagerCollisionDetection* _instance;
 	CCollisionDetection* m_CollisionDetection[eCollisionTypeMax][eCollisionTypeMax];
+	std::vector<std::vector<CGameObject*>> m_ObjectListByOctree;
+
+
+	bool CalcOctreeCollisionList(std::vector<CGameObject*> &current_space ,std::vector<CGameObject*> &collision_stack, DWORD elem);
 
 public:
 	ManagerCollisionDetection();
