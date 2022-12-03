@@ -27,6 +27,9 @@ void CScene::Init()
 			gameobject->Init();
 		}
 	}
+
+	if(m_LinerOctree.get())
+		m_LinerOctree->Init();
 }
 
 void CScene::Uninit()
@@ -54,8 +57,6 @@ void CScene::Update()
 	{
 		camera->Update();
 	}
-
-	
 	
 	for (int i = 0; i < eMaxLayer; i++) 
 	{
@@ -72,7 +73,7 @@ void CScene::Update()
 		for (auto gameobject : m_GameObjects[i])
 		{
 			gameobject->Update();
-			if (eMaxLayer == e3DObject && !m_LinerOctree.get())
+			if (eMaxLayer == e3DObject && m_LinerOctree.get())
 				m_LinerOctree->CalcOctree(gameobject);
 		}
 	}
@@ -84,9 +85,13 @@ void CScene::Update()
 void CScene::HitCheck()
 {
 	if (m_LinerOctree.get())
-		m_LinerOctree->Init();//•ÏX‚µ‚Ä
-	else
+	{
+		m_ManagerCollisionDetection->CollisionCheck(m_LinerOctree->GetObjectList());
+		m_LinerOctree->ClearList();
+	}else
 		m_ManagerCollisionDetection->CollisionCheck(m_GameObjects[e3DObject]);
+
+	
 }
 
 void CScene::Draw()

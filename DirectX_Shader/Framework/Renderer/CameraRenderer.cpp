@@ -207,10 +207,10 @@ void CameraRenderer::CalcRenderingOrder(std::list<CGameObject *> gameobject[])
 	});
 
 	//‹ß‚¢‚Ù‚¤‚©‚ç•`‰æ
-	m_OpacityList.sort([pos](CommonProcess* a, CommonProcess* b)
+	m_OpacityList.sort([pos](std::tuple<CRenderer*, unsigned int, std::shared_ptr<CMaterial>> a, std::tuple<CRenderer*, unsigned int, std::shared_ptr<CMaterial>> b)
 	{
-			D3DXVECTOR3 a_dis = pos - a->GetPosition();
-			D3DXVECTOR3 b_dis = pos - b->GetPosition();
+			D3DXVECTOR3 a_dis = pos - ((CommonProcess*)std::get<0>(a))->GetPosition();
+			D3DXVECTOR3 b_dis = pos - ((CommonProcess*)std::get<0>(b))->GetPosition();
 
 			return D3DXVec3LengthSq(&a_dis) < D3DXVec3LengthSq(&b_dis);
 	});

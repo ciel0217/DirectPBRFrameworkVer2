@@ -65,7 +65,7 @@ void ManagerCollisionDetection::CollisionCheck(std::list<CGameObject*> gameobjec
 }
 
 //線形8分木を用いた当たり判定
-void ManagerCollisionDetection::CollisionCheckByOctree(std::vector<std::vector<CGameObject*>> object_list)
+void ManagerCollisionDetection::CollisionCheck(std::vector<std::vector<CGameObject*>> object_list)
 {
 
 	std::vector<CGameObject* > collision_stack;//当たり判定を取る上位空間のオブジェクト
