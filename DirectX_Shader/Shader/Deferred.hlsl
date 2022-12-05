@@ -140,8 +140,9 @@ Output_PS PS_main(Output_VS vs)
 		float3 numerator = d * g * f;
 		float denominator = 4.0f * saturate(surf.NdotV) * saturate(light_info.NdotL);
 		float3 specularBRDF = numerator / max(denominator, 0.001f);
+		
 		Lo += (kd * albedo / PI + specularBRDF) * Lights[i].Diffuse.rgb * light_info.Attenuation * saturate(light_info.NdotL);
-
+		
 	}
 
 	float3 ambient = GlobalAmbient.rgb * albedo;
@@ -170,7 +171,7 @@ Output_PS PS_main(Output_VS vs)
 	
 
 	//output.color = float4(depth, depth, depth, 1.0f);
-//	output.color = float4(ambient, 1.0f);
+	//output.color = float4(Lo, 1.0f);
 	
 	/*if (.Enable == 1) {
 		for (int i = 0; i < 10; i++) {
@@ -191,7 +192,7 @@ Output_PS PS_main(Output_VS vs)
 	//output.color = g_RoughMetaSpeTex.Sample(g_SamplerState, vs.texcoord);
 	//output.color = g_NormalTex.Sample(g_SamplerState, vs.texcoord);
 	//output.color = g_SpecularTex.Sample(g_SamplerState, vs.texcoord);
-
+	//output.color = float4(roughness, roughness, roughness, 1.0f);
 	
 	return output;
 

@@ -132,7 +132,7 @@ void CameraRenderer::DrawRenderer(std::list<CGameObject *> gameobject[])
 	CDxRenderer::GetRenderer()->ClearBackBuffor(false);
 	CDxRenderer::GetRenderer()->SetRenderTargetBackBuffor(true);
 
-	SetVPCIdentity();
+//	SetVPCIdentity();
 
 	m_ToneMapPass->Draw();
 	
@@ -328,14 +328,14 @@ void CameraRenderer::SetVPCBuffer(D3DXVECTOR3 pos, D3DXVECTOR3 lookat, D3DXVECTO
 
 	D3DXMatrixInverse(&mtxInverseView, NULL, &mtxView);
 	m_ViewInverseCBuffer->UpdateBuffer(&mtxInverseView);
-	m_ViewInverseCBuffer->VSSetCBuffer(6);
-	m_ViewInverseCBuffer->PSSetCBuffer(6);
+	m_ViewInverseCBuffer->VSSetCBuffer(7);
+	m_ViewInverseCBuffer->PSSetCBuffer(7);
 
 
 	D3DXMatrixInverse(&mtxInverseProj, NULL, &mtxProjection);
 	m_ProjectionInverseCBuffer->UpdateBuffer(&mtxInverseProj);
-	m_ProjectionInverseCBuffer->VSSetCBuffer(7);
-	m_ProjectionInverseCBuffer->PSSetCBuffer(7);
+	m_ProjectionInverseCBuffer->VSSetCBuffer(8);
+	m_ProjectionInverseCBuffer->PSSetCBuffer(8);
 
 	m_CameraPosCBuffer->UpdateBuffer(pos);
 	m_CameraPosCBuffer->PSSetCBuffer(5);
