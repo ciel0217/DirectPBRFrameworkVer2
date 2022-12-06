@@ -47,7 +47,7 @@ void DeferredRenderer::Draw()
 	CDxRenderer::GetRenderer()->SetInputLayout(m_Shader->GetShaderVS()->Layout.Get());
 
 	m_DeferredCBuffer->UpdateBuffer(&m_CBufferValue);
-	m_DeferredCBuffer->PSSetCBuffer(8);
+	m_DeferredCBuffer->PSSetCBuffer(9);
 
 	RenderTarget color = CDxRenderer::GetRenderer()->GetSceneTexture(eBaseColor);
 	RenderTarget normal = CDxRenderer::GetRenderer()->GetSceneTexture(eNormal);
@@ -77,7 +77,8 @@ void DeferredRenderer::Draw()
 	ID3D11ShaderResourceView* t10 = m_SkyBox->GetSpecularMap();
 	ID3D11ShaderResourceView* t11 = m_SkyBox->GetBrdfLUTMap();*/
 
-	if (m_CBufferValue.UseEnvMap == 1) {
+	if (m_CBufferValue.UseEnvMap == 1)
+	{
 		/*CDxRenderer::GetRenderer()->GetDeviceContext()->PSSetShaderResources(8, 1, &t8);*/
 		CDxRenderer::GetRenderer()->GetDeviceContext()->PSSetShaderResources(9, 1, &m_IrradianceTexture);
 		CDxRenderer::GetRenderer()->GetDeviceContext()->PSSetShaderResources(10, 1, &m_PrefilterTexture);

@@ -132,7 +132,7 @@ void CameraRenderer::DrawRenderer(std::list<CGameObject *> gameobject[])
 	CDxRenderer::GetRenderer()->ClearBackBuffor(false);
 	CDxRenderer::GetRenderer()->SetRenderTargetBackBuffor(true);
 
-	SetVPCIdentity();
+//	SetVPCIdentity();
 
 	m_ToneMapPass->Draw();
 	
@@ -207,10 +207,10 @@ void CameraRenderer::CalcRenderingOrder(std::list<CGameObject *> gameobject[])
 	});
 
 	//‹ß‚¢‚Ù‚¤‚©‚ç•`‰æ
-	m_OpacityList.sort([pos](CommonProcess* a, CommonProcess* b)
+	m_OpacityList.sort([pos](std::tuple<CRenderer*, unsigned int, std::shared_ptr<CMaterial>> a, std::tuple<CRenderer*, unsigned int, std::shared_ptr<CMaterial>> b)
 	{
-			D3DXVECTOR3 a_dis = pos - a->GetPosition();
-			D3DXVECTOR3 b_dis = pos - b->GetPosition();
+			D3DXVECTOR3 a_dis = pos - ((CommonProcess*)std::get<0>(a))->GetPosition();
+			D3DXVECTOR3 b_dis = pos - ((CommonProcess*)std::get<0>(b))->GetPosition();
 
 			return D3DXVec3LengthSq(&a_dis) < D3DXVec3LengthSq(&b_dis);
 	});
@@ -328,14 +328,14 @@ void CameraRenderer::SetVPCBuffer(D3DXVECTOR3 pos, D3DXVECTOR3 lookat, D3DXVECTO
 
 	D3DXMatrixInverse(&mtxInverseView, NULL, &mtxView);
 	m_ViewInverseCBuffer->UpdateBuffer(&mtxInverseView);
-	m_ViewInverseCBuffer->VSSetCBuffer(6);
-	m_ViewInverseCBuffer->PSSetCBuffer(6);
+	m_ViewInverseCBuffer->VSSetCBuffer(7);
+	m_ViewInverseCBuffer->PSSetCBuffer(7);
 
 
 	D3DXMatrixInverse(&mtxInverseProj, NULL, &mtxProjection);
 	m_ProjectionInverseCBuffer->UpdateBuffer(&mtxInverseProj);
-	m_ProjectionInverseCBuffer->VSSetCBuffer(7);
-	m_ProjectionInverseCBuffer->PSSetCBuffer(7);
+	m_ProjectionInverseCBuffer->VSSetCBuffer(8);
+	m_ProjectionInverseCBuffer->PSSetCBuffer(8);
 
 	m_CameraPosCBuffer->UpdateBuffer(pos);
 	m_CameraPosCBuffer->PSSetCBuffer(5);

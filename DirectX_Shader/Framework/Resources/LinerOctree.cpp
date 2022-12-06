@@ -27,12 +27,14 @@ void LinerOctree::CalcOctree(CGameObject * object)
 	CollisionType type = collision->GetCollisionType();
 
 	D3DXVECTOR3 min, max;
+	D3DXVECTOR3 size;
+	D3DXVECTOR3 center;
 	//コリジョンタイプによって最小座標、最大座標のとり方が違う
 	switch (type)
 	{
 	case eBoxCollision:
-		D3DXVECTOR3 size = ((BoxCollision*)collision)->GetCollisionBoxSize();
-		D3DXVECTOR3 center = ((BoxCollision*)collision)->GetCollisionCenterPosition();
+		size = ((BoxCollision*)collision)->GetCollisionBoxSize();
+		center = ((BoxCollision*)collision)->GetCollisionCenterPosition();
 
 		min = center - size / 2.0f;
 		max = center + size / 2.0f;

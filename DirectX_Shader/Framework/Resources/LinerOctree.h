@@ -3,8 +3,9 @@
 #include <vector>
 
 class CGameObject;
-class LinerOctree{
 
+class LinerOctree
+{
 private:
 	const unsigned int MAX_DIMENSION_LEVEL = 7;
 	const unsigned int POWER_NUMBER[8] ={1, 8, 64, 512, 4096, 32768, 262144, 2097152};//8‚Ì‚×‚«æ

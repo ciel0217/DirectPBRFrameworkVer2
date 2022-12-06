@@ -6,8 +6,8 @@
 #include "../Resources/DevelopEnum.h"
 #include "../Manager/ManagerCollsionDetection.h"
 #include <memory>
+#include "LinerOctree.h"
 
-class LinerOctree;
 
 class CScene
 {

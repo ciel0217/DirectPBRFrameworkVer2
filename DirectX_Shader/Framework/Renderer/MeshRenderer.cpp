@@ -143,7 +143,12 @@ void MeshRenderer::Draw(unsigned int index)
 			CDxRenderer::GetRenderer()->GetDeviceContext()->PSSetShaderResources(3, 1, material->GetRoughMetalTexture().GetAddressOf());
 		if (material->GetMaterialValue().NormalState != NORMAL_UNUSED)
 			CDxRenderer::GetRenderer()->GetDeviceContext()->PSSetShaderResources(4, 1, material->GetNormalTexture().GetAddressOf());
-
+		if (material->GetMaterialValue().UseAlbedoTex == 0)
+		{
+			int a = 0;
+			a = 1;
+		}
+			
 
 		CDxRenderer::GetRenderer()->GetDeviceContext()->DrawIndexed(indices.size(), 0, 0);
 		//ƒJƒŠƒ“ƒO‚ğŒ³‚É–ß‚·

@@ -182,6 +182,7 @@
     <ClInclude Include="GameSceneCamera.h" />
     <ClInclude Include="Math\Quaternion.h" />
     <ClInclude Include="Ocean.h" />
+    <ClInclude Include="Test3D.h" />
     <ClInclude Include="TestScene.h" />
     <ClInclude Include="UserEnum.h" />
   </ItemGroup>
@@ -225,6 +226,7 @@
     <ClCompile Include="GameSceneCamera.cpp" />
     <ClCompile Include="Math\Quaternion.cpp" />
     <ClCompile Include="Ocean.cpp" />
+    <ClCompile Include="Test3D.cpp" />
     <ClCompile Include="TestScene.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -351,11 +351,6 @@ void ManagerModel::LoadMaterial(char* FileName, MODEL_MATERIAL ** MaterialArray,
 		if (feof(file) != 0)
 			break;
 
-		materialArray[mc].Material.UseAlbedoTex = false;
-		materialArray[mc].Material.UseAoMap = false;
-		materialArray[mc].Material.UseEmmisive = false;
-		materialArray[mc].Material.UseOccMetalRough = false;
-		materialArray[mc].Material.NormalState = NORMAL_UNUSED;
 
 		if (strcmp(str, "newmtl") == 0)
 		{
@@ -473,7 +468,11 @@ std::pair<std::shared_ptr<Mesh>, std::vector<unsigned int>> ManagerModel::Load(s
 			std::string filename = model.SubsetArray[i].Material.TextureName;
 			std::string material_name = model.SubsetArray[i].Material.Name;
 			
-			ID3D11ShaderResourceView* texture = ManagerTexture::LoadTexture(filename);
+			ID3D11ShaderResourceView* texture = nullptr;
+			if (filename.size() != 0)
+				texture = ManagerTexture::LoadTexture(filename);
+			else
+				int a = 0;
 			CShader* shader = ManagerShader::GetShader("Shader/shader.hlsl");
 
 			unsigned int material_id = ManagerMaterial::CreateMaterial(eOpacity, material_value, shader, texture, material_name);

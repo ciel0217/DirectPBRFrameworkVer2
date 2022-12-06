@@ -82,7 +82,7 @@ Output_PS PS_main(Output_VS a)
 	else
 	{
 		//color = a.color;
-		color = float4(1.0f,1.0f, 1.0f, 1.0f);
+		color = float4(1.0f, 1.0f, 1.0f, 1.0f);
 		
 	}
 
@@ -93,7 +93,7 @@ Output_PS PS_main(Output_VS a)
 	//output.normal = float4(a.normal, 1);
 	output.rough_meta_spe = float4(Material.Roughness, Material.Metaric, Material.Specular, 1.0f);
 
-	//output.color = float4(Material.Metaric, Material.Metaric, Material.Metaric, 1.0f);
+	//output.color = float4(Material.Roughness, Material.Roughness, Material.Roughness, 1.0f);
 	//output.color = float4(.0f, 0.0f, 1.0f, 1.0f);
 	return output;
 }
