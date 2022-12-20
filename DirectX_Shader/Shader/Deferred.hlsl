@@ -167,7 +167,7 @@ Output_PS PS_main(Output_VS vs)
 
 	//output.color = float4(F0 , 1.0f);
 	
-	output.color = float4(Lo + ambient + emmisive, 1.0f);
+	output.color = float4(Lo + ambient + emmisive , 1.0f);
 	
 
 	//output.color = float4(depth, depth, depth, 1.0f);

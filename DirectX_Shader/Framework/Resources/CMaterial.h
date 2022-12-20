@@ -22,7 +22,7 @@ private:
 	D3DXVECTOR2 m_TextureScale = D3DXVECTOR2(1.0f, 1.0f);
 	
 public:
-	CMaterial() = delete;
+	CMaterial() {};
 	CMaterial(int render, CShader* shader, ID3D11ShaderResourceView* texture, std::string name) : 
 		m_RenderQueue(render), m_Shader(shader), m_MaterialName(name) {
 		ZeroMemory(&m_MaterialValue, sizeof(m_MaterialValue));

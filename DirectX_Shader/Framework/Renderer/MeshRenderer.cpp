@@ -7,6 +7,7 @@
 #include "../Resources/CShader.h"
 #include "../Resources/DevelopEnum.h"
 #include "../Resources/CGameObject.h"
+#include "../Resources/CMaterial.h"
 
 void MeshRenderer::CalcBuffer()
 {
@@ -22,11 +23,20 @@ void MeshRenderer::CalcBuffer()
 	//インデックスバッファ
 	{
 		std::vector<std::vector<unsigned int>> indies = m_ModelMesh->GetIndicesArray();
-		for (auto index : indies) {
+		for (auto index : indies) 
+		{
 			ID3D11Buffer* buffer = CDxRenderer::GetRenderer()->CreateIndexBuffer(index.size(), index.data());
 			m_IndexBuffer.push_back(buffer);
 		}
 	}
+}
+
+void MeshRenderer::SetMaterialCopy(unsigned int id)
+{
+	CMaterial* material = new CMaterial();
+
+	memcpy(material, ManagerMaterial::GetMaterial(id).get(), sizeof(CMaterial));
+	m_Material.push_back(material);
 }
 
 void MeshRenderer::SetMeshAndMaterial(Mesh * mesh, std::vector<unsigned int> material_ids)
@@ -47,23 +57,40 @@ void MeshRenderer::SetUpModel(std::string model_name, CGameObject * self)
 	m_MaterialIds = model.second;
 	m_ModelMesh = model.first;
 
+	for (auto id : m_MaterialIds)
+	{
+		SetMaterialCopy(id);
+	}
+
 	CalcBuffer();
+}
+
+MeshRenderer::~MeshRenderer()
+{
+	for (int i = 0; i < m_Material.size(); i++)
+	{
+		delete m_Material[i];
+	}
 }
 
 void MeshRenderer::AddMaterial(unsigned int material_id)
 {
 	m_MaterialIds.push_back(material_id);
+	SetMaterialCopy(material_id);
 }
 
 void MeshRenderer::DeleteMaterial(unsigned int index)
 {
 	m_MaterialIds.erase(m_MaterialIds.begin() + index);
+	m_Material.erase(m_Material.begin() + index);
 }
 
 bool MeshRenderer::ChangeMaterial(unsigned int index, unsigned int change_material_id)
 {
 	if (m_MaterialIds.size() - 1 < index)return false;
 	m_MaterialIds[index] = change_material_id;
+	memcpy(m_Material[index], ManagerMaterial::GetMaterial(change_material_id).get(), sizeof(CMaterial));
+
 	return true;
 }
 
@@ -75,8 +102,7 @@ void MeshRenderer::Draw(unsigned int index)
 {
 
 	if (m_IsActive) {
-		unsigned int material_id = m_MaterialIds[index];
-		std::shared_ptr<CMaterial> material = ManagerMaterial::GetMaterial(material_id);
+		CMaterial* material = m_Material[index];
 		std::vector<unsigned int> indices = m_ModelMesh->GetIndexArray(index);
 
 		CShader* shader = material->GetShader();
@@ -143,11 +169,7 @@ void MeshRenderer::Draw(unsigned int index)
 			CDxRenderer::GetRenderer()->GetDeviceContext()->PSSetShaderResources(3, 1, material->GetRoughMetalTexture().GetAddressOf());
 		if (material->GetMaterialValue().NormalState != NORMAL_UNUSED)
 			CDxRenderer::GetRenderer()->GetDeviceContext()->PSSetShaderResources(4, 1, material->GetNormalTexture().GetAddressOf());
-		if (material->GetMaterialValue().UseAlbedoTex == 0)
-		{
-			int a = 0;
-			a = 1;
-		}
+		
 			
 
 		CDxRenderer::GetRenderer()->GetDeviceContext()->DrawIndexed(indices.size(), 0, 0);

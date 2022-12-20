@@ -458,6 +458,7 @@ std::pair<std::shared_ptr<Mesh>, std::vector<unsigned int>> ManagerModel::Load(s
 		{
 			unsigned int start_index = model.SubsetArray[i].StartIndex;
 			unsigned int index_num = model.SubsetArray[i].IndexNum;
+
 			std::vector<unsigned int> index_copy{ &model.IndexArray[start_index], &model.IndexArray[start_index] + index_num };
 			std::vector<VERTEX_3D> vertex_copy{ &model.VertexArray[0], &model.VertexArray[0] + model.VertexNum };
 			mesh->SetIndexArray(index_copy, i);
@@ -469,10 +470,10 @@ std::pair<std::shared_ptr<Mesh>, std::vector<unsigned int>> ManagerModel::Load(s
 			std::string material_name = model.SubsetArray[i].Material.Name;
 			
 			ID3D11ShaderResourceView* texture = nullptr;
+
 			if (filename.size() != 0)
 				texture = ManagerTexture::LoadTexture(filename);
-			else
-				int a = 0;
+		
 			CShader* shader = ManagerShader::GetShader("Shader/shader.hlsl");
 
 			unsigned int material_id = ManagerMaterial::CreateMaterial(eOpacity, material_value, shader, texture, material_name);
