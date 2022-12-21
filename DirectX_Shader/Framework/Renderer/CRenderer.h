@@ -30,7 +30,6 @@ public:
 	CRenderer() {}
 	virtual ~CRenderer() {}
 
-	virtual void SetUpMaterial(std::string name, std::string shader_name, std::string material_name) = 0;
 	virtual void Draw(unsigned int index) = 0;
 
 	std::vector<unsigned int> GetMaterialIds() { return m_MaterialIds; }

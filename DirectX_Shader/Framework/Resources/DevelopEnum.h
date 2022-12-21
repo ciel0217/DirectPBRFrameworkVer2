@@ -85,4 +85,11 @@ enum CollisionType {
 	eCollisionTypeMax,
 };
 
+enum ParticleRenderType
+{
+	eBillboard = 0,
+
+	eTypeMax,
+};
+
 

@@ -150,6 +150,7 @@
     <ClInclude Include="Framework\Renderer\DeferredRenderer.h" />
     <ClInclude Include="Framework\Renderer\GBufferPass.h" />
     <ClInclude Include="Framework\Renderer\MeshRenderer.h" />
+    <ClInclude Include="Framework\Renderer\ParticleRenderer.h" />
     <ClInclude Include="Framework\Renderer\PostEffectToneMap.h" />
     <ClInclude Include="Framework\Renderer\SpriteRenderer.h" />
     <ClInclude Include="Framework\Resources\BoxAndBoxDetection.h" />
@@ -163,6 +164,7 @@
     <ClInclude Include="Framework\Resources\CLight.h" />
     <ClInclude Include="Framework\Resources\CMaterial.h" />
     <ClInclude Include="Framework\Resources\CommonProcess.h" />
+    <ClInclude Include="Framework\Resources\ParticleSystem.h" />
     <ClInclude Include="Framework\Resources\CPostEffect.h" />
     <ClInclude Include="Framework\Resources\CScene.h" />
     <ClInclude Include="Framework\Resources\CShader.h" />
@@ -203,6 +205,7 @@
     <ClCompile Include="Framework\Renderer\DeferredRenderer.cpp" />
     <ClCompile Include="Framework\Renderer\GBufferPass.cpp" />
     <ClCompile Include="Framework\Renderer\MeshRenderer.cpp" />
+    <ClCompile Include="Framework\Renderer\ParticleRenderer.cpp" />
     <ClCompile Include="Framework\Renderer\PostEffectToneMap.cpp" />
     <ClCompile Include="Framework\Renderer\SpriteRenderer.cpp" />
     <ClCompile Include="Framework\Resources\BoxAndBoxDetection.cpp" />
@@ -213,6 +216,7 @@
     <ClCompile Include="Framework\Resources\CLight.cpp" />
     <ClCompile Include="Framework\Resources\CMaterial.cpp" />
     <ClCompile Include="Framework\Resources\CommonProcess.cpp" />
+    <ClCompile Include="Framework\Resources\ParticleSystem.cpp" />
     <ClCompile Include="Framework\Resources\CPostEffect.cpp" />
     <ClCompile Include="Framework\Resources\CScene.cpp" />
     <ClCompile Include="Framework\Resources\DirectionalLight.cpp" />
