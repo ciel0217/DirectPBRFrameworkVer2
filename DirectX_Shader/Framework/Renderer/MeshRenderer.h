@@ -27,7 +27,6 @@ public:
 
 	void SetUpModel(std::string model_name, CGameObject* self);
 	void SetMeshAndMaterial(Mesh* mesh, std::vector<unsigned int> material_ids);
-	void SetUpMaterial(std::string texture_name, std::string shader_name, std::string material_name)override;
 
 	void Draw(unsigned int index)override;
 };

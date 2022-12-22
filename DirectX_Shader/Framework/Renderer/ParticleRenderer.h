@@ -13,7 +13,7 @@ protected:
 
 public:
 	ParticleRenderer(){}
-	void SetUpMaterial(int render_queue, std::string material_name, ID3D11ShaderResourceView* texture, MATERIAL_CBUFFER material_value);
+	void SetUpMaterial(int render_queue, std::string material_name, std::string shader_name, ID3D11ShaderResourceView* texture, MATERIAL_CBUFFER material_value);
 	virtual ~ParticleRenderer() {}
 	virtual void Draw(unsigned int index)override;
 };
