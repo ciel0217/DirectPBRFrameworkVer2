@@ -94,3 +94,11 @@ struct VertexShaderRelated {
 	Microsoft::WRL::ComPtr<ID3D11InputLayout>  Layout;
 	Microsoft::WRL::ComPtr<ID3D11ShaderReflection> ShaderRF;
 };
+
+struct ParticleStructuredBuffer
+{
+	D3DXMATRIX WorldMatrix;
+	D3DXCOLOR Color;
+	D3DXVECTOR2 UV;
+	D3DXVECTOR2 Offset;
+};
