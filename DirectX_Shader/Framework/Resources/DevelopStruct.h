@@ -99,6 +99,7 @@ struct ParticleStructuredBuffer
 {
 	D3DXMATRIX WorldMatrix;
 	D3DXCOLOR Color;
+	D3DXVECTOR3 Size;
 	D3DXVECTOR2 UV;
 	D3DXVECTOR2 Offset;
 };

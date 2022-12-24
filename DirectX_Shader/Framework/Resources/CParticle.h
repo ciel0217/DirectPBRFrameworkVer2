@@ -12,6 +12,8 @@ private:
 	D3DXVECTOR3 m_ParticleScale = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXCOLOR m_ParticleColor = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	D3DXQUATERNION m_ParticleRotation = D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f);
+	D3DXVECTOR2 m_ParticleUV = D3DXVECTOR2(0.0f, 0.0f);
+	D3DXVECTOR2 m_TextureOffset = D3DXVECTOR2(1.0f, 1.0f);
 
 	D3DXVECTOR3 m_ParticleInitPosition = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 m_ParticleInitScale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
@@ -37,6 +39,8 @@ public:
 	void SetParticleScale(D3DXVECTOR3 scale) { m_ParticleInitScale = scale; }
 	void SetParticleVelocity(D3DXVECTOR3 velo) { m_ParticleVelocity = velo; }
 	void SetParticleRotation(D3DXQUATERNION qua) { m_ParticleInitRotation = qua; }
+	void SetUV(D3DXVECTOR2 uv) { m_ParticleUV = uv; }
+	void SetOffset(D3DXVECTOR2 uv) { m_TextureOffset = uv; }
 
 	void SetAddScale(D3DXVECTOR3 scale) { m_AddScale = scale; }
 	void SetAddAngle(D3DXVECTOR3 angle) { m_AddAngle = angle; }
@@ -52,4 +56,7 @@ public:
 	D3DXVECTOR3 GetScale() { return m_ParticleScale; }
 	D3DXQUATERNION GetRotation() { return m_ParticleRotation; }
 	D3DXCOLOR GetColor() { return m_ParticleColor; }
+	D3DXVECTOR2 GetUV() { return m_ParticleUV; }
+	D3DXVECTOR2 GetOffset() { return m_TextureOffset; }
+
 };
