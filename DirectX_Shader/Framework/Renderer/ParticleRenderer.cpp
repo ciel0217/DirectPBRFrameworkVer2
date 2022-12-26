@@ -6,6 +6,8 @@
 #include "../Manager/ManagerScene.h"
 #include "../Resources/CParticle.h"
 #include "../LowLevel/CDxRenderer.h"
+#include "../Resources/StructuredBuffer.h"
+
 
 void ParticleRenderer::SetUpMaterial(int render_queue, std::string material_name, std::string shader_name, ID3D11ShaderResourceView * texture, MATERIAL_CBUFFER material_value)
 {
@@ -17,6 +19,11 @@ void ParticleRenderer::SetUpMaterial(int render_queue, std::string material_name
 	memcpy(m_CMaterial, ManagerMaterial::GetMaterial(id).get(), sizeof(CMaterial));
 	m_CMaterial->SetMaterialValue(material_value);
 
+}
+
+void ParticleRenderer::CreateStructuredBuffer(UINT MaxNumElements)
+{
+	m_StructuredBuffer.reset(StructuredBuffer::CreateStructuredBuffer(sizeof(ParticleStructuredBuffer), MaxNumElements));
 }
 
 void ParticleRenderer::Draw(unsigned int index)
@@ -60,6 +67,8 @@ void ParticleRenderer::Draw(unsigned int index)
 	}
 	
 	//ジオメトリシェーダーにセット
+	m_StructuredBuffer->UpdateBuffer(particle_buffer.data());
+	m_StructuredBuffer->GSSetStructuredBuffer(0);
 
 	m_MaterialCBuffer->UpdateBuffer(&m_CMaterial->GetMaterialValue());
 	m_MaterialCBuffer->PSSetCBuffer(3);

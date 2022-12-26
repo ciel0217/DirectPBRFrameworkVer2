@@ -182,6 +182,7 @@
     <ClInclude Include="Framework\Resources\Sprite.h" />
     <ClInclude Include="Framework\Resources\SpriteType.h" />
     <ClInclude Include="Framework\Resources\SquareSprite.h" />
+    <ClInclude Include="Framework\Resources\StructuredBuffer.h" />
     <ClInclude Include="GameSceneCamera.h" />
     <ClInclude Include="Math\Quaternion.h" />
     <ClInclude Include="Ocean.h" />
@@ -229,6 +230,7 @@
     <ClCompile Include="Framework\Resources\SkyBox.cpp" />
     <ClCompile Include="Framework\Resources\Sprite.cpp" />
     <ClCompile Include="Framework\Resources\SquareSprite.cpp" />
+    <ClCompile Include="Framework\Resources\StructuredBuffer.cpp" />
     <ClCompile Include="GameSceneCamera.cpp" />
     <ClCompile Include="Math\Quaternion.cpp" />
     <ClCompile Include="Ocean.cpp" />
@@ -274,6 +276,12 @@
     </FxCompile>
     <FxCompile Include="Shader\Ocean.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Shader\ParticleRender.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="Shader\shader.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>

@@ -102,4 +102,6 @@ struct ParticleStructuredBuffer
 	D3DXVECTOR3 Size;
 	D3DXVECTOR2 UV;
 	D3DXVECTOR2 Offset;
+
+	float Dummy;
 };

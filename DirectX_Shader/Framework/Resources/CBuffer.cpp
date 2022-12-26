@@ -26,7 +26,7 @@ ID3D11Buffer * CBuffer::CreateBuffer(UINT byte_width, UINT bind_flags, const voi
 
 	if (FAILED(hr)) {
 		//エラー処理
-		int a = 1;
+		throw std::runtime_error("定数バッファ作成できませんでした");
 		return nullptr;
 	}
 	return buffer;
