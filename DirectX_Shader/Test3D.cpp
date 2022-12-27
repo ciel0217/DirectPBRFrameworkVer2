@@ -7,7 +7,9 @@ void Test3D::Config()
 	SetUpModel("Asset/model/Sphere.obj", this);
 	MATERIAL_CBUFFER value;
 	ZeroMemory(&value, sizeof(MATERIAL_CBUFFER));
-
+	value.Metaric = 0;
+	value.Roughness = 0;
+	m_Material[0]->SetMaterialValue(value);
 	m_Count = 0;
 	m_Count2 = 0;
 	m_Count3 = 0;
@@ -36,7 +38,7 @@ void Test3D::Update()
 	if (m_Start == 1)
 	{
 		m_Count++;
-		if (m_Count > 120)
+		if (m_Count > 30)
 		{
 			m_Count = 0;
 			m_Count2++;

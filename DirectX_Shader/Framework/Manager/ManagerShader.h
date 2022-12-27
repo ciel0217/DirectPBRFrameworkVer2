@@ -4,7 +4,7 @@
 #include "../LowLevel/DirectX.h"
 #include "../Resources/DevelopStruct.h"
 
-#define SHADER_MAX 10
+#define SHADER_MAX 11
 
 class CShader;
 

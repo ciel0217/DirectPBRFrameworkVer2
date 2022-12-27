@@ -1,6 +1,6 @@
 #include "common.hlsli"
 
-struct DummyVertex{}
+struct DummyVertex {};
 
 struct ParticleInfo
 {
@@ -14,7 +14,7 @@ struct ParticleInfo
 };
 
 
-struct GS_Output
+struct Output_GS
 {
 	float4 Position : SV_POSITION;
 	float4 Color : COLOR0;
@@ -24,7 +24,7 @@ struct GS_Output
 StructuredBuffer<ParticleInfo> Particle : register(t0);
 
 //何もしない頂点シェーダー
-void VS_main(){}
+void VS_main() {}
 
 
 //ジオメトリシェーダー
@@ -32,8 +32,8 @@ void VS_main(){}
 void GS_main(
 	point DummyVertex input[1] : POSITION,
 	in uint id : SV_PrimitiveId,
-	inout TriangleStream<GS_Output> output
-	)
+	inout TriangleStream<Output_GS> output
+)
 {
 	float half_width = Particle[id].Size.x / 2.0;
 	float half_height = Particle[id].Size.y / 2.0f;
@@ -42,7 +42,7 @@ void GS_main(
 	float2 uv[4];
 
 	position[0] = float3(-half_width, -half_height, 0.0); //左上
-	position[1] = float3(half_width, -half_height, 0.0);　//右上
+	position[1] = float3(half_width, -half_height, 0.0); //右上
 	position[2] = float3(-half_width, half_height, 0.0); //左下
 	position[3] = float3(half_width, half_height, 0.0); //右下
 
@@ -53,7 +53,7 @@ void GS_main(
 
 	for (int i = 0; i < 4; i++)
 	{
-		GS_Output gs;
+		Output_GS gs;
 		matrix wvp;
 		wvp = mul(Particle[id].WorldMatrix, View);
 		wvp = mul(wvp, Projection);
@@ -70,4 +70,42 @@ void GS_main(
 	output.RestartStrip();
 
 }
+
+
+struct Output_PS
+{
+	float4 color : SV_Target0;
+};
+
+Texture2D		g_Texture : register(t0);
+
+SamplerState	g_SamplerState : register(s0);
+
+
+Output_PS PS_main(Output_GS a)
+{
+	Output_PS output;
+	float4 color = 0.0;
+
+	if (Material.UseAlbedoTex == 1)
+	{
+		color = g_Texture.Sample(g_SamplerState, a.TexCoord);
+		//color = Material.Roughness;
+
+		//color = float4(1.0f, 0.0f, 1.0f, 1.0f);
+	}
+	else
+	{
+		//color = a.color;
+		color = float4(0.5f, 0.5f, 0.5f, 1.0f);
+
+	}
+
+
+
+	output.color = color;
+
+	return output;
+}
+
 

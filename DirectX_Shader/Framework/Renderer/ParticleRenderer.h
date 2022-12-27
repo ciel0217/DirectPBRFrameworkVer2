@@ -1,10 +1,9 @@
 #pragma once
 #include "CRenderer.h"
 #include "../Resources/DevelopEnum.h"
-
+#include "../Resources/StructuredBuffer.h"
 
 class CMaterial;
-class StructuredBuffer;
 
 class ParticleRenderer : public CRenderer
 {

@@ -160,8 +160,6 @@ Output_PS PS_main(Output_VS vs)
 		
 		float3 specular = prefiltercolor * (ks * brdflut.x + brdflut.y);
 		ambient = (kd * diffuse + specular);
-	
-		
 	}
 	
 

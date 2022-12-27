@@ -94,9 +94,6 @@ bool MeshRenderer::ChangeMaterial(unsigned int index, unsigned int change_materi
 	return true;
 }
 
-void MeshRenderer::SetUpMaterial(std::string texture_name, std::string shader_name, std::string material_name)
-{
-}
 
 void MeshRenderer::Draw(unsigned int index)
 {

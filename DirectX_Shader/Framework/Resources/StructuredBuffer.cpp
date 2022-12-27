@@ -1,6 +1,6 @@
 #include "StructuredBuffer.h"
 
-StructuredBuffer * StructuredBuffer::CreateStructuredBuffer(UINT ByteWidth, UINT NumElements, const void * Data = nullptr, UINT BindFlags = D3D11_BIND_SHADER_RESOURCE)
+StructuredBuffer * StructuredBuffer::CreateStructuredBuffer(UINT ByteWidth, UINT NumElements, const void * Data, UINT BindFlags)
 {
 	D3D11_BUFFER_DESC desc = {};
 	desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;

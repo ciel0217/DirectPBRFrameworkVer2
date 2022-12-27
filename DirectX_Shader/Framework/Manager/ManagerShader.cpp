@@ -6,7 +6,7 @@
 std::map<std::string, CShader*> ManagerShader:: m_ShaderList;
 const std::string ManagerShader::m_ShaderName[SHADER_MAX] =
 {"Shader/shader.hlsl","Shader/Deferred.hlsl","Shader/2DTexture.hlsl", "Shader/DefaultModel.hlsl", "Shader/CubeMap.hlsl", "Shader/ToneMap.hlsl"
-, "Shader/IrradianceMap.hlsl", "Shader/SpecularMap.hlsl", "Shader/BrdfLUT.hlsl", "Shader/Ocean.hlsl"};
+, "Shader/IrradianceMap.hlsl", "Shader/SpecularMap.hlsl", "Shader/BrdfLUT.hlsl", "Shader/Ocean.hlsl", "Shader/ParticleRender.hlsl"};
 
 void ManagerShader::LoadVertexShader(std::string name)
 {
