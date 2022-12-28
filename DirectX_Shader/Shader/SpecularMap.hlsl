@@ -77,6 +77,7 @@ float4 PS_main(Output_VS vs) : SV_Target0
 		}
 	}
 	prefilteredColor = prefilteredColor / totalWeight;
+	
 
 	return float4(prefilteredColor, 1);
 }
