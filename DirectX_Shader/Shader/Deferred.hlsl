@@ -160,13 +160,13 @@ Output_PS PS_main(Output_VS vs)
 		
 		float3 specular = prefiltercolor * (ks * brdflut.x + brdflut.y);
 		ambient = (kd * diffuse + specular);
-		ambient = irradiance;
+		
 	}
 	
 
 	//output.color = float4(F0 , 1.0f);
 	
-	output.color = float4( ambient  , 1.0f);
+	output.color = float4(Lo + ambient  , 1.0f);
 	//output.color = float4(surf.Normal, 1.0f);
 
 	//output.color = float4(depth, depth, depth, 1.0f);

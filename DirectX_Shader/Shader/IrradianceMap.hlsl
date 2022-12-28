@@ -70,6 +70,6 @@ float4 PS_main(Output_VS vs) : SV_Target0
 		}
 	}
 	irradiance = PI * irradiance * (1.0 / float(nrSamples));
-	irradiance = float3(1.0f, 0.0f, 0.0);
+	
 	return float4(irradiance, 1);
 }

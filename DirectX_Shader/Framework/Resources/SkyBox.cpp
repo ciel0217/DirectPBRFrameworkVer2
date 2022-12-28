@@ -54,15 +54,10 @@ void SkyBox::DrawByCubeMap()
 	m_ShaderPreFilterMap = ManagerShader::GetShader("SpecularMap.hlsl");*/
 	m_ShaderBrdfLUT = ManagerShader::GetShader("Shader/BrdfLUT.hlsl");
 
-	//普通の描画に使うようShaderに変える(デフォルトのままだとGBuffer用のShaderになっているから)
-	std::shared_ptr<CMaterial> default_material = ManagerMaterial::GetMaterial(m_MaterialIds[0]);
-	default_material->SetRenderQueue(eSkyBox);
 	
-	/*unsigned int cubematerial_id = ManagerMaterial::CreateMaterial(eSkyBox, m_ShaderCubeMap, nullptr, "cubemap");
-	unsigned int irradiancematerial_id = ManagerMaterial::CreateMaterial(eSkyBox, m_ShaderCubeMap, nullptr, "irradiancemap");
-	unsigned int prefiltermaterial_id = ManagerMaterial::CreateMaterial(eSkyBox, m_ShaderCubeMap, nullptr, "soecularmap");
-	unsigned int brdflutmaterial_id = ManagerMaterial::CreateMaterial(eSkyBox, m_ShaderCubeMap, nullptr, "brdflut");*/
-
+	//普通の描画に使うようShaderに変える(デフォルトのままだとGBuffer用のShaderになっているから)
+	m_Material[0]->SetRenderQueue(eSkyBox);
+	ManagerMaterial::GetMaterial(m_MaterialIds[0])->SetRenderQueue(eSkyBox);
 
 	m_CubeMap = new CCubeMap(1);
 	m_CubeMap->Init();
@@ -120,7 +115,7 @@ void SkyBox::DrawByCubeMap()
 	}
 
 	m_CubeMap->SetViewPort();
-	default_material->SetShader("Shader/CubeMap.hlsl");
+	m_Material[0]->SetShader("Shader/CubeMap.hlsl");
 
 	for (int i = 0; i < 6; i++) {
 		
@@ -146,7 +141,7 @@ void SkyBox::DrawByCubeMap()
 	}
 
 	m_IrradianceMap->SetViewPort();
-	default_material->SetShader("Shader/IrradianceMap.hlsl");
+	m_Material[0]->SetShader("Shader/IrradianceMap.hlsl");
 	for (int i = 0; i < 6; i++) {
 		CDxRenderer::GetRenderer()->GetDeviceContext()->OMSetRenderTargets(1, m_IrradianceMap->GetRenderTargetViewPointerPointer(i), nullptr);
 
@@ -178,7 +173,7 @@ void SkyBox::DrawByCubeMap()
 
 	float map_size = CUBE_MAP_SIZE;
 	m_RoughnessCBuffer->PSSetCBuffer(0);
-	default_material->SetShader("Shader/SpecularMap.hlsl");
+	m_Material[0]->SetShader("Shader/SpecularMap.hlsl");
 
 	for (int i = 0; i < 6; i++) {
 		float roughness = (float)i / 5.0f;
@@ -235,6 +230,6 @@ void SkyBox::DrawByCubeMap()
 	CDxRenderer::GetRenderer()->SetCullingMode(CULL_MODE_BACK);
 
 	//最後普通に描画するときのシェーダーに戻す
-	default_material->SetShader("Shader/DefaultModel.hlsl");
+	m_Material[0]->SetShader("Shader/DefaultModel.hlsl");
 
 }
