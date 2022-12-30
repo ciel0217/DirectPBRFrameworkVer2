@@ -6,7 +6,12 @@ class CParticle
 private:
 	int m_FrameCount = 0;
 	int m_LimitLifeTime = 10;
+	int m_AnimationCountUp = 1;
+	int m_AnimationCount = 0;
+
+	bool m_IsLoopAnimation = false;
 	bool m_IsDeath = true;
+	bool m_UseAnime = false;
 
 	D3DXVECTOR3 m_ParticlePosition = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 m_ParticleScale = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -31,7 +36,6 @@ private:
 
 public:
 	CParticle() { m_IsDeath = true; }
-
 	~CParticle(){}
 
 	void Init();
@@ -50,6 +54,10 @@ public:
 
 	void SetParent(CGameObject* parent) { m_Parent = parent; }
 	void SetLimitLifeTime(int time) { m_LimitLifeTime = time; }
+
+	void SetAnimationCountUp(int count) { m_AnimationCountUp = count; }
+	void SetIsLoopAnimation(bool is_loop) { m_IsLoopAnimation = is_loop; }
+	void SetUseAnimation(bool use) { m_UseAnime = use; }
 
 	bool GetIsDeath() { return m_IsDeath; }
 	void SetIsDeath(bool is_death) { m_IsDeath = is_death; }
