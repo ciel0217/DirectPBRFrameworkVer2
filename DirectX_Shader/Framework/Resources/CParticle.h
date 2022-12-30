@@ -22,10 +22,12 @@ private:
 	D3DXCOLOR m_ParticleInitColor = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
 	D3DXVECTOR3 m_AddScale = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3 m_AddAngle = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXQUATERNION m_AddAngleByQuaternion = D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f);
 	D3DXCOLOR   m_AddColor = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f);
 
 	CGameObject* m_Parent;
+
+	D3DXQUATERNION AngleToQuaternion(D3DXVECTOR3 angle);
 
 public:
 	CParticle() { m_IsDeath = true; }
@@ -43,7 +45,7 @@ public:
 	void SetOffset(D3DXVECTOR2 uv) { m_TextureOffset = uv; }
 
 	void SetAddScale(D3DXVECTOR3 scale) { m_AddScale = scale; }
-	void SetAddAngle(D3DXVECTOR3 angle) { m_AddAngle = angle; }
+	void SetAddAngle(D3DXVECTOR3 angle) { m_AddAngleByQuaternion = AngleToQuaternion(angle); }
 	void SetAddColor(D3DXCOLOR color) { m_AddColor = color; }
 
 	void SetParent(CGameObject* parent) { m_Parent = parent; }
