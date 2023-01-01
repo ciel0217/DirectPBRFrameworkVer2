@@ -37,6 +37,7 @@ public:
 	virtual void Config()override = 0;
 	void Init()override;
 	void Update()override;
+	void Uninit()override;
 
 	std::vector<CParticle*> GetParticleList() { return m_ParticleList; }
 };

@@ -57,6 +57,10 @@ void ParticleSystem::Update()
 	}
 }
 
+void ParticleSystem::Uninit()
+{
+}
+
 void ParticleSystem::InitParticle(CParticle* particle)
 {
 	particle->SetLimitLifeTime(m_LimitLifeTime);
