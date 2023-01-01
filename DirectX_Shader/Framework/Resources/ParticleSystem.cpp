@@ -4,7 +4,7 @@
 
 ParticleSystem::~ParticleSystem()
 {
-	for (int i = 0; i < m_ParticleList.size(); i++)
+	for (unsigned int i = 0; i < m_ParticleList.size(); i++)
 	{
 		delete m_ParticleList[i];
 	}
@@ -39,7 +39,7 @@ void ParticleSystem::Update()
 			}
 		}
 
-		if (!is_generate && m_ParticleList.size() < m_ParticleNum)
+		if (!is_generate && (int)m_ParticleList.size() < m_ParticleNum)
 		{
 			//メモリアロケータとか使ったらもっとよさそう
 			CParticle* particle = new CParticle();

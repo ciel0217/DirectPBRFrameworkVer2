@@ -67,7 +67,7 @@ void MeshRenderer::SetUpModel(std::string model_name, CGameObject * self)
 
 MeshRenderer::~MeshRenderer()
 {
-	for (int i = 0; i < m_Material.size(); i++)
+	for (unsigned int i = 0; i < m_Material.size(); i++)
 	{
 		delete m_Material[i];
 	}
