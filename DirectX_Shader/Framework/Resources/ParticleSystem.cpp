@@ -14,6 +14,7 @@ ParticleSystem::~ParticleSystem()
 
 void ParticleSystem::Init()
 {
+	CreateStructuredBuffer(m_ParticleNum);
 	m_ParticleList.reserve(m_ParticleNum);
 	m_FrameCount = 0;
 }
@@ -75,4 +76,10 @@ void ParticleSystem::InitParticle(CParticle* particle)
 	particle->SetAddScale(m_AddScale);
 	particle->SetAddColor(m_AddColor);
 	particle->SetAddAngle(m_AddAngle);
+
+	particle->SetAnimationCountUp(m_AnimationCountUp);
+	particle->SetIsLoopAnimation(m_IsLoopAnimation);
+	particle->SetUseAnimation(m_UseAnimation);
+	particle->SetUV(m_ParticleUV);
+	particle->SetOffset(D3DXVECTOR2(1.0f / m_TextureMaxWidth, 1.0f / m_TextureMaxHeight));
 }

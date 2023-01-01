@@ -17,11 +17,19 @@ protected:
 	int m_ParticleNum = 1;
 
 	int m_LimitLifeTime = 10;
+	int m_AnimationCountUp = 10;
+	int m_TextureMaxWidth = 1;
+	int m_TextureMaxHeight = 1;
+
+
+	bool m_UseAnimation = false;
+	bool m_IsLoopAnimation = false;
 
 	D3DXVECTOR3 m_ParticleScale = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 m_ParticleVelocity = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXQUATERNION m_ParticleRotation = D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f);
 	D3DXCOLOR m_ParticleColor = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	D3DXVECTOR2 m_ParticleUV = D3DXVECTOR2(1.0f, 1.0f);
 
 	D3DXVECTOR3 m_AddScale = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 m_AddAngle = D3DXVECTOR3(0.0f, 0.0f, 0.0f);

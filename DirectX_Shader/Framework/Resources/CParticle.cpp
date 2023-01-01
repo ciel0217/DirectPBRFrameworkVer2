@@ -4,7 +4,21 @@
 
 D3DXQUATERNION CParticle::AngleToQuaternion(D3DXVECTOR3 angle)
 {
-	return D3DXQUATERNION();
+	float cr = cosf(angle.x * 0.5f);
+	float sr = sinf(angle.x * 0.5f);
+	float cp = cosf(angle.y * 0.5f);
+	float sp = sinf(angle.y * 0.5f);
+	float cy = cosf(angle.z * 0.5f);
+	float sy = cosf(angle.z * 0.5f);
+
+	D3DXQUATERNION ret = D3DXQUATERNION(
+		sr * cp * cy - cr * sp * sy,
+		cr * sp * cy + sr * cp * sy,
+		cr * cp * sy - sr * sp * cy,
+		cr * cp * sy - sr * sp * cy
+	);
+
+	return ret;
 }
 
 void CParticle::Init()

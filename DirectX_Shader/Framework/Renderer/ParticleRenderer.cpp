@@ -9,9 +9,10 @@
 #include "../Resources/StructuredBuffer.h"
 
 
-void ParticleRenderer::SetUpMaterial(int render_queue, std::string material_name, std::string shader_name, ID3D11ShaderResourceView * texture, MATERIAL_CBUFFER material_value)
+void ParticleRenderer::SetUpMaterial(int render_queue, std::string material_name, std::string shader_name, std::string texture_name, MATERIAL_CBUFFER material_value)
 {
 	CShader* shader = ManagerShader::GetShader(shader_name);
+	ID3D11ShaderResourceView* texture = ManagerTexture::LoadTexture(texture_name);
 	unsigned int id = ManagerMaterial::CreateMaterial(render_queue, shader, texture, material_name);
 	m_MaterialIds.push_back(id);
 

@@ -54,10 +54,12 @@ public:
 
 	void SetParent(CGameObject* parent) { m_Parent = parent; }
 	void SetLimitLifeTime(int time) { m_LimitLifeTime = time; }
+	
 
 	void SetAnimationCountUp(int count) { m_AnimationCountUp = count; }
 	void SetIsLoopAnimation(bool is_loop) { m_IsLoopAnimation = is_loop; }
 	void SetUseAnimation(bool use) { m_UseAnime = use; }
+
 
 	bool GetIsDeath() { return m_IsDeath; }
 	void SetIsDeath(bool is_death) { m_IsDeath = is_death; }
