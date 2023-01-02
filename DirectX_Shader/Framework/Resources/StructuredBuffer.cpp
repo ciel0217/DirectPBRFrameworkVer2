@@ -59,6 +59,7 @@ void StructuredBuffer::UpdateBuffer(const void * Data)
 void StructuredBuffer::VSSetStructuredBuffer(UINT StartSlot)
 {
 	CDxRenderer::GetRenderer()->GetDeviceContext()->VSSetShaderResources(StartSlot, 1, m_SRV.GetAddressOf());
+
 }
 
 void StructuredBuffer::PSSetStructuredBuffer(UINT StartSlot)

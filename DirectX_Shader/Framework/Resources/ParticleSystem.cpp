@@ -14,9 +14,20 @@ ParticleSystem::~ParticleSystem()
 
 void ParticleSystem::Init()
 {
-	CreateStructuredBuffer(m_ParticleNum);
+	m_Position = m_InitPosition;
+	
 	m_ParticleList.reserve(m_ParticleNum);
 	m_FrameCount = 0;
+
+	for (int i = 0; i < m_ParticleNum; i++)
+	{
+		CParticle* particle = new CParticle();
+		m_ParticleList.push_back(particle);
+		InitParticle(particle);
+		particle->Init();
+	}
+
+	CreateStructuredBuffer(10);
 }
 
 void ParticleSystem::Update()
@@ -40,15 +51,15 @@ void ParticleSystem::Update()
 			}
 		}
 
-		if (!is_generate && (int)m_ParticleList.size() < m_ParticleNum)
-		{
-			//メモリアロケータとか使ったらもっとよさそう
-			CParticle* particle = new CParticle();
-			m_ParticleList.push_back(particle);
+		//if (!is_generate && (int)m_ParticleList.size() < m_ParticleNum)
+		//{
+		//	//メモリアロケータとか使ったらもっとよさそう
+		//	CParticle* particle = new CParticle();
+		//	m_ParticleList.push_back(particle);
 
-			InitParticle(particle);
-			particle->Init();
-		}
+		//	InitParticle(particle);
+		//	particle->Init();
+		//}
 	}
 	
 	for (auto particle : m_ParticleList)
@@ -66,6 +77,8 @@ void ParticleSystem::InitParticle(CParticle* particle)
 {
 	particle->SetLimitLifeTime(m_LimitLifeTime);
 	particle->SetParent(this);
+
+	particle->SetIsDeath(false);
 
 	//パターンで分けてもいい。ランダムに生成とか
 	particle->SetParticlePosition(this->GetPosition());
