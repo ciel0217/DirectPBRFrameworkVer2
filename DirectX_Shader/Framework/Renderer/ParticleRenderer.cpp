@@ -103,7 +103,7 @@ void ParticleRenderer::Draw(unsigned int index)
 	CDxRenderer::GetRenderer()->SetVertexShader(shader->GetShaderVS()->VertexShader.Get());
 	CDxRenderer::GetRenderer()->SetPixelShader(shader->GetShaderPS().Get());
 	CDxRenderer::GetRenderer()->SetInputLayout(shader->GetShaderVS()->Layout.Get());
-	//CDxRenderer::GetRenderer()->SetGeometryShader(shader->GetShaderGS().Get());
+	CDxRenderer::GetRenderer()->SetGeometryShader(shader->GetShaderGS().Get());
 
 	for (auto particle : particle_list)
 	{
