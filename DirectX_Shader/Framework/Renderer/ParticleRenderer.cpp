@@ -34,41 +34,7 @@ void ParticleRenderer::SetUpMaterial(int render_queue, std::string material_name
 }
 
 void ParticleRenderer::CreateStructuredBuffer(UINT MaxNumElements)
-{
-	std::vector<CParticle*> particle_list = ((ParticleSystem*)this)->GetParticleList();
-	Camera* camera = ManagerScene::GetInstance()->GetCurrentSceneCamera();
-
-	D3DXMATRIX mtx_world;
-	// ワールドマトリックスの初期化
-	D3DXMatrixIdentity(&mtx_world);
-
-	D3DXMATRIX mtx_view, mtx_inverse_view;
-	D3DXMatrixLookAtLH(&mtx_view, &camera->GetPosition(), &camera->GetCameraLookAtPoint(), &camera->GetCameraUp());
-
-	mtx_world._11 = mtx_view._11;
-	mtx_world._12 = mtx_view._21;
-	mtx_world._13 = mtx_view._31;
-	mtx_world._21 = mtx_view._12;
-	mtx_world._22 = mtx_view._22;
-	mtx_world._23 = mtx_view._32;
-	mtx_world._31 = mtx_view._13;
-	mtx_world._32 = mtx_view._23;
-	mtx_world._33 = mtx_view._33;
-
-
-	D3DXVECTOR3 pos = particle_list[0]->GetPosition();
-	std::vector<ParticleStructuredBuffer> particle_buffer;
-	for (int i = 0; i < 10; i++) {
-		D3DXMATRIX mtx_translate, world;
-		D3DXMatrixIdentity(&world);
-		D3DXMatrixTranslation(&mtx_translate, pos.x, pos.y + 10.0f * (float)i, pos.z);
-
-		D3DXMatrixMultiply(&world, &mtx_world, &mtx_translate);
-		D3DXMatrixTranspose(&world, &world);
-		particle_buffer.push_back({ world,  particle_list[0]->GetColor(),  particle_list[0]->GetScale(),  particle_list[0]->GetUV(),  particle_list[0]->GetOffset() });
-	}
-
-	
+{	
 
 	m_StructuredBuffer.reset(StructuredBuffer::CreateStructuredBuffer(sizeof(ParticleStructuredBuffer), MaxNumElements));
 }
@@ -199,14 +165,6 @@ void ParticleRenderer::Draw(unsigned int index)
 		
 	}
 
-
-
-	
-
-
-	
-
-	
 	
 
 	CDxRenderer::GetRenderer()->UnbindShaderResourceView(0);

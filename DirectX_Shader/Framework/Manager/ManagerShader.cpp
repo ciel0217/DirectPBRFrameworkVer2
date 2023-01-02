@@ -5,8 +5,8 @@
 
 std::map<std::string, CShader*> ManagerShader:: m_ShaderList;
 const std::string ManagerShader::m_ShaderName[SHADER_MAX] =
-{"Shader/shader.hlsl","Shader/Deferred.hlsl","Shader/2DTexture.hlsl", "Shader/DefaultModel.hlsl", "Shader/CubeMap.hlsl", "Shader/ToneMap.hlsl"
-, "Shader/IrradianceMap.hlsl", "Shader/SpecularMap.hlsl", "Shader/BrdfLUT.hlsl", "Shader/Ocean.hlsl", "Shader/ParticleRender.hlsl"};
+{ "Shader/ParticleRender.hlsl","Shader/Deferred.hlsl","Shader/2DTexture.hlsl", "Shader/DefaultModel.hlsl", "Shader/CubeMap.hlsl", "Shader/ToneMap.hlsl"
+, "Shader/IrradianceMap.hlsl", "Shader/SpecularMap.hlsl", "Shader/BrdfLUT.hlsl", "Shader/Ocean.hlsl", "Shader/shader.hlsl"};
 
 void ManagerShader::LoadVertexShader(std::string name)
 {
@@ -66,7 +66,7 @@ void ManagerShader::LoadGeometryShader(std::string name)
 	ID3DBlob* pGSBlob = NULL;
 
 	//	hr = D3DX11CompileFromFile( "Shader/shader.hlsl", NULL, NULL, "VertexShaderPolygon", "vs_4_0", D3DCOMPILE_ENABLE_STRICTNESS, 0, NULL, &pVSBlob, &pErrorBlob, NULL );
-	hr = D3DX11CompileFromFile(name.c_str(), NULL, NULL, "GS_main", "gs_4_0", D3D10_SHADER_DEBUG | D3D10_SHADER_SKIP_OPTIMIZATION, 0, NULL, &pGSBlob, &pErrorBlob, NULL);
+	hr = D3DX11CompileFromFile(name.c_str(), NULL, NULL, "GS_Main", "gs_4_0", D3D10_SHADER_DEBUG | D3D10_SHADER_SKIP_OPTIMIZATION, 0, NULL, &pGSBlob, &pErrorBlob, NULL);
 	//hr = D3DX11CompileFromFile("Shader/shader.hlsl", NULL, NULL, "VS_main", "vs_4_0", D3D10_SHADER_DEBUG | D3D10_SHADER_SKIP_OPTIMIZATION, 0, NULL, &pVSBlob, &pErrorBlob, NULL);
 	if (FAILED(hr))
 		return;
@@ -74,7 +74,7 @@ void ManagerShader::LoadGeometryShader(std::string name)
 
 	ID3D11GeometryShader* shader;
 	CDxRenderer::GetRenderer()->GetDevice()->CreateGeometryShader(pGSBlob->GetBufferPointer(), pGSBlob->GetBufferSize(), NULL, &(shader));
-	
+
 	m_ShaderList[name]->SetShaderGS(shader);
 }
 
@@ -103,10 +103,11 @@ void ManagerShader::LoadInputLayout(std::string name, ID3D10Blob* blob)
 				, D3D11_INPUT_PER_VERTEX_DATA // Œˆ‚ß‘Å‚¿
 				, 0 // Œˆ‚ß‘Å‚¿
 		};
+		if (lstrcmp(eledesc.SemanticName, "SV_VertexID") == 0 || lstrcmp(eledesc.SemanticName, "SV_InstanceID") == 0)continue;
 		vbElement.push_back(eledesc);
 	}
 	
-	if (!vbElement.empty() && lstrcmp(vbElement[0].SemanticName, "SV_VertexID") != 0)
+	if (!vbElement.empty())
 	{
 		HRESULT hr;
 		ID3D11InputLayout* layout;
