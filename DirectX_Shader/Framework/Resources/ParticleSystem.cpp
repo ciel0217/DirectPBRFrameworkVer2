@@ -27,7 +27,7 @@ void ParticleSystem::Init()
 		particle->Init();
 	}
 
-	CreateStructuredBuffer(10);
+	CreateStructuredBuffer(m_ParticleNum);
 }
 
 void ParticleSystem::Update()
@@ -78,7 +78,7 @@ void ParticleSystem::InitParticle(CParticle* particle)
 	particle->SetLimitLifeTime(m_LimitLifeTime);
 	particle->SetParent(this);
 
-	particle->SetIsDeath(false);
+	//particle->SetIsDeath(false);
 
 	//パターンで分けてもいい。ランダムに生成とか
 	particle->SetParticlePosition(this->GetPosition());

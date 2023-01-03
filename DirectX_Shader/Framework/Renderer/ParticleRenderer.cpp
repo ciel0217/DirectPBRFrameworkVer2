@@ -76,49 +76,49 @@ void ParticleRenderer::Draw(unsigned int index)
 		if (particle->GetIsDeath())continue;
 
 		D3DXVECTOR3 pos = particle->GetPosition();
-		{
-			D3D11_MAPPED_SUBRESOURCE msr;
-			CDxRenderer::GetRenderer()->GetDeviceContext()->Map(m_VertexBuffer[0].Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
+		//{
+		//	D3D11_MAPPED_SUBRESOURCE msr;
+		//	CDxRenderer::GetRenderer()->GetDeviceContext()->Map(m_VertexBuffer[0].Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
 
-			VERTEX_3D* vertex = (VERTEX_3D*)msr.pData;
+		//	VERTEX_3D* vertex = (VERTEX_3D*)msr.pData;
 
-			D3DXVECTOR2 wh = particle->GetScale();
-			
-			D3DXVECTOR2 uv = particle->GetUV();
-			D3DXVECTOR2 uv_wh = particle->GetOffset();
+		//	D3DXVECTOR2 wh = particle->GetScale();
+		//	
+		//	D3DXVECTOR2 uv = particle->GetUV();
+		//	D3DXVECTOR2 uv_wh = particle->GetOffset();
 
-			float width = wh.x;
-			float height = wh.y;
+		//	float width = wh.x;
+		//	float height = wh.y;
 
-			D3DXVECTOR3 dir = camera->GetPosition() - pos;
-			D3DXVec3Normalize(&dir, &dir);
+		//	D3DXVECTOR3 dir = camera->GetPosition() - pos;
+		//	D3DXVec3Normalize(&dir, &dir);
 
-			// 頂点座標の設定
-			vertex[2].Position = D3DXVECTOR3(-width / 2.0f, -height / 2.0f, 0.0f);//左下
-			vertex[3].Position = D3DXVECTOR3(width / 2.0f, -height / 2.0f, 0.0f);//右下
-			vertex[0].Position = D3DXVECTOR3(-width / 2.0f, height / 2.0f, 0.0f);//左上
-			vertex[1].Position = D3DXVECTOR3(width / 2.0f, height / 2.0f, 0.0f);//右上
+		//	// 頂点座標の設定
+		//	vertex[2].Position = D3DXVECTOR3(-width / 2.0f, -height / 2.0f, 0.0f);//左下
+		//	vertex[3].Position = D3DXVECTOR3(width / 2.0f, -height / 2.0f, 0.0f);//右下
+		//	vertex[0].Position = D3DXVECTOR3(-width / 2.0f, height / 2.0f, 0.0f);//左上
+		//	vertex[1].Position = D3DXVECTOR3(width / 2.0f, height / 2.0f, 0.0f);//右上
 
-			//法線の設定
-			vertex[0].Normal = dir;
-			vertex[1].Normal = dir;
-			vertex[2].Normal = dir;
-			vertex[3].Normal = dir;
+		//	//法線の設定
+		//	vertex[0].Normal = dir;
+		//	vertex[1].Normal = dir;
+		//	vertex[2].Normal = dir;
+		//	vertex[3].Normal = dir;
 
-			// 頂点カラーの設定
-			vertex[0].Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-			vertex[1].Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-			vertex[2].Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-			vertex[3].Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+		//	// 頂点カラーの設定
+		//	vertex[0].Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+		//	vertex[1].Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+		//	vertex[2].Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+		//	vertex[3].Diffuse = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
-			// テクスチャ座標の設定
-			vertex[0].TexCoord = D3DXVECTOR2(uv.x, uv.y);
-			vertex[1].TexCoord = D3DXVECTOR2(uv.x + uv_wh.x, uv.y);
-			vertex[2].TexCoord = D3DXVECTOR2(uv.x, uv.y + uv_wh.y);
-			vertex[3].TexCoord = D3DXVECTOR2(uv.x + uv_wh.x, uv.y + uv_wh.y);
+		//	// テクスチャ座標の設定
+		//	vertex[0].TexCoord = D3DXVECTOR2(uv.x, uv.y);
+		//	vertex[1].TexCoord = D3DXVECTOR2(uv.x + uv_wh.x, uv.y);
+		//	vertex[2].TexCoord = D3DXVECTOR2(uv.x, uv.y + uv_wh.y);
+		//	vertex[3].TexCoord = D3DXVECTOR2(uv.x + uv_wh.x, uv.y + uv_wh.y);
 
-			CDxRenderer::GetRenderer()->GetDeviceContext()->Unmap(m_VertexBuffer[0].Get(), 0);
-		}
+		//	CDxRenderer::GetRenderer()->GetDeviceContext()->Unmap(m_VertexBuffer[0].Get(), 0);
+		//}
 
 		D3DXMATRIX mtx_translate, world;
 		D3DXMatrixIdentity(&world);
@@ -128,44 +128,36 @@ void ParticleRenderer::Draw(unsigned int index)
 		D3DXMatrixTranspose(&world, &world);
 
 		m_WorldMatrixCBuffer->UpdateBuffer(&world);
-		m_WorldMatrixCBuffer->VSSetCBuffer(0);
+		m_WorldMatrixCBuffer->GSSetCBuffer(0);
 
-		for (int i = 0; i < 10; i++) {
-			D3DXMatrixIdentity(&world);
-			D3DXMatrixTranslation(&mtx_translate, pos.x, pos.y + 10.0f * i, pos.z);
-
-			D3DXMatrixMultiply(&world, &mtx_world, &mtx_translate);
-			D3DXMatrixTranspose(&world, &world);
-			particle_buffer.push_back({ world, particle->GetColor(), particle->GetScale(), particle->GetUV(), particle->GetOffset() });
-		}
-		//ジオメトリシェーダーにセット
-		m_StructuredBuffer->UpdateBuffer(particle_buffer.data());
-		m_StructuredBuffer->VSSetStructuredBuffer(0);
-
-		// 頂点バッファ設定
-		UINT stride = sizeof(VERTEX_3D);
-		UINT offset = 0;
-		CDxRenderer::GetRenderer()->GetDeviceContext()->IASetVertexBuffers(0, 1, m_VertexBuffer[0].GetAddressOf(), &stride, &offset);
-
-
-		m_MaterialCBuffer->UpdateBuffer(&m_CMaterial->GetMaterialValue());
-		m_MaterialCBuffer->PSSetCBuffer(3);
-
-		// プリミティブトポロジ設定
-		CDxRenderer::GetRenderer()->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+		particle_buffer.push_back({ world, particle->GetColor(), particle->GetScale(), particle->GetUV(), particle->GetOffset() });
+		
 		
 
+		//// 頂点バッファ設定
+		//UINT stride = sizeof(VERTEX_3D);
+		//UINT offset = 0;
+		////CDxRenderer::GetRenderer()->GetDeviceContext()->IASetVertexBuffers(0, 1, m_VertexBuffer[0].GetAddressOf(), &stride, &offset);
 
-		CDxRenderer::GetRenderer()->SetCullingMode(CULL_MODE_NONE);
-		CDxRenderer::GetRenderer()->GetDeviceContext()->PSSetShaderResources(0, 1, m_CMaterial->GetAlbedoTexture().GetAddressOf());
-		CDxRenderer::GetRenderer()->GetDeviceContext()->DrawInstanced(4, 10, 0, 0);
-
-		//カリングを元に戻す
-		CDxRenderer::GetRenderer()->SetCullingMode(CULL_MODE_BACK);
-		
 	}
+	//ジオメトリシェーダーにセット
+	m_StructuredBuffer->UpdateBuffer(particle_buffer.data());
+	m_StructuredBuffer->GSSetStructuredBuffer(0);
 
-	
+	m_MaterialCBuffer->UpdateBuffer(&m_CMaterial->GetMaterialValue());
+	m_MaterialCBuffer->PSSetCBuffer(3);
+
+	// プリミティブトポロジ設定
+	CDxRenderer::GetRenderer()->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
+
+
+	CDxRenderer::GetRenderer()->SetCullingMode(CULL_MODE_NONE);
+	CDxRenderer::GetRenderer()->GetDeviceContext()->PSSetShaderResources(0, 1, m_CMaterial->GetAlbedoTexture().GetAddressOf());
+	CDxRenderer::GetRenderer()->GetDeviceContext()->DrawInstanced(3, particle_buffer.size(), 0, 0);
+
+	//カリングを元に戻す
+	CDxRenderer::GetRenderer()->SetCullingMode(CULL_MODE_BACK);
 
 	CDxRenderer::GetRenderer()->UnbindShaderResourceView(0);
 	CDxRenderer::GetRenderer()->SetGeometryShader(nullptr);

@@ -319,12 +319,14 @@ void CameraRenderer::SetVPCBuffer(D3DXVECTOR3 pos, D3DXVECTOR3 lookat, D3DXVECTO
 	m_ViewCBuffer->UpdateBuffer(&mtxTransView);
 	m_ViewCBuffer->VSSetCBuffer(1);
 	m_ViewCBuffer->PSSetCBuffer(1);
+	m_ViewCBuffer->GSSetCBuffer(1);
 
 	D3DXMatrixPerspectiveFovLH(&mtxProjection, 1.0f, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, VIEW_NEAR_Z, VIEW_FAR_Z);
 	D3DXMatrixTranspose(&mtxTransProj, &mtxProjection);
 	m_ProjectionCBuffer->UpdateBuffer(&mtxTransProj);
 	m_ProjectionCBuffer->VSSetCBuffer(2);
 	m_ProjectionCBuffer->PSSetCBuffer(2);
+	m_ProjectionCBuffer->GSSetCBuffer(2);
 
 	D3DXMatrixInverse(&mtxInverseView, NULL, &mtxView);
 	m_ViewInverseCBuffer->UpdateBuffer(&mtxInverseView);

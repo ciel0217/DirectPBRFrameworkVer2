@@ -1,6 +1,9 @@
 #include "common.hlsli"
 
-struct DummyVertex {};
+struct DummyVertex 
+{
+	uint id : SV_InstanceID;
+};
 
 struct Output_VS
 {
@@ -31,150 +34,63 @@ struct Output_GS
 
 StructuredBuffer<ParticleInfo> Particle : register(t0);
 
-////何もしない頂点シェーダー
-//void VS_main() {}
-
-//=============================================================================
-// 頂点シェーダ
-//=============================================================================
-Output_VS VS_main(in  float3 inPosition		: POSITION0,
-	in  float3 inNormal : NORMAL0,
-	in  float2 inTexCoord : TEXCOORD0,
-	in  float4 inDiffuse : COLOR0,
-	in	float3 inTangent : TANGENT,
-	in  float3 inBinormal : BINORMAL,
-	in uint id : SV_InstanceID
-)
-{
-	Output_VS output;
-	matrix wvp;
-	wvp = mul(Particle[id].WorldMatrix, View);
-	wvp = mul(wvp, Projection);
-	//inPosition.y = inPosition.y + 10.0 * id;
-	float4 pos = float4(inPosition, 1.0f);
-
-	output.pos = mul(pos, wvp);
-	output.normal = normalize(mul(float4(inNormal, .0), World).xyz);
-	output.texcoord = inTexCoord;
-
-	output.color = inDiffuse;
-	return output;
+//ＩDだけ渡す頂点シェーダー
+DummyVertex VS_main(in uint id : SV_InstanceID) 
+{ 
+	DummyVertex dv;
+	dv.id = id; 
+	return dv;
 }
 
 
+
 //ジオメトリシェーダー
-[maxvertexcount(6)] //quadだから6にしなきゃいけない?
+[maxvertexcount(4)] //quadだから6にしなきゃいけない?
 
 void GS_Main(
-	triangle Output_VS input[3],
+	point DummyVertex input[1],
 	inout TriangleStream<Output_GS> output
 )
 {
-	Output_GS gs;
-	gs.Position = input[0].pos + float4(50.0f, 0.0f, 0.0f, 0.0f);
-	gs.Color = input[0].color;
-	gs.TexCoord = input[0].texcoord;
-
-	output.Append(gs);
-
-	gs.Position = input[1].pos + float4(50.0f, 0.0f, 0.0f, 0.0f);
-	gs.Color = input[1].color;
-	gs.TexCoord = input[1].texcoord;
-
-	output.Append(gs);
-
-	gs.Position = input[2].pos + float4(50.0f, 0.0f, 0.0f, 0.0f);
-	gs.Color = input[2].color;
-	gs.TexCoord = input[2].texcoord;
-
-	output.Append(gs);
-	output.RestartStrip();
-	/*float half_width = Particle[id].Size.x / 2.0;
+	uint id = input[0].id;
+	
+	float half_width = Particle[id].Size.x / 2.0;
 	float half_height = Particle[id].Size.y / 2.0f;
 
-	float3 position[4];
+
+	float4 position[4];
 	float2 uv[4];
-	float4 a[3];
+
+	
+	position[0] = float4(-half_width, half_height, 0.0, 1.0f); //左上
+	position[1] = float4(half_width, half_height, 0.0, 1.0f); //右上
+	position[2] = float4(-half_width, -half_height, 0.0, 1.0f); //左下
+	position[3] = float4(half_width, -half_height, 0.0, 1.0f); //右下
+
+	uv[0] = float2(Particle[id].UV.x, Particle[id].UV.y);
+	uv[1] = float2(Particle[id].UV.x + Particle[id].Offset.x, Particle[id].UV.y);
+	uv[2] = float2(Particle[id].UV.x, Particle[id].UV.y + Particle[id].Offset.y);
+	uv[3] = float2(Particle[id].UV.x + Particle[id].Offset.x, Particle[id].UV.y + Particle[id].Offset.y);
 
 	matrix wvp;
 	wvp = mul(Particle[id].WorldMatrix, View);
+	//wvp = mul(World, View);
 	wvp = mul(wvp, Projection);
-	Output_GS gs;
 
-	a[0] = mul(input[0].pos, wvp);
-	a[1] = mul(input[1].pos, wvp);
-	a[2] = mul(input[2].pos, wvp);
+	for (int i = 0; i < 4; i++)
+	{
+		Output_GS gs;
 
-	gs.Position = a[0] + float4(1.0f, 0.0f, 0.0f, 0.0f);
-	gs.Color = input[0].color;
-	gs.TexCoord = input[0].texcoord;
+		float4 pos = position[i];
 
-	output.Append(gs);
+		gs.Position = mul(pos, wvp);
+		gs.Color = Particle[id].Color;
+		gs.TexCoord = uv[i];
 
-	gs.Position = a[1] + float4(1.0f, 0.0f, 0.0f, 0.0f);
-	gs.Color = input[1].color;
-	gs.TexCoord = input[1].texcoord;
-
-	output.Append(gs);
-
-	gs.Position = a[2] + float4(1.0f, 0.0f, 0.0f, 0.0f);
-	gs.Color = input[2].color;
-	gs.TexCoord = input[2].texcoord;
-
-	output.Append(gs);
-
-	gs.Position = a[0] + float4(1.0f, 0.0f, 0.0f, 0.0f);
-	gs.Color = input[0].color;
-	gs.TexCoord = input[0].texcoord;
-
-	output.Append(gs);
-
-	gs.Position = a[1] + float4(1.0f, 0.0f, 0.0f, 0.0f);
-	gs.Color = input[1].color;
-	gs.TexCoord = input[1].texcoord;
-
-	output.Append(gs);
-
-	gs.Position = a[2] + float4(1.0f, 0.0f, 0.0f, 0.0f);
-	gs.Color = input[2].color;
-	gs.TexCoord = input[2].texcoord;
-
-	output.Append(gs);
-
+		output.Append(gs);
+	}
+	output.RestartStrip();
 	
-
-	output.RestartStrip();*/
-
-	//position[0] = float3(-half_width, -half_height, 0.0); //左上
-	//position[1] = float3(half_width, -half_height, 0.0); //右上
-	//position[2] = float3(-half_width, half_height, 0.0); //左下
-	//position[3] = float3(half_width, half_height, 0.0); //右下
-
-	//uv[0] = float2(Particle[id].UV.x, Particle[id].UV.y);
-	//uv[1] = float2(Particle[id].UV.x + Particle[id].Offset.x, Particle[id].UV.y);
-	//uv[2] = float2(Particle[id].UV.x, Particle[id].UV.y + Particle[id].Offset.y);
-	//uv[3] = float2(Particle[id].UV.x + Particle[id].Offset.x, Particle[id].UV.y + Particle[id].Offset.y);
-
-	//float
-
-	///*for (int i = 0; i < 6; i++)
-	//{
-	//	Output_GS gs;
-	//	matrix wvp;
-	//	wvp = mul(Particle[id].WorldMatrix, View);
-	//	wvp = mul(wvp, Projection);
-
-	//	float4 pos = float4(position[i], 1.0f);
-
-	//	gs.Position = mul(pos, wvp);
-	//	gs.Color = Particle[id].Color;
-	//	gs.TexCoord = uv[i];
-
-	//	output.Append(gs);
-	//}*/
-
-	//output.RestartStrip();
-
 }
 
 
@@ -208,9 +124,10 @@ Output_PS PS_main(Output_GS a)
 
 	}
 
-	//color.w = a.color.w;
+	//color.w = a.Color.w;
 
 	//color = float4(0.5f, 0.5f, 0.5f, 1.0f);
+	//color = a.Color;
 	output.color = color;
 
 	return output;

@@ -8,6 +8,7 @@ StructuredBuffer * StructuredBuffer::CreateStructuredBuffer(UINT ByteWidth, UINT
 	desc.ByteWidth = ByteWidth * NumElements;
 	desc.Usage = D3D11_USAGE_DEFAULT;
 	desc.BindFlags = BindFlags;
+	desc.CPUAccessFlags = 0;
 
 	ID3D11Buffer* buffer;
 	HRESULT hr;
@@ -53,6 +54,7 @@ StructuredBuffer * StructuredBuffer::CreateStructuredBuffer(UINT ByteWidth, UINT
 
 void StructuredBuffer::UpdateBuffer(const void * Data)
 {
+	if (Data == nullptr)return;
 	CDxRenderer::GetRenderer()->GetDeviceContext()->UpdateSubresource(m_StructuredBuffer.Get(), 0, nullptr, Data, 0, 0);
 }
 
