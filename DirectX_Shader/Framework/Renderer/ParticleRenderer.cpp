@@ -80,6 +80,7 @@ void ParticleRenderer::Draw(unsigned int index)
 		particle_buffer.push_back({ world, particle->GetColor(), particle->GetScale(), particle->GetUV(), particle->GetOffset() });
 
 	}
+	particle_buffer.shrink_to_fit();
 	//ジオメトリシェーダーにセット
 	m_StructuredBuffer->UpdateBuffer(particle_buffer.data());
 	m_StructuredBuffer->GSSetStructuredBuffer(0);

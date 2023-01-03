@@ -15,7 +15,8 @@ struct VERTEX_3D
 	D3DXCOLOR   Diffuse;//頂点カラー
 	D3DXVECTOR3 Tangent;//tangent(接ベクトル？なんていうか分からんw)
 	D3DXVECTOR3 Binormal;//従法線
-
+	
+	float Dummy[2];
 };
 
 // ライト構造体

@@ -132,7 +132,7 @@ void CameraRenderer::DrawRenderer(std::list<CGameObject *> gameobject[])
 	CDxRenderer::GetRenderer()->ClearBackBuffor(false);
 	CDxRenderer::GetRenderer()->SetRenderTargetBackBuffor(true);
 
-//	SetVPCIdentity();
+	SetVPCIdentity();
 
 	m_ToneMapPass->Draw();
 	

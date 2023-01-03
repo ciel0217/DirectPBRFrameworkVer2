@@ -5,7 +5,7 @@ StructuredBuffer * StructuredBuffer::CreateStructuredBuffer(UINT ByteWidth, UINT
 	D3D11_BUFFER_DESC desc = {};
 	desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
 	desc.StructureByteStride = ByteWidth;
-	desc.ByteWidth = ByteWidth * (NumElements + 10);
+	desc.ByteWidth = ByteWidth * (NumElements+1);
 	desc.Usage = D3D11_USAGE_DEFAULT;
 	desc.BindFlags = BindFlags;
 	desc.CPUAccessFlags = 0;
@@ -38,7 +38,7 @@ StructuredBuffer * StructuredBuffer::CreateStructuredBuffer(UINT ByteWidth, UINT
 	srv_desc.Format = DXGI_FORMAT_UNKNOWN;
 	srv_desc.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
 	srv_desc.Buffer.FirstElement = 0;
-	srv_desc.Buffer.NumElements = NumElements;
+	srv_desc.Buffer.NumElements = NumElements+1;
 
 	hr = CDxRenderer::GetRenderer()->GetDevice()->CreateShaderResourceView(buffer, &srv_desc, &srv);
 
@@ -56,6 +56,7 @@ void StructuredBuffer::UpdateBuffer(const void * Data)
 {
 	if (Data == nullptr)return;
 	CDxRenderer::GetRenderer()->GetDeviceContext()->UpdateSubresource(m_StructuredBuffer.Get(), 0, nullptr, Data, 0, 0);
+
 }
 
 void StructuredBuffer::VSSetStructuredBuffer(UINT StartSlot)

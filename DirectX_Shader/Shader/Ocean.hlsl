@@ -35,8 +35,6 @@ struct MATERIAL
 	int			UseAoMap;
 	int			UseEmmisive;
 	int			NormalState;
-	int			Dummy[3];
-	//float		Dummy[2];	//16byte‹«ŠE—p
 };
 
 cbuffer MaterialBuffer : register(b3)
