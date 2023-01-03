@@ -112,22 +112,14 @@ Output_PS PS_main(Output_GS a)
 	if (Material.UseAlbedoTex == 1)
 	{
 		color = g_Texture.Sample(g_SamplerState, a.TexCoord);
-		//color = Material.Roughness;
-
-		//color = float4(1.0f, 0.0f, 1.0f, 1.0f);
-		//color = float4(a.texcoord.x, a.texcoord.y, 0.0f, 1.0f);
+		
 	}
 	else
 	{
-		//color = a.color;
 		color = float4(0.5f, 0.5f, 0.5f, 1.0f);
-
 	}
 
-	//color.w = a.Color.w;
-
-	//color = float4(0.5f, 0.5f, 0.5f, 1.0f);
-	//color = a.Color;
+	color = color * a.Color;
 	output.color = color;
 
 	return output;

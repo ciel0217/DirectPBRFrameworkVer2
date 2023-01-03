@@ -5,7 +5,7 @@ StructuredBuffer * StructuredBuffer::CreateStructuredBuffer(UINT ByteWidth, UINT
 	D3D11_BUFFER_DESC desc = {};
 	desc.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
 	desc.StructureByteStride = ByteWidth;
-	desc.ByteWidth = ByteWidth * NumElements;
+	desc.ByteWidth = ByteWidth * (NumElements + 10);
 	desc.Usage = D3D11_USAGE_DEFAULT;
 	desc.BindFlags = BindFlags;
 	desc.CPUAccessFlags = 0;
