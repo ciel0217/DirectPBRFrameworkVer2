@@ -133,7 +133,6 @@ HRESULT CDxRenderer::InitRenderer()
 		m_Rtv[i] = m_RenderTargets[i].RenderTargetView.Get();
 	}
 
-	m_IntermediateRtv = m_RenderTargets[RENDER_TARGET_NUM].RenderTargetView.Get();
 
 	//ステンシル用テクスチャー作成
 	D3D11_TEXTURE2D_DESC td;
@@ -211,42 +210,55 @@ HRESULT CDxRenderer::InitRenderer()
 	ZeroMemory(&blendDesc, sizeof(blendDesc));
 	blendDesc.AlphaToCoverageEnable = FALSE;
 	blendDesc.IndependentBlendEnable = FALSE;
-	blendDesc.RenderTarget[0].BlendEnable = TRUE;
-	blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-	blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-	blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-	blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-	blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	
+	for (int i = 0; i < 8; i++) 
+	{
+		blendDesc.RenderTarget[i].BlendEnable = TRUE;
+		blendDesc.RenderTarget[i].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+		blendDesc.RenderTarget[i].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+		blendDesc.RenderTarget[i].BlendOp = D3D11_BLEND_OP_ADD;
+		blendDesc.RenderTarget[i].SrcBlendAlpha = D3D11_BLEND_ONE;
+		blendDesc.RenderTarget[i].DestBlendAlpha = D3D11_BLEND_ZERO;
+		blendDesc.RenderTarget[i].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+		blendDesc.RenderTarget[i].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	}
 	float blendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 	m_D3DDevice->CreateBlendState(&blendDesc, &m_BlendStateAlphaBlend);
 
-	blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
-	blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ZERO;
-	blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-	blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-	blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	for (int i = 0; i < 8; i++)
+	{
+		blendDesc.RenderTarget[i].SrcBlend = D3D11_BLEND_ONE;
+		blendDesc.RenderTarget[i].DestBlend = D3D11_BLEND_ZERO;
+		blendDesc.RenderTarget[i].BlendOp = D3D11_BLEND_OP_ADD;
+		blendDesc.RenderTarget[i].SrcBlendAlpha = D3D11_BLEND_ONE;
+		blendDesc.RenderTarget[i].DestBlendAlpha = D3D11_BLEND_ZERO;
+		blendDesc.RenderTarget[i].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+		blendDesc.RenderTarget[i].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	}
 	m_D3DDevice->CreateBlendState(&blendDesc, &m_BlendStateNone);
 
-	blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-	blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
-	blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-	blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-	blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	for (int i = 0; i < 8; i++)
+	{
+		blendDesc.RenderTarget[i].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+		blendDesc.RenderTarget[i].DestBlend = D3D11_BLEND_ONE;
+		blendDesc.RenderTarget[i].BlendOp = D3D11_BLEND_OP_ADD;
+		blendDesc.RenderTarget[i].SrcBlendAlpha = D3D11_BLEND_ONE;
+		blendDesc.RenderTarget[i].DestBlendAlpha = D3D11_BLEND_ZERO;
+		blendDesc.RenderTarget[i].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+		blendDesc.RenderTarget[i].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	}
 	m_D3DDevice->CreateBlendState(&blendDesc, &m_BlendStateAdd);
 
-	blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
-	blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
-	blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_REV_SUBTRACT;
-	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-	blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-	blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	for (int i = 0; i < 8; i++)
+	{
+		blendDesc.RenderTarget[i].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+		blendDesc.RenderTarget[i].DestBlend = D3D11_BLEND_ONE;
+		blendDesc.RenderTarget[i].BlendOp = D3D11_BLEND_OP_REV_SUBTRACT;
+		blendDesc.RenderTarget[i].SrcBlendAlpha = D3D11_BLEND_ONE;
+		blendDesc.RenderTarget[i].DestBlendAlpha = D3D11_BLEND_ZERO;
+		blendDesc.RenderTarget[i].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+		blendDesc.RenderTarget[i].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	}
 	m_D3DDevice->CreateBlendState(&blendDesc, &m_BlendStateSubtract);
 
 	// アルファブレンド設定
@@ -425,7 +437,7 @@ void CDxRenderer::SetCullingMode(CULL_MODE cm)
 
 void CDxRenderer::SetAlphaTestEnable(BOOL flag)
 {
-	D3D11_BLEND_DESC blendDesc;
+	/*D3D11_BLEND_DESC blendDesc;
 	ZeroMemory(&blendDesc, sizeof(blendDesc));
 
 	if (flag)
@@ -482,7 +494,7 @@ void CDxRenderer::SetAlphaTestEnable(BOOL flag)
 	m_ImmediateContext->OMSetBlendState(blendState, blendFactor, 0xffffffff);
 
 	if (blendState != NULL)
-		blendState->Release();
+		blendState->Release();*/
 }
 
 void CDxRenderer::SetSamplerState(FILTER_MODE fm, ADDRESS_MODE am)
@@ -581,10 +593,10 @@ void CDxRenderer::SetRenderTargetByDeffard()
 void CDxRenderer::SetRenderTargetIntermediateBuffer(bool enableDepthStencil)
 {
 	if (enableDepthStencil) {
-		m_ImmediateContext->OMSetRenderTargets(1, &m_IntermediateRtv, m_DepthStencilView.Get());
+		m_ImmediateContext->OMSetRenderTargets(1, m_RenderTargets[RENDER_TARGET_NUM].RenderTargetView.GetAddressOf(), m_DepthStencilView.Get());
 	}
 	else {
-		m_ImmediateContext->OMSetRenderTargets(1, &m_IntermediateRtv, NULL);
+		m_ImmediateContext->OMSetRenderTargets(1, m_RenderTargets[RENDER_TARGET_NUM].RenderTargetView.GetAddressOf(), NULL);
 	}
 
 }
@@ -613,7 +625,7 @@ void CDxRenderer::ClearRenderTextureSceneByDeffard()
 void CDxRenderer::ClearIntermediateBuffer(bool enableDepthStencilClear)
 {
 	float ClearColor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
-	m_ImmediateContext->ClearRenderTargetView(m_IntermediateRtv, ClearColor);
+	m_ImmediateContext->ClearRenderTargetView(m_RenderTargets[RENDER_TARGET_NUM].RenderTargetView.Get(), ClearColor);
 
 	if (enableDepthStencilClear) {
 		m_ImmediateContext->ClearDepthStencilView(m_DepthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
@@ -639,5 +651,5 @@ void CDxRenderer::SetViewPortDefault()
 
 void CDxRenderer::Present()
 {
-	m_SwapChain->Present(0, 0);
+	m_SwapChain->Present(1, 0);
 }

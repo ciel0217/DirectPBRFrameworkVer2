@@ -56,8 +56,6 @@ Output_PS PS_main(Output_VS vs)
 
 	
 
-	output.color = g_IntermediateTex.Sample(g_SamplerState, vs.texcoord);
-
 	return output;
 
 }

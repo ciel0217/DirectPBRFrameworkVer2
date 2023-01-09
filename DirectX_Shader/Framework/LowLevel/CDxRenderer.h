@@ -50,9 +50,7 @@ private:
 	RenderTarget m_RenderTargets[RENDER_TARGET_NUM + 1];
 
 	ID3D11RenderTargetView* m_Rtv[RENDER_TARGET_NUM];
-	ID3D11RenderTargetView* m_IntermediateRtv;
-
-
+	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> m_IntermediateRtv;
 
 
 

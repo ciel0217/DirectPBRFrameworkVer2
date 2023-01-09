@@ -34,7 +34,7 @@ void ParticleRenderer::Draw(unsigned int index)
 	//‚±‚Ì‚â‚è•û‚æ‚­‚È‚¢‚Ì‚©‚È...
 	std::vector<CParticle*> particle_list = ((ParticleSystem*)this)->GetParticleList();
 	CShader* shader = m_CMaterial->GetShader();
-	CDxRenderer::GetRenderer()->SetAlphaTestEnable(true);
+	
 	Camera* camera = ManagerScene::GetInstance()->GetCurrentSceneCamera();
 
 	D3DXMATRIX mtx_world;
