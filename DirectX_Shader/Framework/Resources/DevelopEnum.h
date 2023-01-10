@@ -80,7 +80,7 @@ enum DrawObjectRenderQueue {
 
 enum CollisionType {
 	eBoxCollision = 0,
-
+	eObbCollision,
 
 	eCollisionTypeMax,
 };

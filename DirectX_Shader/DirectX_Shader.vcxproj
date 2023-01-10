@@ -165,6 +165,8 @@
     <ClInclude Include="Framework\Resources\CMaterial.h" />
     <ClInclude Include="Framework\Resources\CommonProcess.h" />
     <ClInclude Include="Framework\Resources\CParticle.h" />
+    <ClInclude Include="Framework\Resources\ObbCollision.h" />
+    <ClInclude Include="Framework\Resources\ObbAndObbDetection.h" />
     <ClInclude Include="Framework\Resources\ParticleSystem.h" />
     <ClInclude Include="Framework\Resources\CPostEffect.h" />
     <ClInclude Include="Framework\Resources\CScene.h" />
@@ -220,6 +222,8 @@
     <ClCompile Include="Framework\Resources\CMaterial.cpp" />
     <ClCompile Include="Framework\Resources\CommonProcess.cpp" />
     <ClCompile Include="Framework\Resources\CParticle.cpp" />
+    <ClCompile Include="Framework\Resources\ObbAndObbDetection.cpp" />
+    <ClCompile Include="Framework\Resources\ObbCollision.cpp" />
     <ClCompile Include="Framework\Resources\ParticleSystem.cpp" />
     <ClCompile Include="Framework\Resources\CPostEffect.cpp" />
     <ClCompile Include="Framework\Resources\CScene.cpp" />

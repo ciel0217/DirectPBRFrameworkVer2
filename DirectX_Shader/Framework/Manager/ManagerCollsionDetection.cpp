@@ -3,6 +3,7 @@
 #include "../Resources/CCollision.h"
 #include "../Resources/CGameObject.h"
 #include "../Resources/BoxAndBoxDetection.h"
+#include "../Resources/ObbAndObbDetection.h"
 
 #define TARGET_RADIUS 200.0f
 
@@ -13,6 +14,7 @@ ManagerCollisionDetection* ManagerCollisionDetection::_instance = nullptr;
 ManagerCollisionDetection::ManagerCollisionDetection()
 {
 	m_CollisionDetection[eBoxCollision][eBoxCollision] = new BoxAndBoxDetection();
+	m_CollisionDetection[eObbCollision][eObbCollision] = new ObbAndObbDetection();
 }
 
 ManagerCollisionDetection::~ManagerCollisionDetection()
