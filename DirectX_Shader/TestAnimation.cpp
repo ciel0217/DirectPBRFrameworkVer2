@@ -8,7 +8,7 @@ void TestAnimation::Config()
 	material.UseAlbedoTex = 1;
 	SetUpMaterial(eTransparent, "test", "Shader/ParticleRender.hlsl", "asset/texture/enter.png", material);
 
-	m_ParticleNum = 10;
+	m_ParticleNum = 1000;
 	m_ParticleScale = D3DXVECTOR3(40.0f, 5.0f, 5.0f);
 	m_ParticleVelocity = D3DXVECTOR3(10.0f, 0.0f, 0.0f);
 	m_LimitLifeTime = 10;

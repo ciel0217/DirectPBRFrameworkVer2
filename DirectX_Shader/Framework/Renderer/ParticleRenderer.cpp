@@ -61,9 +61,14 @@ void ParticleRenderer::Draw(unsigned int index)
 	CDxRenderer::GetRenderer()->SetInputLayout(shader->GetShaderVS()->Layout.Get());
 	CDxRenderer::GetRenderer()->SetGeometryShader(shader->GetShaderGS().Get());
 
+	int count = 0;
 	for (auto particle : particle_list)
 	{
-		if (particle->GetIsDeath())continue;
+		if (particle->GetIsDeath())
+		{
+			count++;
+			continue;
+		}
 
 		D3DXVECTOR3 pos = particle->GetPosition();
 
@@ -74,16 +79,21 @@ void ParticleRenderer::Draw(unsigned int index)
 		D3DXMatrixMultiply(&world, &mtx_world, &mtx_translate);
 		D3DXMatrixTranspose(&world, &world);
 
-		m_WorldMatrixCBuffer->UpdateBuffer(&world);
-		m_WorldMatrixCBuffer->GSSetCBuffer(0);
+		/*m_WorldMatrixCBuffer->UpdateBuffer(&world);
+		m_WorldMatrixCBuffer->GSSetCBuffer(0);*/
 
 		particle_buffer.push_back({ world, particle->GetColor(), particle->GetScale(), particle->GetUV(), particle->GetOffset() });
 
 	}
+
+	for (int i = 0; i < count; i++)
+	{
+		particle_buffer.push_back({mtx_view, D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(0.0f, 0.0f)});
+	}
 	particle_buffer.shrink_to_fit();
 	//ジオメトリシェーダーにセット
 	m_StructuredBuffer->UpdateBuffer(particle_buffer.data());
-	m_StructuredBuffer->GSSetStructuredBuffer(0);
+	m_StructuredBuffer->GSSetStructuredBuffer(2);
 
 	m_MaterialCBuffer->UpdateBuffer(&m_CMaterial->GetMaterialValue());
 	m_MaterialCBuffer->PSSetCBuffer(3);
@@ -94,7 +104,7 @@ void ParticleRenderer::Draw(unsigned int index)
 
 	CDxRenderer::GetRenderer()->SetCullingMode(CULL_MODE_NONE);
 	CDxRenderer::GetRenderer()->GetDeviceContext()->PSSetShaderResources(0, 1, m_CMaterial->GetAlbedoTexture().GetAddressOf());
-	CDxRenderer::GetRenderer()->GetDeviceContext()->DrawInstanced(3, particle_buffer.size(), 0, 0);
+	CDxRenderer::GetRenderer()->GetDeviceContext()->DrawInstanced(4, particle_buffer.size(), 0, 0);
 
 	//カリングを元に戻す
 	CDxRenderer::GetRenderer()->SetCullingMode(CULL_MODE_BACK);

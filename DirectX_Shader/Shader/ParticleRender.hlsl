@@ -32,7 +32,7 @@ struct Output_GS
 	float2 TexCoord : TEXCOORD0;
 };
 
-StructuredBuffer<ParticleInfo> Particle : register(t0);
+StructuredBuffer<ParticleInfo> Particle : register(t2);
 
 //ＩDだけ渡す頂点シェーダー
 DummyVertex VS_main(in uint id : SV_InstanceID) 
@@ -45,10 +45,10 @@ DummyVertex VS_main(in uint id : SV_InstanceID)
 
 
 //ジオメトリシェーダー
-[maxvertexcount(4)] //quadだから6にしなきゃいけない?
+[maxvertexcount(6)] //quadだから6にしなきゃいけない?
 
 void GS_Main(
-	point DummyVertex input[1],
+	triangle DummyVertex input[3],
 	inout TriangleStream<Output_GS> output
 )
 {
@@ -116,7 +116,7 @@ Output_PS PS_main(Output_GS a)
 	}
 	else
 	{
-		color = float4(0.5f, 0.5f, 0.5f, 1.0f);
+		color = float4(0.0f, 0.5f, 0.5f, 1.0f);
 	}
 
 	color = color * a.Color;
