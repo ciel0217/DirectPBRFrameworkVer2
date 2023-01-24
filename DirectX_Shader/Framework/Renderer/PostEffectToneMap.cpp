@@ -29,7 +29,7 @@ void PostEffectToneMap::Draw()
 
 
 	RenderTarget tonemap = CDxRenderer::GetRenderer()->GetSceneTexture(eToneMap);
-	//ID3D11ShaderResourceView* a = CDxRenderer::GetRenderer()->GetDepthStencilSRV();
+	ID3D11ShaderResourceView* a = CDxRenderer::GetRenderer()->GetDepthStencilSRV();
 	ID3D11ShaderResourceView* t0 = tonemap.ShaderResourceView.Get();
 
 	CDxRenderer::GetRenderer()->GetDeviceContext()->PSSetShaderResources(0, 1, &t0);

@@ -130,7 +130,7 @@ void CameraRenderer::DrawRenderer(std::list<CGameObject *> gameobject[])
 	DrawTransparent();
 
 	CDxRenderer::GetRenderer()->ClearBackBuffor(false);
-	CDxRenderer::GetRenderer()->SetRenderTargetBackBuffor(true);
+	CDxRenderer::GetRenderer()->SetRenderTargetBackBuffor(false);
 
 	SetVPCIdentity();
 

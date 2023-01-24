@@ -14,6 +14,7 @@ public:
 
 	void SetUpSprite(CGameObject* self);
 	void SetUpMaterial(std::string texture_name, std::string shader_name, std::string material_name);
+	void SetUpMaterial(ID3D11ShaderResourceView* texture, std::string shader_name, std::string material_name);
 	void Draw(unsigned int index)override;
 	void SetTextureColor(D3DXCOLOR color) { m_TextureColor = color; }
 };

@@ -23,16 +23,24 @@ private:
 	
 public:
 	CMaterial() {};
+	CMaterial(int render, CShader* shader, std::string name) :
+		m_RenderQueue(render), m_Shader(shader), m_MaterialName(name) {
+		ZeroMemory(&m_MaterialValue, sizeof(m_MaterialValue));
+		m_MaterialValue.BaseColor = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	}
+
 	CMaterial(int render, CShader* shader, ID3D11ShaderResourceView* texture, std::string name) : 
 		m_RenderQueue(render), m_Shader(shader), m_MaterialName(name) {
 		ZeroMemory(&m_MaterialValue, sizeof(m_MaterialValue));
 		m_MaterialValue.BaseColor = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+		m_MaterialValue.UseAlbedoTex = 1;
 		m_AlbedoTexture.Attach(texture);
 	}
 
 	CMaterial(int render, MATERIAL_CBUFFER material, CShader* shader, ID3D11ShaderResourceView* texture, std::string name) :
 		m_RenderQueue(render), m_Shader(shader), m_MaterialName(name), m_MaterialValue(material) {
 		m_AlbedoTexture.Attach(texture);
+		m_MaterialValue.UseAlbedoTex = 1;
 	}
 
 	void SetMaterialValue(MATERIAL_CBUFFER value) { m_MaterialValue = value; }

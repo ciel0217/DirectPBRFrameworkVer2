@@ -47,6 +47,15 @@ void SpriteRenderer::SetUpMaterial(std::string texture_name, std::string shader_
 	m_MaterialIds.push_back(material_id);
 }
 
+void SpriteRenderer::SetUpMaterial(ID3D11ShaderResourceView * texture, std::string shader_name, std::string material_name)
+{
+	CShader* shader = ManagerShader::GetShader(shader_name);
+
+	unsigned int material_id = ManagerMaterial::CreateMaterial(e2D, shader, texture, material_name);
+	m_MaterialIds.reserve(1);
+	m_MaterialIds.push_back(material_id);
+}
+
 void SpriteRenderer::Draw(unsigned int index)
 {
 	if (m_IsActive) {
@@ -57,10 +66,6 @@ void SpriteRenderer::Draw(unsigned int index)
 
 		MATERIAL_CBUFFER material = renderer_material->GetMaterialValue();
 		material.BaseColor = m_TextureColor;
-		 
-
-		D3DXMATRIX mtxScl, mtxRot, mtxTranslate;
-		D3DXMATRIX mtxWorld;
 
 
 		CShader* shader = renderer_material->GetShader();

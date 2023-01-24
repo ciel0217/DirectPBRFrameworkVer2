@@ -72,5 +72,6 @@ Output_PS PS_main(Output_VS vs)
 
 	output.color = color;
 	//output.color = float4(.0f, 0.0f, 1.0f, 1.0f);
+	//output.color.a = 1.0f;
 	return output;
 }
