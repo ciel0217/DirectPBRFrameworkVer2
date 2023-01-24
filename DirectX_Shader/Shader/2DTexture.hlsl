@@ -1,4 +1,4 @@
-
+#include "common.hlsli"
 
 //*****************************************************************************
 // 定数バッファ
@@ -64,12 +64,16 @@ Output_PS PS_main(Output_VS vs)
 	Output_PS output;
 	float4 color;
 
+	if(Material.UseAlbedoTex == 1)
+	{
+		color = g_Texture.Sample(g_SamplerState, vs.texcoord);
+		color *= vs.color;
+	}
+	else
+	{
+		color = vs.color;
+	}
 	
-	color = g_Texture.Sample(g_SamplerState, vs.texcoord);
-
-		
-	color *= vs.color;
-
 	output.color = color;
 	//output.color = float4(.0f, 0.0f, 1.0f, 1.0f);
 	//output.color.a = 1.0f;
