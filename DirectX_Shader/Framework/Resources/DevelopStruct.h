@@ -82,6 +82,22 @@ struct OCEAN_CBUFFER
 	float Dummy[2];
 };
 
+struct WORLD_CBUFFER
+{
+	D3DXMATRIX World;
+	D3DXMATRIX InverseWorld;
+};
+
+struct CAMERA_CBUFFER
+{
+	D3DXVECTOR4 CameraPos;
+	D3DMATRIX View;
+	D3DMATRIX InverseView;
+	D3DMATRIX Projection;
+	D3DMATRIX InverseProjection;
+	D3DMATRIX WVP;
+};
+
 struct RenderTarget
 {
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> RenderTargetTexture;

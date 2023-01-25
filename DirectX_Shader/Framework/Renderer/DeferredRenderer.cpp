@@ -47,7 +47,7 @@ void DeferredRenderer::Draw()
 	CDxRenderer::GetRenderer()->SetInputLayout(m_Shader->GetShaderVS()->Layout.Get());
 
 	m_DeferredCBuffer->UpdateBuffer(&m_CBufferValue);
-	m_DeferredCBuffer->PSSetCBuffer(9);
+	m_DeferredCBuffer->PSSetCBuffer(5);
 
 	RenderTarget color = CDxRenderer::GetRenderer()->GetSceneTexture(eBaseColor);
 	RenderTarget normal = CDxRenderer::GetRenderer()->GetSceneTexture(eNormal);

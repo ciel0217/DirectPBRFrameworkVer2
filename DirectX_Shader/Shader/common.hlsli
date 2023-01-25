@@ -1,17 +1,28 @@
+struct WORLD_BUFFER
+{
+	matrix World;
+	matrix InverseWorld;
+};
+
 // マトリクスバッファ
 cbuffer WorldBuffer : register(b0)
 {
-	matrix World;
+	WORLD_BUFFER WorldBuffer;
 }
 
-cbuffer ViewBuffer : register(b1)
+struct CAMERA_BUFFER
 {
+	float4 CameraPos;
 	matrix View;
-}
-
-cbuffer ProjectionBuffer : register(b2)
-{
+	matrix InverseView;
 	matrix Projection;
+	matrix InverseProjection;
+	matrix WVP; //2D用
+};
+
+cbuffer CameraBuffer : register(b1)
+{
+	CAMERA_BUFFER CameraBuffer;
 }
 
 // マテリアルバッファ
@@ -34,7 +45,3 @@ cbuffer MaterialBuffer : register(b3)
 	MATERIAL	Material;
 }
 
-cbuffer InverseWorldBuffer : register(b6)
-{
-	matrix InverseWorld;
-}

@@ -1,17 +1,5 @@
 #include "common.hlsli"
 
-//*****************************************************************************
-// 定数バッファ
-//*****************************************************************************
-
-
-
-cbuffer ConstantBuffer : register(b2)
-{
-	matrix wvp;
-}
-
-
 struct Output_VS
 {
 	float4 pos : SV_POSITION;
@@ -39,7 +27,7 @@ Output_VS VS_main(in  float3 inPosition		: POSITION0,
 	float4 pos = float4(inPosition, 1.0f);
 	float4 nor = float4(inNormal, 1.0f);
 
-	output.pos = mul(pos, wvp);
+	output.pos = mul(pos, CameraBuffer.WVP);
 	output.normal = nor;
 	output.texcoord = inTexCoord;
 

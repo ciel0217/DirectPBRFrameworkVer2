@@ -1,21 +1,7 @@
 #include "NDCFullScreen.hlsli"
 #include "BRDF.hlsli"
 #include "CalcLight.hlsli"
-
-cbuffer ViewBuffer : register(b7)
-{
-	matrix View;
-}
-
-cbuffer ProjectionBuffer : register(b8)
-{
-	matrix Projection;
-}
-
-cbuffer CameraPos : register(b5)
-{
-	float4 CameraPos;
-}
+#include "common.hlsli"
 
 struct DEFERRED_CBUFFER
 {
@@ -24,7 +10,7 @@ struct DEFERRED_CBUFFER
 	int Dummy[2];
 };
 
-cbuffer DeferredBuffer : register(b9)
+cbuffer DeferredBuffer : register(b5)
 {
 	DEFERRED_CBUFFER DeferredBuffer;
 }
@@ -71,13 +57,13 @@ float4 CalculateWorldFromDepth(float2 texcoord, float depth)
 	// 範囲[0 ~ 1]
 	float4 clipSpace = float4(clipXY, depth, 1);
 	
-	float4 viewSpace = mul(Projection, clipSpace);
+	float4 viewSpace = mul(CameraBuffer.InverseProjection, clipSpace);
 	
 
 	// クリップ座標をwで割るとNDC座標になる
 	viewSpace /= viewSpace.w;
 
-	float4 worldSpace = mul(View, viewSpace);
+	float4 worldSpace = mul(CameraBuffer.InverseView, viewSpace);
 
 	return worldSpace;
 }
@@ -115,7 +101,7 @@ Output_PS PS_main(Output_VS vs)
 	SurfaceInfo surf;
 	surf.WorldPosition = CalculateWorldFromDepth(vs.texcoord, depth);
 	surf.Normal = normal;
-	surf.EyeV = normalize(CameraPos.xyz - surf.WorldPosition.xyz);
+	surf.EyeV = normalize(CameraBuffer.CameraPos.xyz - surf.WorldPosition.xyz);
 	//surf.EyeV = normalize(surf.WorldPosition.xyz - CameraPos.xyz);
 	surf.NdotV = dot(surf.Normal, surf.EyeV);
 

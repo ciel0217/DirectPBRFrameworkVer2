@@ -29,8 +29,8 @@ Output_VS VS_main(in  float3 inPosition		: POSITION0,
 {
 	Output_VS output;
 	matrix wvp;
-	wvp = mul(World, View);
-	wvp = mul(wvp, Projection);
+	wvp = mul(WorldBuffer.World, CameraBuffer.View);
+	wvp = mul(wvp, CameraBuffer.Projection);
 
 	float4 pos = float4(inPosition, 1.0f);
 	
@@ -38,7 +38,7 @@ Output_VS VS_main(in  float3 inPosition		: POSITION0,
 
 	float4 worldNormal, normal;
 	normal = float4(inNormal, 0.0f);
-	worldNormal = mul(normal, InverseWorld);
+	worldNormal = mul(normal, WorldBuffer.InverseWorld);
 	worldNormal = normalize(worldNormal);
 	output.normal = worldNormal.xyz;
 	

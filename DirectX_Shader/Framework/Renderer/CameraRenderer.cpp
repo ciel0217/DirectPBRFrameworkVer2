@@ -9,6 +9,7 @@
 #include "../Manager/ManagerMaterial.h"
 #include "../Resources/CLight.h"
 #include "../Resources/CommonProcess.h"
+#include "../Resources/DevelopStruct.h"
 
 #include <vector>
 #include <memory>
@@ -21,11 +22,8 @@ std::unique_ptr<CPostEffect>             CameraRenderer::m_ToneMapPass = nullptr
 std::unique_ptr<ManagerLight>		      CameraRenderer::m_LightPass = nullptr;
 std::unique_ptr<GBufferPass>			  CameraRenderer::m_GBufferPass = nullptr;
 
-std::unique_ptr<CBuffer>				  CameraRenderer::m_ViewCBuffer = nullptr;
-std::unique_ptr<CBuffer>				  CameraRenderer::m_ProjectionCBuffer = nullptr;
-std::unique_ptr<CBuffer>				  CameraRenderer::m_CameraPosCBuffer = nullptr;
-std::unique_ptr<CBuffer>				  CameraRenderer::m_ViewInverseCBuffer = nullptr;
-std::unique_ptr<CBuffer>				  CameraRenderer::m_ProjectionInverseCBuffer = nullptr;
+std::unique_ptr<CBuffer>				  CameraRenderer::m_CameraCBuffer = nullptr;
+
 
 
 void CameraRenderer::SetUpCameraRenderer()
@@ -39,18 +37,8 @@ void CameraRenderer::SetUpCameraRenderer()
 	if (!m_GBufferPass)
 		m_GBufferPass.reset(new GBufferPass());
 
-	if (!m_ViewCBuffer)
-		m_ViewCBuffer.reset(new CBuffer(CBuffer::CreateBuffer(sizeof(D3DMATRIX), D3D11_BIND_CONSTANT_BUFFER, nullptr)));
-	if (!m_ProjectionCBuffer)
-		m_ProjectionCBuffer.reset(new CBuffer(CBuffer::CreateBuffer(sizeof(D3DMATRIX), D3D11_BIND_CONSTANT_BUFFER, nullptr)));
-
-	if (!m_ViewInverseCBuffer)
-		m_ViewInverseCBuffer.reset(new CBuffer(CBuffer::CreateBuffer(sizeof(D3DMATRIX), D3D11_BIND_CONSTANT_BUFFER, nullptr)));
-	if (!m_ProjectionInverseCBuffer)
-		m_ProjectionInverseCBuffer.reset(new CBuffer(CBuffer::CreateBuffer(sizeof(D3DMATRIX), D3D11_BIND_CONSTANT_BUFFER, nullptr)));
-
-	if (!m_CameraPosCBuffer)
-		m_CameraPosCBuffer.reset(new CBuffer(CBuffer::CreateBuffer(sizeof(D3DXCOLOR), D3D11_BIND_CONSTANT_BUFFER, nullptr)));
+	if (!m_CameraCBuffer)
+		m_CameraCBuffer.reset(new CBuffer(CBuffer::CreateBuffer(sizeof(CAMERA_CBUFFER), D3D11_BIND_CONSTANT_BUFFER, nullptr)));
 
 	return;
 }
@@ -312,51 +300,37 @@ void CameraRenderer::SetSkyBox(SkyBox* obj)
 void CameraRenderer::SetVPCBuffer(D3DXVECTOR3 pos, D3DXVECTOR3 lookat, D3DXVECTOR3 up)
 {
 	m_CameraPos = pos;
+	CAMERA_CBUFFER camera_cbuffer;
+	camera_cbuffer.CameraPos = D3DXVECTOR4(m_CameraPos.x, m_CameraPos.y, m_CameraPos.z, 1.0f);
 
 	D3DXMATRIX mtxView, mtxProjection, mtxTransView, mtxTransProj, mtxInverseView, mtxInverseProj;
 	D3DXMatrixLookAtLH(&mtxView, &pos, &lookat, &up);
 	D3DXMatrixTranspose(&mtxTransView, &mtxView);
-	m_ViewCBuffer->UpdateBuffer(&mtxTransView);
-	m_ViewCBuffer->VSSetCBuffer(1);
-	m_ViewCBuffer->PSSetCBuffer(1);
-	m_ViewCBuffer->GSSetCBuffer(1);
+	camera_cbuffer.View = mtxTransView;
+
+	D3DXMatrixInverse(&mtxInverseView, NULL, &mtxView);
+	camera_cbuffer.InverseView = mtxInverseView;
 
 	D3DXMatrixPerspectiveFovLH(&mtxProjection, 1.0f, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, VIEW_NEAR_Z, VIEW_FAR_Z);
 	D3DXMatrixTranspose(&mtxTransProj, &mtxProjection);
-	m_ProjectionCBuffer->UpdateBuffer(&mtxTransProj);
-	m_ProjectionCBuffer->VSSetCBuffer(2);
-	m_ProjectionCBuffer->PSSetCBuffer(2);
-	m_ProjectionCBuffer->GSSetCBuffer(2);
-
-	D3DXMatrixInverse(&mtxInverseView, NULL, &mtxView);
-	m_ViewInverseCBuffer->UpdateBuffer(&mtxInverseView);
-	m_ViewInverseCBuffer->VSSetCBuffer(7);
-	m_ViewInverseCBuffer->PSSetCBuffer(7);
-
+	camera_cbuffer.Projection = mtxTransProj;
 
 	D3DXMatrixInverse(&mtxInverseProj, NULL, &mtxProjection);
-	m_ProjectionInverseCBuffer->UpdateBuffer(&mtxInverseProj);
-	m_ProjectionInverseCBuffer->VSSetCBuffer(8);
-	m_ProjectionInverseCBuffer->PSSetCBuffer(8);
-
-	m_CameraPosCBuffer->UpdateBuffer(pos);
-	m_CameraPosCBuffer->PSSetCBuffer(5);
-}
-
-void CameraRenderer::SetVPCIdentity()
-{
-	D3DXMATRIX view;
-	D3DXMatrixIdentity(&view);
-	D3DXMatrixTranspose(&view, &view);
-	m_ViewCBuffer->UpdateBuffer(&view);
-	m_ViewCBuffer->VSSetCBuffer(1);
-	m_ViewCBuffer->PSSetCBuffer(1);
+	camera_cbuffer.InverseProjection = mtxInverseProj;
 
 	D3DXMATRIX worldViewProjection;
 	D3DXMatrixOrthoOffCenterLH(&worldViewProjection, 0.0f, SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f, 0.0f, 1.0f);
 	D3DXMatrixTranspose(&worldViewProjection, &worldViewProjection);
-	m_ProjectionCBuffer->UpdateBuffer(&worldViewProjection);
-	m_ProjectionCBuffer->VSSetCBuffer(2);
-	
+	camera_cbuffer.WVP = worldViewProjection;
+
+	m_CameraCBuffer->UpdateBuffer(&camera_cbuffer);
+	m_CameraCBuffer->VSSetCBuffer(1);
+	m_CameraCBuffer->PSSetCBuffer(1);
+	m_CameraCBuffer->GSSetCBuffer(1);
+
+}
+
+void CameraRenderer::SetVPCIdentity()
+{
 }
 

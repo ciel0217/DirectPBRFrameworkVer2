@@ -24,8 +24,7 @@ void CCubeMap::CreateCubeMapResourveAndView()
 	m_ViewPort.MinDepth = 0.0f;
 	m_ViewPort.MaxDepth = 1.0f;
 
-	m_ViewCBuffer = new CBuffer(CBuffer::CreateBuffer(sizeof(D3DMATRIX), D3D11_BIND_CONSTANT_BUFFER, nullptr));
-	m_ProjectionCBuffer = new CBuffer(CBuffer::CreateBuffer(sizeof(D3DMATRIX), D3D11_BIND_CONSTANT_BUFFER, nullptr));
+	m_CameraCBuffer = new CBuffer(CBuffer::CreateBuffer(sizeof(CAMERA_CBUFFER), D3D11_BIND_CONSTANT_BUFFER, nullptr));
 }
 
 void CCubeMap::Init()
@@ -36,8 +35,7 @@ void CCubeMap::Init()
 
 void CCubeMap::Uninit()
 {
-	delete m_ViewCBuffer;
-	delete m_ProjectionCBuffer;
+	delete m_CameraCBuffer;
 }
 
 void CCubeMap::Update()
@@ -104,16 +102,21 @@ void CCubeMap::SetEnvMapCamera(int index)
 	D3DXVECTOR3 lookpt;
 	lookpt = m_Position + forward[index];
 
+	CAMERA_CBUFFER camera_cbuffer;
+	ZeroMemory(&camera_cbuffer, sizeof(CAMERA_CBUFFER));
+
 	D3DXMatrixLookAtLH(&mtxView, &m_Position, &lookpt, &up[index]);
 	D3DXMatrixTranspose(&mtxView, &mtxView);
-	m_ViewCBuffer->UpdateBuffer(&mtxView);
-	m_ViewCBuffer->VSSetCBuffer(1);
+	camera_cbuffer.View = mtxView;
 	//CDxRenderer::GetRenderer()->SetViewMatrix(&mtxView);
 
 	D3DXMatrixPerspectiveFovLH(&mtxProjection, 1.57908f, 1.0f, 10.0f, 10000000.0f);
 	D3DXMatrixTranspose(&mtxProjection, &mtxProjection);
-	m_ProjectionCBuffer->UpdateBuffer(&mtxProjection);
-	m_ProjectionCBuffer->VSSetCBuffer(2);
+	camera_cbuffer.Projection = mtxProjection;
+
+	m_CameraCBuffer->UpdateBuffer(&camera_cbuffer);
+	m_CameraCBuffer->VSSetCBuffer(1);
+	m_CameraCBuffer->PSSetCBuffer(1);
 
 	//CDxRenderer::GetRenderer()->SetProjectionMatrix(&mtxProjection);
 

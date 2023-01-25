@@ -31,11 +31,7 @@ private:
 	static std::unique_ptr<ManagerLight> m_LightPass;
 	static std::unique_ptr<GBufferPass>  m_GBufferPass;
 
-	static std::unique_ptr<CBuffer>				  m_ViewCBuffer;
-	static std::unique_ptr<CBuffer>				  m_ProjectionCBuffer;
-	static std::unique_ptr<CBuffer>				  m_CameraPosCBuffer;
-	static std::unique_ptr<CBuffer>				  m_ViewInverseCBuffer;
-	static std::unique_ptr<CBuffer>				  m_ProjectionInverseCBuffer;
+	static std::unique_ptr<CBuffer>				  m_CameraCBuffer;
 
 	SkyBox*				  m_SkyBox;
 	

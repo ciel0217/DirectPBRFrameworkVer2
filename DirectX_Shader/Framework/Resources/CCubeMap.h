@@ -4,6 +4,7 @@
 #include "../Resources/CGameObject.h"
 #include <vector>
 #include "DirectXTexture2D.h"
+#include "DevelopStruct.h"
 
 #define CUBE_MAP_SIZE (512)
 class CBuffer;
@@ -40,8 +41,7 @@ private:
 
 	DirectXTexture2D* m_Texture;
 
-	CBuffer* m_ViewCBuffer;
-	CBuffer* m_ProjectionCBuffer;
+	CBuffer* m_CameraCBuffer;
 	void CreateCubeMapResourveAndView();
 	
 public:

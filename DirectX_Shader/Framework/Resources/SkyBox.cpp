@@ -1,6 +1,7 @@
 #include "SkyBox.h"
 #include "../Manager/ManagerShader.h"
 #include "../Resources/DevelopEnum.h"
+#include "../Resources/DevelopStruct.h"
 #include "../LowLevel/CDxRenderer.h"
 #include "../Resources/CShader.h"
 #include "CCubeMap.h"
@@ -75,10 +76,10 @@ void SkyBox::DrawByCubeMap()
 
 
 	m_RoughnessCBuffer = new CBuffer(CBuffer::CreateBuffer(sizeof(D3DXCOLOR), D3D11_BIND_CONSTANT_BUFFER, nullptr));
-	m_WorldCBuffer = new CBuffer(CBuffer::CreateBuffer(sizeof(D3DXMATRIX), D3D11_BIND_CONSTANT_BUFFER, nullptr));
+	m_WorldCBuffer = new CBuffer(CBuffer::CreateBuffer(sizeof(WORLD_CBUFFER), D3D11_BIND_CONSTANT_BUFFER, nullptr));
 
 	D3DXMATRIX mtxScl, mtxRot, mtxTranslate;
-	D3DXMATRIX mtxWorld;
+	D3DXMATRIX mtxWorld, mtxInvWorld;
 
 	D3DXMatrixIdentity(&mtxWorld);
 
@@ -97,9 +98,17 @@ void SkyBox::DrawByCubeMap()
 	//ˆÚ“®
 	D3DXMatrixTranslation(&mtxTranslate, m_Position.x, m_Position.y, m_Position.z);
 	D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxTranslate);
+
+	D3DXMatrixInverse(&mtxInvWorld, nullptr, &mtxWorld);
+
+	D3DXMatrixTranspose(&mtxInvWorld, &mtxInvWorld);
 	D3DXMatrixTranspose(&mtxWorld, &mtxWorld);
 
-	m_WorldCBuffer->UpdateBuffer(mtxWorld);
+	WORLD_CBUFFER world_cbuffer;
+	world_cbuffer.World = mtxWorld;
+	world_cbuffer.InverseWorld = mtxInvWorld;
+
+	m_WorldCBuffer->UpdateBuffer(&world_cbuffer);
 	m_WorldCBuffer->VSSetCBuffer(0);
 	//CDxRenderer::GetRenderer()->SetWorldMatrix(&mtxWorld);
 	//ƒJƒŠƒ“ƒO‚È‚µ

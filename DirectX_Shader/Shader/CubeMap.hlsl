@@ -1,20 +1,4 @@
-
-// マトリクスバッファ
-cbuffer WorldBuffer : register(b0)
-{
-	matrix World;
-}
-
-cbuffer ViewBuffer : register(b1)
-{
-	matrix View;
-}
-
-cbuffer ProjectionBuffer : register(b2)
-{
-	matrix Projection;
-}
-
+#include "common.hlsli"
 
 struct Output_VS
 {
@@ -36,8 +20,8 @@ Output_VS VS_main(in  float3 inPosition		: POSITION0,
 {
 	Output_VS output;
 	matrix wvp;
-	wvp = mul(World, View);
-	wvp = mul(wvp, Projection);
+	wvp = mul(WorldBuffer.World, CameraBuffer.View);
+	wvp = mul(wvp, CameraBuffer.Projection);
 
 	float4 pos = float4(inPosition, 1.0f);
 	float4 nor = float4(inNormal, 1.0f);

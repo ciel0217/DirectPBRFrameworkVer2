@@ -129,11 +129,14 @@ void MeshRenderer::Draw(unsigned int index)
 		D3DXMatrixTranspose(&mtxWorld, &mtxWorld);
 		D3DXMatrixTranspose(&mtxInverseWorld, &mtxInverseWorld);
 
-		m_WorldMatrixCBuffer->UpdateBuffer(&mtxWorld);
-		m_WorldMatrixCBuffer->VSSetCBuffer(0);
+		WORLD_CBUFFER world_cbuffer;
+		world_cbuffer.World = mtxWorld;
+		world_cbuffer.InverseWorld = mtxInverseWorld;
 
-		m_InverseWorldMatrixCBuffer->UpdateBuffer(&mtxInverseWorld);
-		m_InverseWorldMatrixCBuffer->VSSetCBuffer(6);
+		m_WorldCBuffer->UpdateBuffer(&world_cbuffer);
+		m_WorldCBuffer->VSSetCBuffer(0);
+		m_WorldCBuffer->PSSetCBuffer(0);
+		m_WorldCBuffer->GSSetCBuffer(0);
 
 		//ƒJƒŠƒ“ƒO‚È‚µ
 		CDxRenderer::GetRenderer()->SetCullingMode(CULL_MODE_NONE);

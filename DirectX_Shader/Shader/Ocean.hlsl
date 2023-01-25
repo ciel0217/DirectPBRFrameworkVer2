@@ -1,46 +1,10 @@
 #include "BRDF.hlsli"
+#include "common.hlsli"
 
 #define NORMAL_UNUSED 0
 #define NORMAL_MAP 1
 #define BUMP_MAP 2
 
-
-
-// マトリクスバッファ
-cbuffer WorldBuffer : register(b0)
-{
-	matrix World;
-}
-
-cbuffer ViewBuffer : register(b1)
-{
-	matrix View;
-}
-
-cbuffer ProjectionBuffer : register(b2)
-{
-	matrix Projection;
-}
-
-// マテリアルバッファ
-struct MATERIAL
-{
-	float4  	BaseColor;
-	float4  	Normal;
-	float    	Roughness;
-	float    	Metaric;
-	float   	Specular;
-	int			UseAlbedoMap;
-	int			UseOccMetalRough;
-	int			UseAoMap;
-	int			UseEmmisive;
-	int			NormalState;
-};
-
-cbuffer MaterialBuffer : register(b3)
-{
-	MATERIAL Material;
-}
 
 struct OCEAN_BUFFER
 {
@@ -51,20 +15,11 @@ struct OCEAN_BUFFER
 	float Dummy[2];
 };
 
-cbuffer OceanBuffer : register(b4)
+cbuffer OceanBuffer : register(b9)
 {
 	OCEAN_BUFFER Ocean;
 };
 
-cbuffer CameraPos : register(b5)
-{
-	float4 CameraPos;
-}
-
-cbuffer InverseWorldBuffer : register(b6)
-{
-	matrix InverseWorld;
-}
 
 struct Output_VS
 {
@@ -100,16 +55,16 @@ Output_VS VS_main(in  float3 inPosition		: POSITION0,
 {
 	Output_VS output;
 	matrix wvp;
-	wvp = mul(World, View);
-	wvp = mul(wvp, Projection);
+	wvp = mul(WorldBuffer.World, CameraBuffer.View);
+	wvp = mul(wvp, CameraBuffer.Projection);
 
 	float4 pos = float4(inPosition, 1.0f);
-	output.wpos = mul(pos, World);
+	output.wpos = mul(pos, WorldBuffer.World);
 	output.pos = mul(pos, wvp);
 
 	float4 worldNormal, normal;
 	normal = float4(inNormal, 0.0f);
-	worldNormal = mul(normal, World);
+	worldNormal = mul(normal, WorldBuffer.World);
 	worldNormal = normalize(worldNormal);
 	output.normal = worldNormal.xyz;
 
@@ -169,7 +124,7 @@ Output_PS PS_main(Output_VS vs)
 	Output_PS output;
 	
 	//色の計算
-	float3  viewdir = (CameraPos.xyz - vs.wpos.xyz);
+	float3  viewdir = (CameraBuffer.CameraPos.xyz - vs.wpos.xyz);
 	float f = FresnelEffect(vs.normal, viewdir, 1.0f);
 	float3 color = lerp(Material.BaseColor.xyz, Ocean.MixColor.xyz,  f);
 

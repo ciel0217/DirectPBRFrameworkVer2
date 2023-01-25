@@ -26,13 +26,13 @@ Output_VS VS_main(in  float3 inPosition		: POSITION0,
 {
 	Output_VS output;
 	matrix wvp;
-	wvp = mul(World, View);
-	wvp = mul(wvp, Projection);
+	wvp = mul(WorldBuffer.World, CameraBuffer.View);
+	wvp = mul(wvp, CameraBuffer.Projection);
 
 	float4 pos = float4(inPosition, 1.0f);
 
 	output.pos = mul(pos, wvp);
-	output.normal = normalize(mul(float4(inNormal, .0), World).xyz);
+	output.normal = normalize(mul(float4(inNormal, .0), WorldBuffer.World).xyz);
 	output.texcoord = inTexCoord;
 
 	output.color = inDiffuse;

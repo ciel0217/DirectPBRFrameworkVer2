@@ -73,9 +73,9 @@ void GS_Main(
 	uv[3] = float2(Particle[id].UV.x + Particle[id].Offset.x, Particle[id].UV.y + Particle[id].Offset.y);
 
 	matrix wvp;
-	wvp = mul(Particle[id].WorldMatrix, View);
+	wvp = mul(Particle[id].WorldMatrix, CameraBuffer.View);
 	//wvp = mul(World, View);
-	wvp = mul(wvp, Projection);
+	wvp = mul(wvp, CameraBuffer.Projection);
 
 	for (int i = 0; i < 4; i++)
 	{
