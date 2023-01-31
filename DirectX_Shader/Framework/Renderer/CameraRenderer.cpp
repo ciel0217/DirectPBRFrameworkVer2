@@ -98,6 +98,8 @@ void CameraRenderer::DrawRenderer(std::list<CGameObject *> gameobject[])
 {
 
 	CalcRenderingOrder(gameobject);
+	CalcCulling();
+
 	CDxRenderer::GetRenderer()->SetDepthEnable(true);
 
 	CDxRenderer::GetRenderer()->SetViewPortDefault();
@@ -119,8 +121,6 @@ void CameraRenderer::DrawRenderer(std::list<CGameObject *> gameobject[])
 
 	CDxRenderer::GetRenderer()->ClearBackBuffor(false);
 	CDxRenderer::GetRenderer()->SetRenderTargetBackBuffor(false);
-
-	SetVPCIdentity();
 
 	m_ToneMapPass->Draw();
 	
@@ -232,6 +232,11 @@ void CameraRenderer::CalcRenderingOrder(std::list<CGameObject *> gameobject[])
 
 	//		return D3DXVec3LengthSq(&a_dis) > D3DXVec3LengthSq(&b_dis);
 	//	});
+}
+
+void CameraRenderer::CalcCulling()
+{
+	
 }
 
 void CameraRenderer::ClearGameObjectList()

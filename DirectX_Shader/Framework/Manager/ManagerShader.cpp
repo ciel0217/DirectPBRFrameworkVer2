@@ -3,6 +3,9 @@
 #include "../LowLevel/CDxRenderer.h"
 #include <vector>
 
+
+//TODO
+//テキスト管理のほうがいいかも
 std::map<std::string, CShader*> ManagerShader:: m_ShaderList;
 const std::string ManagerShader::m_ShaderName[SHADER_MAX] =
 { "Shader/ParticleRender.hlsl","Shader/Deferred.hlsl","Shader/2DTexture.hlsl", "Shader/DefaultModel.hlsl", "Shader/CubeMap.hlsl", "Shader/ToneMap.hlsl"

@@ -122,3 +122,15 @@ struct ParticleStructuredBuffer
 
 	float Dummy;
 };
+
+struct FrustumCullStructuredBuffer
+{
+	D3DXVECTOR4 Position;
+	D3DXVECTOR4 Scale;
+};
+
+struct FrustumCullCameraCBuffer
+{
+	D3DXVECTOR4 Position;
+	D3DMATRIX InvVPMatrix;
+};

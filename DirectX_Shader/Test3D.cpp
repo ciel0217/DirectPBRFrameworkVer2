@@ -31,23 +31,9 @@ void Test3D::Uninit()
 
 void Test3D::Update()
 {
-	if (ManagerInput::GetInstance()->GetKeyboardTrigger(DIK_RETURN))
+	if (ManagerInput::GetInstance()->GetKeyboardPress(DIK_RETURN))
 	{
-		m_Start = 1;
+		m_Position.z -= 0.5f;
 	}
-	if (m_Start == 1)
-	{
-		m_Count++;
-		if (m_Count > 30)
-		{
-			m_Count = 0;
-			m_Count2++;
-			MATERIAL_CBUFFER value;
-			ZeroMemory(&value, sizeof(MATERIAL_CBUFFER));
-			value.Metaric = float(m_Count2 % 10) / 10.0f;
-			value.Roughness = float(m_Count3 % 10) / 10.0f;
-			m_Material[0]->SetMaterialValue(value);
-			if (m_Count2 % 10 == 0)m_Count3++;
-		}
-	}
+	
 }

@@ -54,6 +54,8 @@ private:
 	D3DXVECTOR3 m_CameraPos;
 
 	void CalcRenderingOrder(std::list<CGameObject *> gameobject[]);
+	void CalcCulling();
+
 	void ClearGameObjectList();
 
 	void DrawTransparent();
