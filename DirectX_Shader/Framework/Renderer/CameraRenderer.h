@@ -22,6 +22,7 @@ class CPostEffect;
 class SkyBox;
 class GBufferPass;
 class CRenderer;
+class StructuredBuffer;
 
 class CameraRenderer {
 
@@ -31,7 +32,11 @@ private:
 	static std::unique_ptr<ManagerLight> m_LightPass;
 	static std::unique_ptr<GBufferPass>  m_GBufferPass;
 
-	static std::unique_ptr<CBuffer>				  m_CameraCBuffer;
+	static std::unique_ptr<StructuredBuffer> m_FrustumStructuredBuffer;
+	static std::unique_ptr<CBuffer>			m_FrustumCullInfoCBuffer;
+	static const unsigned int MAX_CULLING_OBJECT = 1000;
+
+	static std::unique_ptr<CBuffer>			m_CameraCBuffer;
 
 	SkyBox*				  m_SkyBox;
 	
@@ -54,10 +59,11 @@ private:
 	D3DXVECTOR3 m_CameraPos;
 
 	void CalcRenderingOrder(std::list<CGameObject *> gameobject[]);
-	void CalcCulling();
+	void CalcCulling(std::list<std::tuple<CRenderer*, unsigned int, std::shared_ptr<CMaterial>>> gameobject, int* result);
 
 	void ClearGameObjectList();
 
+	void DrawGBuffer();
 	void DrawTransparent();
 	void Draw2D();
 	void DrawPostEffectToOpacity();

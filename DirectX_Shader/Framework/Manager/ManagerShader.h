@@ -16,6 +16,8 @@ private:
 	static void LoadVertexShader(std::string);
 	static void LoadPixelShader(std::string);
 	static void LoadGeometryShader(std::string);
+	static void LoadComputeShader(std::string);
+
 	static void LoadInputLayout(std::string, ID3D10Blob*);
 	static void Load(std::string name);
 	static DXGI_FORMAT GetDxgiFormat(D3D10_REGISTER_COMPONENT_TYPE, BYTE);

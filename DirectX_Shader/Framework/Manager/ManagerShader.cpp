@@ -25,8 +25,11 @@ void ManagerShader::LoadVertexShader(std::string name)
 	
 
 	ID3D11VertexShader* shader;
-	CDxRenderer::GetRenderer()->GetDevice()->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), NULL, &shader);
-	m_ShaderList[name]->GetShaderVS()->VertexShader.Attach(shader);
+	hr = CDxRenderer::GetRenderer()->GetDevice()->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), NULL, &shader);
+	if (FAILED(hr))
+		return;
+	
+	m_ShaderList[name]->SetShaderVS(shader);
 	
 	//シェーダーリフレクションの生成
 	ID3D11ShaderReflection* rf;
@@ -34,7 +37,7 @@ void ManagerShader::LoadVertexShader(std::string name)
 	if (FAILED(hr)) 
 		MessageBox(NULL, (char*)pErrorBlob->GetBufferPointer(), "VS", MB_OK | MB_ICONERROR);
 	
-	m_ShaderList[name]->GetShaderVS()->ShaderRF.Attach(rf);
+	m_ShaderList[name]->SetRFVS(rf);
 	//インプットレイアウト動的読み込み
 	LoadInputLayout(name,  pVSBlob);
 }
@@ -47,17 +50,16 @@ void ManagerShader::LoadPixelShader(std::string name)
 	ID3DBlob* pErrorBlob;
 	ID3DBlob* pPSBlob = NULL;
 
-	//	hr = D3DX11CompileFromFile( "Shader/shader.hlsl", NULL, NULL, "VertexShaderPolygon", "vs_4_0", D3DCOMPILE_ENABLE_STRICTNESS, 0, NULL, &pVSBlob, &pErrorBlob, NULL );
 	hr = D3DX11CompileFromFile(name.c_str(), NULL, NULL, "PS_main", "ps_4_0", D3D10_SHADER_DEBUG | D3D10_SHADER_SKIP_OPTIMIZATION, 0, NULL, &pPSBlob, &pErrorBlob, NULL);
-	//hr = D3DX11CompileFromFile("Shader/shader.hlsl", NULL, NULL, "VS_main", "vs_4_0", D3D10_SHADER_DEBUG | D3D10_SHADER_SKIP_OPTIMIZATION, 0, NULL, &pVSBlob, &pErrorBlob, NULL);
 	if (FAILED(hr))
 		MessageBox(NULL, (char*)pErrorBlob->GetBufferPointer(), "PS", MB_OK | MB_ICONERROR);
 	
 
 	ID3D11PixelShader* shader;
-	CDxRenderer::GetRenderer()->GetDevice()->CreatePixelShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), NULL, &(shader));
-	//a.Attach(shader);
-	//auto a = m_ShaderList[name]->GetShaderPS();
+	hr = CDxRenderer::GetRenderer()->GetDevice()->CreatePixelShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), NULL, &shader);
+	if (FAILED(hr))
+		return;
+
 	m_ShaderList[name]->SetShaderPS(shader);
 }
 
@@ -68,17 +70,37 @@ void ManagerShader::LoadGeometryShader(std::string name)
 	ID3DBlob* pErrorBlob;
 	ID3DBlob* pGSBlob = NULL;
 
-	//	hr = D3DX11CompileFromFile( "Shader/shader.hlsl", NULL, NULL, "VertexShaderPolygon", "vs_4_0", D3DCOMPILE_ENABLE_STRICTNESS, 0, NULL, &pVSBlob, &pErrorBlob, NULL );
 	hr = D3DX11CompileFromFile(name.c_str(), NULL, NULL, "GS_Main", "gs_4_0", D3D10_SHADER_DEBUG | D3D10_SHADER_SKIP_OPTIMIZATION, 0, NULL, &pGSBlob, &pErrorBlob, NULL);
-	//hr = D3DX11CompileFromFile("Shader/shader.hlsl", NULL, NULL, "VS_main", "vs_4_0", D3D10_SHADER_DEBUG | D3D10_SHADER_SKIP_OPTIMIZATION, 0, NULL, &pVSBlob, &pErrorBlob, NULL);
 	if (FAILED(hr))
 		return;
 	
 
 	ID3D11GeometryShader* shader;
-	CDxRenderer::GetRenderer()->GetDevice()->CreateGeometryShader(pGSBlob->GetBufferPointer(), pGSBlob->GetBufferSize(), NULL, &(shader));
+	hr = CDxRenderer::GetRenderer()->GetDevice()->CreateGeometryShader(pGSBlob->GetBufferPointer(), pGSBlob->GetBufferSize(), NULL, &shader);
+	if (FAILED(hr))
+		return;
+
 
 	m_ShaderList[name]->SetShaderGS(shader);
+}
+
+void ManagerShader::LoadComputeShader(std::string name)
+{
+	HRESULT hr;
+	// 頂点シェーダコンパイル・生成
+	ID3DBlob* pErrorBlob;
+	ID3DBlob* pCSBlob = NULL;
+
+	hr = D3DX11CompileFromFile(name.c_str(), NULL, NULL, "CS_Main", "cs_4_0", D3D10_SHADER_DEBUG | D3D10_SHADER_SKIP_OPTIMIZATION, 0, NULL, &pCSBlob, &pErrorBlob, NULL);
+	if (FAILED(hr))
+		return;
+
+	ID3D11ComputeShader* shader;
+	hr = CDxRenderer::GetRenderer()->GetDevice()->CreateComputeShader(pCSBlob->GetBufferPointer(), pCSBlob->GetBufferSize(), NULL, &shader);
+	if (FAILED(hr))
+		return;
+
+	m_ShaderList[name]->SetShaderCS(shader);
 }
 
 void ManagerShader::LoadInputLayout(std::string name, ID3D10Blob* blob)
@@ -117,7 +139,7 @@ void ManagerShader::LoadInputLayout(std::string name, ID3D10Blob* blob)
 		hr = CDxRenderer::GetRenderer()->GetDevice()->CreateInputLayout(&vbElement[0], vbElement.size(),
 			blob->GetBufferPointer(), blob->GetBufferSize(), &layout);
 
-		m_ShaderList[name]->GetShaderVS()->Layout.Attach(layout);
+		m_ShaderList[name]->SetInputLayout(layout);
 		if (FAILED(hr))
 			return ;
 	}

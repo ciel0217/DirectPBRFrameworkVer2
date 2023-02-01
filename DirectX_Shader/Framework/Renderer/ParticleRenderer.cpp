@@ -86,13 +86,13 @@ void ParticleRenderer::Draw(unsigned int index)
 
 	}
 
-	for (int i = 0; i < count; i++)
+	/*for (int i = 0; i < count; i++)
 	{
 		particle_buffer.push_back({mtx_view, D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(0.0f, 0.0f)});
-	}
+	}*/
 	particle_buffer.shrink_to_fit();
 	//ジオメトリシェーダーにセット
-	m_StructuredBuffer->UpdateBuffer(particle_buffer.data());
+	m_StructuredBuffer->UpdateBuffer(particle_buffer.data(), particle_buffer.size());
 	m_StructuredBuffer->GSSetStructuredBuffer(2);
 
 	m_MaterialCBuffer->UpdateBuffer(&m_CMaterial->GetMaterialValue());

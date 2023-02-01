@@ -48,15 +48,22 @@ StructuredBuffer * StructuredBuffer::CreateStructuredBuffer(UINT ByteWidth, UINT
 		return nullptr;
 	}
 
-
-	return new StructuredBuffer(srv, buffer);
+	return new StructuredBuffer(srv, buffer, ByteWidth);
 }
 
-void StructuredBuffer::UpdateBuffer(const void * Data)
+void StructuredBuffer::UpdateBuffer(const void * Data, UINT UpdateSize)
 {
 	if (Data == nullptr)return;
 
-	CDxRenderer::GetRenderer()->GetDeviceContext()->UpdateSubresource(m_StructuredBuffer.Get(), 0, nullptr, Data, 0, 0);
+	D3D11_BOX box;
+	box.left = 0;
+	box.top = 0;
+	box.front = 0;
+	box.right = UpdateSize * m_BufferSize;
+	box.bottom = 1;
+	box.back = 1;
+
+	CDxRenderer::GetRenderer()->GetDeviceContext()->UpdateSubresource(m_StructuredBuffer.Get(), 0, &box, Data, 0, 0);
 
 }
 

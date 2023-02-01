@@ -10,6 +10,7 @@
 #include "../Resources/CLight.h"
 #include "../Resources/CommonProcess.h"
 #include "../Resources/DevelopStruct.h"
+#include "../Resources/StructuredBuffer.h"
 
 #include <vector>
 #include <memory>
@@ -22,7 +23,10 @@ std::unique_ptr<CPostEffect>             CameraRenderer::m_ToneMapPass = nullptr
 std::unique_ptr<ManagerLight>		      CameraRenderer::m_LightPass = nullptr;
 std::unique_ptr<GBufferPass>			  CameraRenderer::m_GBufferPass = nullptr;
 
-std::unique_ptr<CBuffer>				  CameraRenderer::m_CameraCBuffer = nullptr;
+std::unique_ptr<StructuredBuffer>			CameraRenderer::m_FrustumStructuredBuffer = nullptr;
+std::unique_ptr<CBuffer>					CameraRenderer::m_FrustumCullInfoCBuffer = nullptr;
+
+std::unique_ptr<CBuffer>					CameraRenderer::m_CameraCBuffer = nullptr;
 
 
 
@@ -36,6 +40,12 @@ void CameraRenderer::SetUpCameraRenderer()
 		m_ToneMapPass.reset(new PostEffectToneMap());
 	if (!m_GBufferPass)
 		m_GBufferPass.reset(new GBufferPass());
+
+	if (!m_FrustumStructuredBuffer)
+		m_FrustumStructuredBuffer.reset(StructuredBuffer::CreateStructuredBuffer(sizeof(FrustumCullStructuredBuffer), MAX_CULLING_OBJECT));
+
+	if (!m_FrustumCullInfoCBuffer)
+		m_FrustumCullInfoCBuffer.reset(new CBuffer(CBuffer::CreateBuffer(sizeof(FrustumCullCameraCBuffer), D3D11_BIND_CONSTANT_BUFFER, nullptr)));
 
 	if (!m_CameraCBuffer)
 		m_CameraCBuffer.reset(new CBuffer(CBuffer::CreateBuffer(sizeof(CAMERA_CBUFFER), D3D11_BIND_CONSTANT_BUFFER, nullptr)));
@@ -98,7 +108,6 @@ void CameraRenderer::DrawRenderer(std::list<CGameObject *> gameobject[])
 {
 
 	CalcRenderingOrder(gameobject);
-	CalcCulling();
 
 	CDxRenderer::GetRenderer()->SetDepthEnable(true);
 
@@ -106,7 +115,7 @@ void CameraRenderer::DrawRenderer(std::list<CGameObject *> gameobject[])
 	CDxRenderer::GetRenderer()->ClearRenderTextureSceneByDeffard();
 	CDxRenderer::GetRenderer()->SetRenderTargetByDeffard();
 
-	m_GBufferPass->Draw(m_OpacityList);
+	DrawGBuffer();
 	
 	CDxRenderer::GetRenderer()->ClearIntermediateBuffer(false);
 	CDxRenderer::GetRenderer()->SetRenderTargetIntermediateBuffer(false);
@@ -158,19 +167,6 @@ void CameraRenderer::CalcRenderingOrder(std::list<CGameObject *> gameobject[])
 					}
 					material_count++;
 				}
-				/*std::vector<std::shared_ptr<CMaterial>> materials = object->GetMaterials();
-				for (auto material : materials) {
-					if (material->GetRenderQueue() <= DrawObjectRenderQueue::eOpacity) {
-						m_GameObjectsOpacity.push_back(object);
-					}
-					else if (material->GetRenderQueue() == DrawObjectRenderQueue::e2D) {
-						m_GameObjects2D.push_back(object);
-					}
-					else {
-						m_GameObjectsTransparent.push_back(object);
-					}
-				}*/
-				
 			}
 		}
 	}
@@ -203,61 +199,66 @@ void CameraRenderer::CalcRenderingOrder(std::list<CGameObject *> gameobject[])
 			return D3DXVec3LengthSq(&a_dis) < D3DXVec3LengthSq(&b_dis);
 	});
 
-	/*m_TransparentList.sort([pos](std::tuple<CRenderer*, unsigned int, std::shared_ptr<CMaterial>> a, std::tuple<CRenderer*, unsigned int, std::shared_ptr<CMaterial>> b)
-	{
-		if (std::get<2>(a)->GetRenderQueue() != std::get<2>(b)->GetRenderQueue())return false;
-
-		D3DXVECTOR3 a_dis = pos - ((CommonProcess*)std::get<0>(a))->GetPosition();
-		D3DXVECTOR3 b_dis = pos - ((CommonProcess*)std::get<0>(b))->GetPosition();
-
-		return D3DXVec3LengthSq(&a_dis) > D3DXVec3LengthSq(&b_dis);
-	});*/
-
-
 	
-	////近いほうから描画(less)
-	//m_GameObjectsOpacity.sort([pos](CommonProcess* a, CommonProcess* b)
-	//	{
-	//		D3DXVECTOR3 a_dis = pos - a->GetPosition();
-	//		D3DXVECTOR3 b_dis = pos - b->GetPosition();
-
-	//		return D3DXVec3LengthSq(&a_dis) < D3DXVec3LengthSq(&b_dis);
-	//	});
-
-	////遠いほうから描画(greater)
-	//m_GameObjectsTransparent.sort([pos](CommonProcess* a, CommonProcess* b)
-	//	{
-	//		D3DXVECTOR3 a_dis = pos - a->GetPosition();
-	//		D3DXVECTOR3 b_dis = pos - b->GetPosition();
-
-	//		return D3DXVec3LengthSq(&a_dis) > D3DXVec3LengthSq(&b_dis);
-	//	});
 }
 
-void CameraRenderer::CalcCulling()
+void CameraRenderer::CalcCulling(std::list<std::tuple<CRenderer*, unsigned int, std::shared_ptr<CMaterial>>> gameobject, int* result)
 {
+	std::vector<FrustumCullStructuredBuffer> str_buf;
+	str_buf.reserve(gameobject.size());
+
+	for (auto obj : gameobject)
+	{
+		D3DXVECTOR3 position3 = ((CommonProcess*)std::get<0>(obj))->GetPosition();
+		D3DXVECTOR3 scale3 = ((CommonProcess*)std::get<0>(obj))->GetScale();
+
+		str_buf.push_back({D3DXVECTOR4(position3.x, position3.y, position3.z, 1.0f), D3DXVECTOR4(scale3.x, scale3.y, scale3.z, 1.0f) });
+	}
+
+	m_FrustumStructuredBuffer->UpdateBuffer(str_buf.data(), str_buf.size());
+
+	//コンピュートシェーダー実行
 	
+
+
+
 }
 
 void CameraRenderer::ClearGameObjectList()
 {
-	/*m_GameObjects2D.clear();
-	m_GameObjectsOpacity.clear();
-	m_GameObjectsTransparent.clear();*/
 
 	m_TransparentList.clear();
 	m_SpriteList.clear();
 	m_OpacityList.clear();
 }
 
+void CameraRenderer::DrawGBuffer()
+{
+	int size = m_OpacityList.size();
+	int* result = new int(size);
+
+	CalcCulling(m_OpacityList, result);
+
+	for (auto obj : m_OpacityList) {
+		std::get<0>(obj)->Draw(std::get<1>(obj));
+	}
+
+	delete[] result;
+}
+
 void CameraRenderer::DrawTransparent()
 {
+	int size = m_TransparentList.size();
+	int* result = new int(size);
+
+	CalcCulling(m_TransparentList, result);
+
 	for (auto obj : m_TransparentList) {
 		std::get<0>(obj)->Draw(std::get<1>(obj));
 	}
-	/*for (auto obj : m_GameObjectsTransparent) {
-		obj->Draw();
-	}*/
+
+
+	delete[] result;
 }
 
 void CameraRenderer::Draw2D()
