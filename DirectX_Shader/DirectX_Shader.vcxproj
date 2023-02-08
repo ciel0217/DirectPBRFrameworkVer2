@@ -185,6 +185,7 @@
     <ClInclude Include="Framework\Resources\SpriteType.h" />
     <ClInclude Include="Framework\Resources\SquareSprite.h" />
     <ClInclude Include="Framework\Resources\StructuredBuffer.h" />
+    <ClInclude Include="Framework\Resources\UnorderedAccessView.h" />
     <ClInclude Include="GameSceneCamera.h" />
     <ClInclude Include="Math\Quaternion.h" />
     <ClInclude Include="Ocean.h" />
@@ -237,6 +238,7 @@
     <ClCompile Include="Framework\Resources\Sprite.cpp" />
     <ClCompile Include="Framework\Resources\SquareSprite.cpp" />
     <ClCompile Include="Framework\Resources\StructuredBuffer.cpp" />
+    <ClCompile Include="Framework\Resources\UnorderedAccessView.cpp" />
     <ClCompile Include="GameSceneCamera.cpp" />
     <ClCompile Include="Math\Quaternion.cpp" />
     <ClCompile Include="Ocean.cpp" />

@@ -354,6 +354,7 @@ ID3D11Buffer* CDxRenderer::CreateIndexBuffer(UINT IndexNum, UINT * Index)
 	return hpBuffer;
 }
 
+
 void CDxRenderer::SetInputLayout(ID3D11InputLayout * VertexLayout)
 {
 	m_ImmediateContext->IASetInputLayout(VertexLayout);

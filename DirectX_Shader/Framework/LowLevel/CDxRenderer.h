@@ -105,6 +105,8 @@ public:
 	};
 
 	ID3D11Buffer* CreateIndexBuffer(UINT IndexNum, UINT* Index);
+	ID3D11UnorderedAccessView* CreateUnorderedAccessView(D3D11_UNORDERED_ACCESS_VIEW_DESC Desc, const void *Data);
+
 
 	ID3D11Device* GetDevice() { return m_D3DDevice.Get(); }
 	ID3D11DeviceContext *GetDeviceContext() { return m_ImmediateContext.Get(); }
