@@ -17,4 +17,9 @@ public:
 	static	UnorededAccessView* CreateUnorderedAccessView(UINT ByteWidth, UINT NumElements, D3D11_UAV_DIMENSION Dimension = D3D11_UAV_DIMENSION_BUFFER, UINT MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED, const void* Data = nullptr, UINT BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE);
 	static UnorededAccessView* CreateUnorderedAccessView(ID3D11Buffer* Buffer, UINT NumElements, D3D11_UAV_DIMENSION Dimension = D3D11_UAV_DIMENSION_BUFFER);
 
+	void CopyBuffer(void *Data);
+
+	void VSSetUnorderedAccessView(UINT StartSlot);
+	void PSSetUnorderedAccessView(UINT StartSlot);
+
 };
