@@ -82,3 +82,8 @@ void StructuredBuffer::GSSetStructuredBuffer(UINT StartSlot)
 {
 	CDxRenderer::GetRenderer()->GetDeviceContext()->GSSetShaderResources(StartSlot, 1, m_SRV.GetAddressOf());
 }
+
+void StructuredBuffer::CSSetStructuredBuffer(UINT StartSlot)
+{
+	CDxRenderer::GetRenderer()->GetDeviceContext()->CSSetShaderResources(StartSlot, 1, m_SRV.GetAddressOf());
+}

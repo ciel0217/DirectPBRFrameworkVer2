@@ -102,19 +102,19 @@ void CCubeMap::SetEnvMapCamera(int index)
 	D3DXVECTOR3 lookpt;
 	lookpt = m_Position + forward[index];
 
-	CAMERA_CBUFFER camera_cbuffer;
-	ZeroMemory(&camera_cbuffer, sizeof(CAMERA_CBUFFER));
+	CAMERA_CBUFFER m_CameraCBufferValue;
+	ZeroMemory(&m_CameraCBufferValue, sizeof(CAMERA_CBUFFER));
 
 	D3DXMatrixLookAtLH(&mtxView, &m_Position, &lookpt, &up[index]);
 	D3DXMatrixTranspose(&mtxView, &mtxView);
-	camera_cbuffer.View = mtxView;
+	m_CameraCBufferValue.TransView = mtxView;
 	//CDxRenderer::GetRenderer()->SetViewMatrix(&mtxView);
 
 	D3DXMatrixPerspectiveFovLH(&mtxProjection, 1.57908f, 1.0f, 10.0f, 10000000.0f);
 	D3DXMatrixTranspose(&mtxProjection, &mtxProjection);
-	camera_cbuffer.Projection = mtxProjection;
+	m_CameraCBufferValue.TransProjection = mtxProjection;
 
-	m_CameraCBuffer->UpdateBuffer(&camera_cbuffer);
+	m_CameraCBuffer->UpdateBuffer(&m_CameraCBufferValue);
 	m_CameraCBuffer->VSSetCBuffer(1);
 	m_CameraCBuffer->PSSetCBuffer(1);
 

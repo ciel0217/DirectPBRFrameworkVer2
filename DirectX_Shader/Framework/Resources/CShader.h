@@ -18,6 +18,7 @@ public:
 	VertexShaderRelated* GetShaderVS() { return m_ShaderVS;}
 	Microsoft::WRL::ComPtr<ID3D11PixelShader> GetShaderPS() { return m_ShaderPS; }
 	Microsoft::WRL::ComPtr<ID3D11GeometryShader> GetShaderGS() { return m_ShaderGS; }
+	Microsoft::WRL::ComPtr<ID3D11ComputeShader> GetShaderCS() { return m_ShaderCS; }
 
 	void SetShaderVS(ID3D11VertexShader* shader) { m_ShaderVS->VertexShader.Attach(shader); }
 	void SetRFVS(ID3D11ShaderReflection* rf) { m_ShaderVS->ShaderRF.Attach(rf); }

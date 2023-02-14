@@ -375,6 +375,11 @@ void CDxRenderer::SetGeometryShader(ID3D11GeometryShader * gs)
 	m_ImmediateContext->GSSetShader(gs, nullptr, 0);
 }
 
+void CDxRenderer::SetComputeShader(ID3D11ComputeShader * cs)
+{
+	m_ImmediateContext->CSSetShader(cs, nullptr, 0);
+}
+
 void CDxRenderer::SetVertexBuffer(ID3D11Buffer * VertexBuffer, UINT VertexSize)
 {
 	// 頂点バッファ設定

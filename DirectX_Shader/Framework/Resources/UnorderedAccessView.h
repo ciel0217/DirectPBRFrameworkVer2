@@ -1,7 +1,7 @@
 #pragma once
 #include "../LowLevel/CDxRenderer.h"
 
-class UnorededAccessView
+class UnorderedAccessView
 {
 private:
 	Microsoft::WRL::ComPtr <ID3D11UnorderedAccessView> m_UAV;
@@ -9,17 +9,25 @@ private:
 
 	UINT m_BufferSize = 0;
 
-	UnorededAccessView() = delete;
-	UnorededAccessView(ID3D11UnorderedAccessView* uav, ID3D11Buffer* buf, UINT BufferSize) { m_UAV.Attach(uav); m_Buffer.Attach(buf); m_BufferSize = BufferSize; }
+	UnorderedAccessView() = delete;
+	UnorderedAccessView(ID3D11UnorderedAccessView* uav, ID3D11Buffer* buf, UINT BufferSize) { m_UAV.Attach(uav); m_Buffer.Attach(buf); m_BufferSize = BufferSize; }
 
 public:
-	~UnorededAccessView() {}
-	static	UnorededAccessView* CreateUnorderedAccessView(UINT ByteWidth, UINT NumElements, D3D11_UAV_DIMENSION Dimension = D3D11_UAV_DIMENSION_BUFFER, UINT MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED, const void* Data = nullptr, UINT BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE);
-	static UnorededAccessView* CreateUnorderedAccessView(ID3D11Buffer* Buffer, UINT NumElements, D3D11_UAV_DIMENSION Dimension = D3D11_UAV_DIMENSION_BUFFER);
+	~UnorderedAccessView() {}
+	static	UnorderedAccessView* CreateUnorderedAccessView(UINT ByteWidth, UINT NumElements, D3D11_UAV_DIMENSION Dimension = D3D11_UAV_DIMENSION_BUFFER, UINT MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED, const void* Data = nullptr, UINT BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE);
+	static UnorderedAccessView* CreateUnorderedAccessView(ID3D11Buffer* Buffer, UINT NumElements, D3D11_UAV_DIMENSION Dimension = D3D11_UAV_DIMENSION_BUFFER);
 
-	void CopyBuffer(void *Data);
+	template<typename T>
+	void CopyBuffer(T* Data)
+	{
+		D3D11_MAPPED_SUBRESOURCE sub_res;
+		ZeroMemory(&sub_res, sizeof(D3D11_MAPPED_SUBRESOURCE));
 
-	void VSSetUnorderedAccessView(UINT StartSlot);
-	void PSSetUnorderedAccessView(UINT StartSlot);
+		CDxRenderer::GetRenderer()->GetDeviceContext()->Map(m_Buffer.Get(), 0, D3D11_MAP_READ, 0, &sub_res);
+		Data = (T*)sub_res.pData;
+		CDxRenderer::GetRenderer()->GetDeviceContext()->Unmap(m_Buffer.Get(), 0);
+	}
+
+	void CSSetUnorderedAccessView(UINT StartSlot);
 
 };

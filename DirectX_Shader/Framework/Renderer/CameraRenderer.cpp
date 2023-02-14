@@ -11,6 +11,9 @@
 #include "../Resources/CommonProcess.h"
 #include "../Resources/DevelopStruct.h"
 #include "../Resources/StructuredBuffer.h"
+#include "../Resources/UnorderedAccessView.h"
+#include "../Manager/ManagerShader.h"
+#include "../Resources/CShader.h"
 
 #include <vector>
 #include <memory>
@@ -25,9 +28,10 @@ std::unique_ptr<GBufferPass>			  CameraRenderer::m_GBufferPass = nullptr;
 
 std::unique_ptr<StructuredBuffer>			CameraRenderer::m_FrustumStructuredBuffer = nullptr;
 std::unique_ptr<CBuffer>					CameraRenderer::m_FrustumCullInfoCBuffer = nullptr;
+std::unique_ptr<UnorderedAccessView>		CameraRenderer::m_FrustumCullUAVBuffer = nullptr;
+std::shared_ptr<CShader>					CameraRenderer::m_CSShader = nullptr;
 
 std::unique_ptr<CBuffer>					CameraRenderer::m_CameraCBuffer = nullptr;
-
 
 
 void CameraRenderer::SetUpCameraRenderer()
@@ -47,8 +51,20 @@ void CameraRenderer::SetUpCameraRenderer()
 	if (!m_FrustumCullInfoCBuffer)
 		m_FrustumCullInfoCBuffer.reset(new CBuffer(CBuffer::CreateBuffer(sizeof(FrustumCullCameraCBuffer), D3D11_BIND_CONSTANT_BUFFER, nullptr)));
 
+	if (!m_FrustumCullUAVBuffer)
+		m_FrustumCullUAVBuffer.reset(UnorderedAccessView::CreateUnorderedAccessView
+		(
+			m_FrustumStructuredBuffer->GetStructuredBuffer(),
+			MAX_CULLING_OBJECT
+		));
+
+	if (!m_CSShader)
+		m_CSShader.reset(ManagerShader::GetShader("FrustumCull.hlsl"));
+
 	if (!m_CameraCBuffer)
 		m_CameraCBuffer.reset(new CBuffer(CBuffer::CreateBuffer(sizeof(CAMERA_CBUFFER), D3D11_BIND_CONSTANT_BUFFER, nullptr)));
+
+
 
 	return;
 }
@@ -170,7 +186,7 @@ void CameraRenderer::CalcRenderingOrder(std::list<CGameObject *> gameobject[])
 			}
 		}
 	}
-	D3DXVECTOR3 pos = m_CameraPos;
+	D3DXVECTOR3 pos = m_CameraInfoValue.CameraPos;
 
 	//Sortの優先順位( 1 : renderqueue   2 : カメラとの距離(遠いほうが先に描画))
 	m_TransparentList.sort([pos](std::tuple<CRenderer*, unsigned int, std::shared_ptr<CMaterial>> a, std::tuple<CRenderer*, unsigned int, std::shared_ptr<CMaterial>> b)
@@ -216,8 +232,12 @@ void CameraRenderer::CalcCulling(std::list<std::tuple<CRenderer*, unsigned int, 
 	}
 
 	m_FrustumStructuredBuffer->UpdateBuffer(str_buf.data(), str_buf.size());
+	m_FrustumStructuredBuffer->CSSetStructuredBuffer(0);
 
+	CDxRenderer::GetRenderer()->SetComputeShader(m_CSShader->GetShaderCS().Get());
+	m_FrustumCullUAVBuffer->CSSetUnorderedAccessView(0);
 	//コンピュートシェーダー実行
+	CDxRenderer::GetRenderer()->GetDeviceContext()->Dispatch(10, 1, 1);
 	
 
 
@@ -305,34 +325,46 @@ void CameraRenderer::SetSkyBox(SkyBox* obj)
 
 void CameraRenderer::SetVPCBuffer(D3DXVECTOR3 pos, D3DXVECTOR3 lookat, D3DXVECTOR3 up)
 {
-	m_CameraPos = pos;
-	CAMERA_CBUFFER camera_cbuffer;
-	camera_cbuffer.CameraPos = D3DXVECTOR4(m_CameraPos.x, m_CameraPos.y, m_CameraPos.z, 1.0f);
 
-	D3DXMATRIX mtxView, mtxProjection, mtxTransView, mtxTransProj, mtxInverseView, mtxInverseProj;
+	CAMERA_CBUFFER camera_cbuffer;
+	m_CameraInfoValue.CameraPos = D3DXVECTOR4(pos.x, pos.y, pos.z, 1.0f);
+	camera_cbuffer.CameraPos = m_CameraInfoValue.CameraPos;
+
+	D3DXMATRIX mtxView, mtxProjection, mtxTransView, mtxTransProj, mtxInverseView, mtxInverseVP, mtxInverseProj;
 	D3DXMatrixLookAtLH(&mtxView, &pos, &lookat, &up);
+	m_CameraInfoValue.View = mtxView;
+
 	D3DXMatrixTranspose(&mtxTransView, &mtxView);
-	camera_cbuffer.View = mtxTransView;
+	camera_cbuffer.TransView = mtxTransView;
 
 	D3DXMatrixInverse(&mtxInverseView, NULL, &mtxView);
 	camera_cbuffer.InverseView = mtxInverseView;
 
 	D3DXMatrixPerspectiveFovLH(&mtxProjection, 1.0f, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, VIEW_NEAR_Z, VIEW_FAR_Z);
+	m_CameraInfoValue.Projection = mtxProjection;
+
 	D3DXMatrixTranspose(&mtxTransProj, &mtxProjection);
-	camera_cbuffer.Projection = mtxTransProj;
+	camera_cbuffer.TransProjection = mtxTransProj;
 
 	D3DXMatrixInverse(&mtxInverseProj, NULL, &mtxProjection);
 	camera_cbuffer.InverseProjection = mtxInverseProj;
 
+	D3DXMatrixMultiply(&mtxInverseVP, &mtxView, &mtxProjection);
+	D3DXMatrixInverse(&mtxInverseVP, NULL, &mtxInverseVP);
+	camera_cbuffer.InverseVP = mtxInverseVP;
+
 	D3DXMATRIX worldViewProjection;
 	D3DXMatrixOrthoOffCenterLH(&worldViewProjection, 0.0f, SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f, 0.0f, 1.0f);
+	m_CameraInfoValue.WVP = worldViewProjection;
+
 	D3DXMatrixTranspose(&worldViewProjection, &worldViewProjection);
-	camera_cbuffer.WVP = worldViewProjection;
+	camera_cbuffer.TransWVP = worldViewProjection;
 
 	m_CameraCBuffer->UpdateBuffer(&camera_cbuffer);
 	m_CameraCBuffer->VSSetCBuffer(1);
 	m_CameraCBuffer->PSSetCBuffer(1);
 	m_CameraCBuffer->GSSetCBuffer(1);
+	m_CameraCBuffer->CSSetCBuffer(1);
 
 }
 

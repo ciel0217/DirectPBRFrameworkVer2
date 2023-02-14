@@ -91,10 +91,19 @@ struct WORLD_CBUFFER
 struct CAMERA_CBUFFER
 {
 	D3DXVECTOR4 CameraPos;
-	D3DMATRIX View;
+	D3DMATRIX TransView;
 	D3DMATRIX InverseView;
-	D3DMATRIX Projection;
+	D3DMATRIX TransProjection;
 	D3DMATRIX InverseProjection;
+	D3DMATRIX InverseVP;
+	D3DMATRIX TransWVP;
+};
+
+struct CAMERA_INFO
+{
+	D3DXVECTOR4 CameraPos;
+	D3DMATRIX View;
+	D3DMATRIX Projection;
 	D3DMATRIX WVP;
 };
 

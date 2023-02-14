@@ -15,4 +15,5 @@ public:
 	void VSSetCBuffer(UINT start_slot);
 	void PSSetCBuffer(UINT start_slot);
 	void GSSetCBuffer(UINT start_slot);
+	void CSSetCBuffer(UINT start_slot);
 };

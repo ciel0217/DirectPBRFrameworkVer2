@@ -17,6 +17,7 @@ struct CAMERA_BUFFER
 	matrix InverseView;
 	matrix Projection;
 	matrix InverseProjection;
+	matrix InverseVP;
 	matrix WVP; //2D—p
 };
 

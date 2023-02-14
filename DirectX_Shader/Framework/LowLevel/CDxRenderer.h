@@ -116,6 +116,7 @@ public:
 	void SetVertexShader(ID3D11VertexShader* vs);
 	void SetPixelShader(ID3D11PixelShader* ps);
 	void SetGeometryShader(ID3D11GeometryShader* gs);
+	void SetComputeShader(ID3D11ComputeShader* cs);
 
 	void SetVertexBuffer(ID3D11Buffer* VertexBuffer, UINT VertexSize);
 	void SetIndexBuffer(ID3D11Buffer* IndexBuffer);

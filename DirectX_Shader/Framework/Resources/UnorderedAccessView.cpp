@@ -1,12 +1,12 @@
 #include "UnorderedAccessView.h"
 
 
-UnorededAccessView * UnorededAccessView::CreateUnorderedAccessView(UINT ByteWidth, UINT NumElements, D3D11_UAV_DIMENSION Dimension, UINT MiscFlags, const void * Data, UINT BindFlags)
+UnorderedAccessView * UnorderedAccessView::CreateUnorderedAccessView(UINT ByteWidth, UINT NumElements, D3D11_UAV_DIMENSION Dimension, UINT MiscFlags, const void * Data, UINT BindFlags)
 {
 	D3D11_BUFFER_DESC desc = {};
 	desc.BindFlags = BindFlags;
 	desc.MiscFlags = MiscFlags;
-	desc.CPUAccessFlags = 0;
+	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	desc.ByteWidth = ByteWidth * NumElements;
 	desc.Usage = D3D11_USAGE_DYNAMIC;
 	desc.StructureByteStride = ByteWidth;
@@ -47,10 +47,10 @@ UnorededAccessView * UnorededAccessView::CreateUnorderedAccessView(UINT ByteWidt
 		return nullptr;
 	}
 
-	return new UnorededAccessView(uav, buffer, 0);
+	return new UnorderedAccessView(uav, buffer, 0);
 }
 
-UnorededAccessView * UnorededAccessView::CreateUnorderedAccessView(ID3D11Buffer * Buffer, UINT NumElements, D3D11_UAV_DIMENSION Dimension = D3D11_UAV_DIMENSION_BUFFER)
+UnorderedAccessView * UnorderedAccessView::CreateUnorderedAccessView(ID3D11Buffer * Buffer, UINT NumElements, D3D11_UAV_DIMENSION Dimension = D3D11_UAV_DIMENSION_BUFFER)
 {
 	HRESULT hr;
 
@@ -69,9 +69,10 @@ UnorededAccessView * UnorededAccessView::CreateUnorderedAccessView(ID3D11Buffer 
 		return nullptr;
 	}
 
-	return new UnorededAccessView(uav, Buffer, 0);
+	return new UnorderedAccessView(uav, Buffer, 0);
 }
 
-void UnorededAccessView::CopyBuffer(void * Data)
+void UnorderedAccessView::CSSetUnorderedAccessView(UINT StartSlot)
 {
+	CDxRenderer::GetRenderer()->GetDeviceContext()->CSSetUnorderedAccessViews(StartSlot, 1, m_UAV.GetAddressOf(), nullptr);
 }

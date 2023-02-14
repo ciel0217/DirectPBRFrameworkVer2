@@ -23,6 +23,8 @@ class SkyBox;
 class GBufferPass;
 class CRenderer;
 class StructuredBuffer;
+class UnorderedAccessView;
+class CShader;
 
 class CameraRenderer {
 
@@ -31,32 +33,28 @@ private:
 	static std::unique_ptr<CPostEffect>  m_ToneMapPass;
 	static std::unique_ptr<ManagerLight> m_LightPass;
 	static std::unique_ptr<GBufferPass>  m_GBufferPass;
+	static std::unique_ptr<CBuffer>		 m_CameraCBuffer;
 
-	static std::unique_ptr<StructuredBuffer> m_FrustumStructuredBuffer;
-	static std::unique_ptr<CBuffer>			m_FrustumCullInfoCBuffer;
+	static std::unique_ptr<StructuredBuffer>	m_FrustumStructuredBuffer;
+	static std::unique_ptr<CBuffer>				m_FrustumCullInfoCBuffer;
+	static std::unique_ptr<UnorderedAccessView> m_FrustumCullUAVBuffer;
+	static std::shared_ptr<CShader>				m_CSShader;
+
 	static const unsigned int MAX_CULLING_OBJECT = 1000;
 
-	static std::unique_ptr<CBuffer>			m_CameraCBuffer;
-
 	SkyBox*				  m_SkyBox;
-	
 	RenderPattern			   m_RenderPattern;
-
-	//std::list<CRenderer *> m_GameObjects2D;			//2dのオブジェクト
-	//std::list<CRenderer *> m_GameObjectsOpacity;		//不透明なオブジェクト
-	//std::list<CRenderer *> m_GameObjectsTransparent;	//透明 or 半透明なオブジェクト
 	
-	//std::list<std::shared_ptr<CMaterial>> m_MaterialList;
 	std::list<std::tuple<CRenderer*, unsigned int, std::shared_ptr<CMaterial>>> m_TransparentList;
 	std::list<std::tuple<CRenderer*, unsigned int, std::shared_ptr<CMaterial>>> m_SpriteList;
 	std::list<std::tuple<CRenderer*, unsigned int, std::shared_ptr<CMaterial>>> m_OpacityList;
 
-
 	std::list<CPostEffect *> m_PostEffectToOpacity;
 	std::list<CPostEffect *> m_PostEffectToAll;
 
+
 	int m_TagMask = TAG_EVERYTHING;
-	D3DXVECTOR3 m_CameraPos;
+	CAMERA_INFO m_CameraInfoValue;
 
 	void CalcRenderingOrder(std::list<CGameObject *> gameobject[]);
 	void CalcCulling(std::list<std::tuple<CRenderer*, unsigned int, std::shared_ptr<CMaterial>>> gameobject, int* result);
@@ -130,4 +128,6 @@ public:
 
 		return nullptr;
 	}
+
+	CAMERA_INFO GetCameraInfo() { return m_CameraInfoValue; }
 };
