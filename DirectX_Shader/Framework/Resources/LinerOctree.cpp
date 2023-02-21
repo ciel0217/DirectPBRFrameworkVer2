@@ -11,6 +11,11 @@ void LinerOctree::Init()
 
 	m_SpaceNum = (POWER_NUMBER[m_DimensionLevel + 1] - 1) / 7;
 	m_ObjectList.reserve(m_SpaceNum);
+
+	for (auto list : m_ObjectList)
+	{
+		list.reserve(100);
+	}
 }
 
 void LinerOctree::ClearList()
@@ -140,9 +145,6 @@ void LinerOctree::CalcOctree(CGameObject * object)
 	//Ž¸”s
 	if (space_num > m_SpaceNum)
 		return;
-
-	
-
 
 	m_ObjectList[space_num].push_back(object);
 
