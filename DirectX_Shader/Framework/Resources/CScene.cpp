@@ -73,7 +73,7 @@ void CScene::Update()
 		for (auto gameobject : m_GameObjects[i])
 		{
 			gameobject->Update();
-			if (eMaxLayer == e3DObject && m_LinerOctree.get())
+			if (m_LinerOctree.get())
 				m_LinerOctree->CalcOctree(gameobject);
 		}
 	}

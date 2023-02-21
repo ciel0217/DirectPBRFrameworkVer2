@@ -9,7 +9,7 @@
 std::map<std::string, CShader*> ManagerShader:: m_ShaderList;
 const std::string ManagerShader::m_ShaderName[SHADER_MAX] =
 { "Shader/ParticleRender.hlsl","Shader/Deferred.hlsl","Shader/2DTexture.hlsl", "Shader/DefaultModel.hlsl", "Shader/CubeMap.hlsl", "Shader/ToneMap.hlsl"
-, "Shader/IrradianceMap.hlsl", "Shader/SpecularMap.hlsl", "Shader/BrdfLUT.hlsl", "Shader/Ocean.hlsl", "Shader/shader.hlsl"};
+, "Shader/IrradianceMap.hlsl", "Shader/SpecularMap.hlsl", "Shader/BrdfLUT.hlsl", "Shader/Ocean.hlsl", "Shader/shader.hlsl", "Shader/FrustumCull.hlsl"};
 
 void ManagerShader::LoadVertexShader(std::string name)
 {
@@ -21,7 +21,8 @@ void ManagerShader::LoadVertexShader(std::string name)
 	hr = D3DX11CompileFromFile(name.c_str(), NULL, NULL, "VS_main", "vs_4_0", D3D10_SHADER_DEBUG | D3D10_SHADER_SKIP_OPTIMIZATION, 0, NULL, &pVSBlob, &pErrorBlob, NULL);
 	
 	if (FAILED(hr))
-		MessageBox(NULL, (char*)pErrorBlob->GetBufferPointer(), "VS", MB_OK | MB_ICONERROR);
+		return;
+		//MessageBox(NULL, (char*)pErrorBlob->GetBufferPointer(), "VS", MB_OK | MB_ICONERROR);
 	
 
 	ID3D11VertexShader* shader;
@@ -52,7 +53,8 @@ void ManagerShader::LoadPixelShader(std::string name)
 
 	hr = D3DX11CompileFromFile(name.c_str(), NULL, NULL, "PS_main", "ps_4_0", D3D10_SHADER_DEBUG | D3D10_SHADER_SKIP_OPTIMIZATION, 0, NULL, &pPSBlob, &pErrorBlob, NULL);
 	if (FAILED(hr))
-		MessageBox(NULL, (char*)pErrorBlob->GetBufferPointer(), "PS", MB_OK | MB_ICONERROR);
+		return;
+		//MessageBox(NULL, (char*)pErrorBlob->GetBufferPointer(), "PS", MB_OK | MB_ICONERROR);
 	
 
 	ID3D11PixelShader* shader;

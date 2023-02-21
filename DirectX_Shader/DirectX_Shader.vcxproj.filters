@@ -412,5 +412,6 @@
       <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="Shader\ParticleRender.hlsl" />
+    <FxCompile Include="Shader\FrustumCull.hlsl" />
   </ItemGroup>
 </Project>

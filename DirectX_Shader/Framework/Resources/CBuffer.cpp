@@ -51,3 +51,8 @@ void CBuffer::GSSetCBuffer(UINT start_slot)
 {
 	CDxRenderer::GetRenderer()->GetDeviceContext()->GSSetConstantBuffers(start_slot, 1, m_CBuffer.GetAddressOf());
 }
+
+void CBuffer::CSSetCBuffer(UINT start_slot)
+{
+	CDxRenderer::GetRenderer()->GetDeviceContext()->CSSetConstantBuffers(start_slot, 1, m_CBuffer.GetAddressOf());
+}

@@ -50,13 +50,13 @@ UnorderedAccessView * UnorderedAccessView::CreateUnorderedAccessView(UINT ByteWi
 	return new UnorderedAccessView(uav, buffer, 0);
 }
 
-UnorderedAccessView * UnorderedAccessView::CreateUnorderedAccessView(ID3D11Buffer * Buffer, UINT NumElements, D3D11_UAV_DIMENSION Dimension = D3D11_UAV_DIMENSION_BUFFER)
+UnorderedAccessView * UnorderedAccessView::CreateUnorderedAccessView(ID3D11Buffer * Buffer, UINT NumElements, D3D11_UAV_DIMENSION Dimension)
 {
 	HRESULT hr;
 
-	D3D11_UNORDERED_ACCESS_VIEW_DESC desc;
+	D3D11_UNORDERED_ACCESS_VIEW_DESC desc = {};
 	desc.ViewDimension = Dimension;
-	desc.Format = DXGI_FORMAT_R16G16B16A16_UINT;
+	desc.Format = DXGI_FORMAT_UNKNOWN;
 	desc.Buffer.FirstElement = 0;
 	desc.Buffer.NumElements = NumElements;
 	

@@ -19,6 +19,8 @@ private:
 
 	std::vector<std::vector<CGameObject*>> m_ObjectList;
 
+	void CreateNewSpace(DWORD Elem);
+
 	// ƒrƒbƒg•ªŠ„ŠÖ”
 	DWORD BitSeparateFor3D(BYTE n)
 	{

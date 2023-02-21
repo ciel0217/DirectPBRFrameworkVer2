@@ -22,6 +22,8 @@ protected:
 	D3DXQUATERNION m_Rotation = D3DXQUATERNION(0.0f, 0.0f, 0.0f, 1.0f);
 
 public:
+	ObbCollision(CGameObject* self) : CCollision(self){}
+
 	void UpdateCollision()override;
 	CollisionType GetCollisionType()override { return eObbCollision; }
 
@@ -31,5 +33,7 @@ public:
 
 	D3DXVECTOR3 GetObbSize() { return m_ObbSize; }
 	D3DXVECTOR3 GetCenterPosition() { return m_CenterPosition; }
+
+	D3DXQUATERNION GetRotation() { return m_Rotation; }
 
 };

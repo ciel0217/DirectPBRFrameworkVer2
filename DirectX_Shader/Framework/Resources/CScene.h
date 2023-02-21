@@ -26,6 +26,7 @@ public:
 	CScene()
 	{ 
 		m_ManagerCollisionDetection = ManagerCollisionDetection::GetInstance();
+		m_LinerOctree.reset(new LinerOctree(6, D3DXVECTOR3(-20000.0f, -20000.0f, -20000.0f), D3DXVECTOR3(20000.0f, 20000.0f, 20000.0f)));
 	}
 	virtual void SetObject() = 0;
 	virtual void Config();

@@ -1,10 +1,14 @@
 #include "Test3D.h"
 #include "Framework/Manager/ManagerMaterial.h"
 #include "Framework/Manager/ManagerInput.h"
+#include "Framework/Resources/ObbCollision.h"
 
 void Test3D::Config()
 {
 	SetUpModel("Asset/model/Sphere.obj", this);
+	m_Collision = new ObbCollision(this);
+	
+
 	MATERIAL_CBUFFER value;
 	ZeroMemory(&value, sizeof(MATERIAL_CBUFFER));
 	value.Metaric = 0;
@@ -35,5 +39,5 @@ void Test3D::Update()
 	{
 		m_Position.z -= 0.5f;
 	}
-	
+	m_Collision->UpdateCollision();
 }

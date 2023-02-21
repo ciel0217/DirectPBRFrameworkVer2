@@ -59,7 +59,7 @@ void CameraRenderer::SetUpCameraRenderer()
 		));
 
 	if (!m_CSShader)
-		m_CSShader.reset(ManagerShader::GetShader("FrustumCull.hlsl"));
+		m_CSShader.reset(ManagerShader::GetShader("Shader/FrustumCull.hlsl"));
 
 	if (!m_CameraCBuffer)
 		m_CameraCBuffer.reset(new CBuffer(CBuffer::CreateBuffer(sizeof(CAMERA_CBUFFER), D3D11_BIND_CONSTANT_BUFFER, nullptr)));
