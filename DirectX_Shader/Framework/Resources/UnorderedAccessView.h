@@ -28,6 +28,7 @@ public:
 		data = (T*)sub_res.pData;
 
 		CDxRenderer::GetRenderer()->GetDeviceContext()->Unmap(m_Buffer.Get(), 0);
+
 		memcpy(Data, data, sizeof(T) * NumElements);
 	}
 

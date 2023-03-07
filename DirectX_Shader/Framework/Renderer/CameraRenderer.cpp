@@ -231,21 +231,16 @@ void CameraRenderer::CalcCulling(std::list<std::tuple<CRenderer*, unsigned int, 
 		str_buf.push_back({D3DXVECTOR4(position3.x, position3.y, position3.z, 1.0f), D3DXVECTOR4(scale3.x, scale3.y, scale3.z, 1.0f) });
 	}
 
-	//m_FrustumStructuredBuffer->UpdateBuffer(str_buf.data(), str_buf.size());
-	//m_FrustumStructuredBuffer->CSSetStructuredBuffer(0);
+	m_FrustumStructuredBuffer->UpdateBuffer(str_buf.data(), str_buf.size());
+	m_FrustumStructuredBuffer->CSSetStructuredBuffer(0);
 
-	//CDxRenderer::GetRenderer()->SetComputeShader(m_CSShader->GetShaderCS().Get());
-	//m_FrustumCullUAVBuffer->CSSetUnorderedAccessView(0);
-	////コンピュートシェーダー実行
-	//CDxRenderer::GetRenderer()->GetDeviceContext()->Dispatch(32, 1, 1);
+	CDxRenderer::GetRenderer()->SetComputeShader(m_CSShader->GetShaderCS().Get());
+	m_FrustumCullUAVBuffer->CSSetUnorderedAccessView(0);
+	//コンピュートシェーダー実行
+	CDxRenderer::GetRenderer()->GetDeviceContext()->Dispatch(32, 1, 1);
 	
-	/*int *res = new int();
-	m_FrustumCullUAVBuffer->CopyBuffer(res, MAX_CULLING_OBJECT);
+	m_FrustumCullUAVBuffer->CopyBuffer(result, gameobject.size());
 
-
-
-
-	delete res;*/
 }
 
 void CameraRenderer::ClearGameObjectList()
@@ -259,12 +254,17 @@ void CameraRenderer::ClearGameObjectList()
 void CameraRenderer::DrawGBuffer()
 {
 	int size = m_OpacityList.size();
-	int* result = new int(size);
+	int* result = new int[size];
 
 	CalcCulling(m_OpacityList, result);
 
+	int index = 0;
+
 	for (auto obj : m_OpacityList) {
-		std::get<0>(obj)->Draw(std::get<1>(obj));
+		if (result[index] == 1)
+			std::get<0>(obj)->Draw(std::get<1>(obj));
+		
+		index++;
 	}
 
 	delete[] result;
@@ -273,12 +273,17 @@ void CameraRenderer::DrawGBuffer()
 void CameraRenderer::DrawTransparent()
 {
 	int size = m_TransparentList.size();
-	int* result = new int(size);
+	int* result = new int[size];
 
 	CalcCulling(m_TransparentList, result);
 
+	int index = 0;
+
 	for (auto obj : m_TransparentList) {
-		std::get<0>(obj)->Draw(std::get<1>(obj));
+		if(result[index] == 1)
+			std::get<0>(obj)->Draw(std::get<1>(obj));
+		
+		index++;
 	}
 
 

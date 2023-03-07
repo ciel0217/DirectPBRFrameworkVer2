@@ -18,11 +18,11 @@ struct CSInput
 StructuredBuffer<FrustumCullStructuredBuffer> SBuffer : register(t0);
 RWStructuredBuffer<int> Result : register(u0);
 
-#define size_x    32
-#define size_y      1
-#define size_z      1
+#define SIZE_X    32
+#define SIZE_Y     1
+#define SIZE_Z     1
 
-[numthreads(size_x, size_y, size_z)]
+[numthreads(SIZE_X, SIZE_Y, SIZE_Z)]
 
 void CS_Main(const CSInput input)
 {
