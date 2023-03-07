@@ -18,14 +18,17 @@ public:
 	static UnorderedAccessView* CreateUnorderedAccessView(ID3D11Buffer* Buffer, UINT NumElements, D3D11_UAV_DIMENSION Dimension = D3D11_UAV_DIMENSION_BUFFER);
 
 	template<typename T>
-	void CopyBuffer(T* Data)
+	void CopyBuffer(T* Data, unsigned int NumElements)
 	{
+		T* data;
 		D3D11_MAPPED_SUBRESOURCE sub_res;
 		ZeroMemory(&sub_res, sizeof(D3D11_MAPPED_SUBRESOURCE));
+		HRESULT hr;
+		hr = CDxRenderer::GetRenderer()->GetDeviceContext()->Map(m_Buffer.Get(), 0, D3D11_MAP_READ, 0, &sub_res);
+		data = (T*)sub_res.pData;
 
-		CDxRenderer::GetRenderer()->GetDeviceContext()->Map(m_Buffer.Get(), 0, D3D11_MAP_READ, 0, &sub_res);
-		Data = (T*)sub_res.pData;
 		CDxRenderer::GetRenderer()->GetDeviceContext()->Unmap(m_Buffer.Get(), 0);
+		memcpy(Data, data, sizeof(T) * NumElements);
 	}
 
 	void CSSetUnorderedAccessView(UINT StartSlot);

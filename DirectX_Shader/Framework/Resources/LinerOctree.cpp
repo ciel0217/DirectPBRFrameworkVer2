@@ -5,26 +5,39 @@
 #include "ObbCollision.h"
 
 
+LinerOctree::~LinerOctree()
+{
+	for (unsigned int i = 0; i < m_SpaceNum; i++)
+	{
+		m_ObjectList[i].clear();
+		m_ObjectList[i].shrink_to_fit();
+	}
+
+	m_ObjectList.clear();
+	m_ObjectList.shrink_to_fit();
+}
+
 void LinerOctree::Init()
 {
 	m_UnitLen = (m_Max - m_Min) / (float)(1 << m_DimensionLevel);
 
-	m_SpaceNum = (POWER_NUMBER[m_DimensionLevel + 1] - 1) / 7;
-	m_ObjectList.reserve(m_SpaceNum);
+	if (m_DimensionLevel >= MAX_DIMENSION_LEVEL)
+		return;
 
-	for (auto list : m_ObjectList)
+	m_SpaceNum = (POWER_NUMBER[m_DimensionLevel + 1] - 1) / 7;
+	m_ObjectList.resize(m_SpaceNum);
+
+	for (unsigned int i = 0; i < m_SpaceNum; i++)
 	{
-		list.reserve(100);
+		m_ObjectList[i].reserve(100);
 	}
+
 }
 
 void LinerOctree::ClearList()
 {
-	for (auto list : m_ObjectList)
-	{
-		list.clear();
-	}
-	m_ObjectList.clear();
+	for (unsigned int i = 0; i < m_SpaceNum; i++)
+		m_ObjectList[i].clear();
 }
 
 void LinerOctree::CalcOctree(CGameObject * object)
@@ -150,7 +163,4 @@ void LinerOctree::CalcOctree(CGameObject * object)
 
 }
 
-void LinerOctree::CreateNewSpace(DWORD Elem)
-{
 
-}

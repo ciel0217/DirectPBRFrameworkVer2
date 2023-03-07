@@ -19,7 +19,7 @@
 #include <memory>
 
 #define VIEW_NEAR_Z (0.3f)
-#define VIEW_FAR_Z  (10000000.0f)
+#define VIEW_FAR_Z  (100000.0f)
 
 std::unique_ptr<DeferredRenderer>         CameraRenderer::m_DeferredRenderPass = nullptr;
 std::unique_ptr<CPostEffect>             CameraRenderer::m_ToneMapPass = nullptr;
@@ -231,17 +231,21 @@ void CameraRenderer::CalcCulling(std::list<std::tuple<CRenderer*, unsigned int, 
 		str_buf.push_back({D3DXVECTOR4(position3.x, position3.y, position3.z, 1.0f), D3DXVECTOR4(scale3.x, scale3.y, scale3.z, 1.0f) });
 	}
 
-	m_FrustumStructuredBuffer->UpdateBuffer(str_buf.data(), str_buf.size());
-	m_FrustumStructuredBuffer->CSSetStructuredBuffer(0);
+	//m_FrustumStructuredBuffer->UpdateBuffer(str_buf.data(), str_buf.size());
+	//m_FrustumStructuredBuffer->CSSetStructuredBuffer(0);
 
-	CDxRenderer::GetRenderer()->SetComputeShader(m_CSShader->GetShaderCS().Get());
-	m_FrustumCullUAVBuffer->CSSetUnorderedAccessView(0);
-	//コンピュートシェーダー実行
-	CDxRenderer::GetRenderer()->GetDeviceContext()->Dispatch(10, 1, 1);
+	//CDxRenderer::GetRenderer()->SetComputeShader(m_CSShader->GetShaderCS().Get());
+	//m_FrustumCullUAVBuffer->CSSetUnorderedAccessView(0);
+	////コンピュートシェーダー実行
+	//CDxRenderer::GetRenderer()->GetDeviceContext()->Dispatch(32, 1, 1);
 	
+	/*int *res = new int();
+	m_FrustumCullUAVBuffer->CopyBuffer(res, MAX_CULLING_OBJECT);
 
 
 
+
+	delete res;*/
 }
 
 void CameraRenderer::ClearGameObjectList()

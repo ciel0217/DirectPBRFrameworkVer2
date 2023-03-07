@@ -53,7 +53,7 @@ UnorderedAccessView * UnorderedAccessView::CreateUnorderedAccessView(UINT ByteWi
 UnorderedAccessView * UnorderedAccessView::CreateUnorderedAccessView(ID3D11Buffer * Buffer, UINT NumElements, D3D11_UAV_DIMENSION Dimension)
 {
 	HRESULT hr;
-
+	
 	D3D11_UNORDERED_ACCESS_VIEW_DESC desc = {};
 	desc.ViewDimension = Dimension;
 	desc.Format = DXGI_FORMAT_UNKNOWN;
@@ -74,5 +74,5 @@ UnorderedAccessView * UnorderedAccessView::CreateUnorderedAccessView(ID3D11Buffe
 
 void UnorderedAccessView::CSSetUnorderedAccessView(UINT StartSlot)
 {
-	CDxRenderer::GetRenderer()->GetDeviceContext()->CSSetUnorderedAccessViews(StartSlot, 1, m_UAV.GetAddressOf(), nullptr);
+	CDxRenderer::GetRenderer()->GetDeviceContext()->CSSetUnorderedAccessViews(StartSlot, 1, m_UAV.GetAddressOf(), 0);
 }

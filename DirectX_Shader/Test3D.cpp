@@ -5,14 +5,15 @@
 
 void Test3D::Config()
 {
-	SetUpModel("Asset/model/Sphere.obj", this);
+	SetUpModel("Asset/model/enemy.obj", this);
 	m_Collision = new ObbCollision(this);
 	
 
 	MATERIAL_CBUFFER value;
 	ZeroMemory(&value, sizeof(MATERIAL_CBUFFER));
-	value.Metaric = 0;
-	value.Roughness = 0;
+	value.Metaric = 0.5f;
+	value.Roughness = 0.5;
+	value.UseAlbedoTex = 1;
 	m_Material[0]->SetMaterialValue(value);
 	m_Count = 0;
 	m_Count2 = 0;

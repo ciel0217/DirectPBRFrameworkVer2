@@ -13,7 +13,7 @@
 void TestScene::SetObject()
 {
 	m_CurrentMainCamera = AddGameObject<GameSceneCamera>(eBackMost);
-	AddGameObject<Test3D>(e3DObject)->SetInitPosition(D3DXVECTOR3(0.0f, 0.0f, 20.0f));
+	AddGameObject<Test3D>(e3DObject)->SetInitPosition(D3DXVECTOR3(0.0f, 0.0f, 100.0f));
 	/*Test2D* test2d = AddGameObject<Test2D>(e2DObject);
 	test2d->SetInitPosition(D3DXVECTOR3(250.0f, 250.0f, 0.0f));
 	test2d->SetInitScale(D3DXVECTOR3(500.0f, 500.0f, 0.0f));*/

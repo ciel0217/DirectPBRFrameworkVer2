@@ -126,7 +126,7 @@ Output_PS PS_main(Output_VS vs)
 		float3 numerator = d * g * f;
 		float denominator = 4.0f * saturate(surf.NdotV) * saturate(light_info.NdotL);
 		float3 specularBRDF = numerator / max(denominator, 0.001f);
-		specularBRDF *= 0.1;
+		//specularBRDF *= 0.1;
 		Lo += (kd * albedo / PI + specularBRDF) * Lights[i].Diffuse.rgb * light_info.Attenuation * saturate(light_info.NdotL);
 		
 	}

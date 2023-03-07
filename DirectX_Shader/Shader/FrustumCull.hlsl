@@ -18,7 +18,7 @@ struct CSInput
 StructuredBuffer<FrustumCullStructuredBuffer> SBuffer : register(t0);
 RWStructuredBuffer<int> Result : register(u0);
 
-#define size_x    1000
+#define size_x    32
 #define size_y      1
 #define size_z      1
 
@@ -26,5 +26,7 @@ RWStructuredBuffer<int> Result : register(u0);
 
 void CS_Main(const CSInput input)
 {
+	uint id = input.dispatch.x;
 
+	Result[id] = id;
 }

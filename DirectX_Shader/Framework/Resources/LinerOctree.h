@@ -19,8 +19,6 @@ private:
 
 	std::vector<std::vector<CGameObject*>> m_ObjectList;
 
-	void CreateNewSpace(DWORD Elem);
-
 	// ƒrƒbƒg•ªŠ„ŠÖ”
 	DWORD BitSeparateFor3D(BYTE n)
 	{
@@ -50,6 +48,7 @@ private:
 public:
 	LinerOctree() = delete;
 	LinerOctree(int level, D3DXVECTOR3 min, D3DXVECTOR3 max) : m_DimensionLevel(level), m_Min(min), m_Max(max) {};
+	~LinerOctree();
 
 	void Init();
 
