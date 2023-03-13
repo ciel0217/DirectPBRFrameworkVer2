@@ -140,6 +140,5 @@ struct FrustumCullStructuredBuffer
 
 struct FrustumCullCameraCBuffer
 {
-	D3DXVECTOR4 Position;
-	D3DMATRIX InvVPMatrix;
+	D3DXVECTOR4 Planes[6];
 };

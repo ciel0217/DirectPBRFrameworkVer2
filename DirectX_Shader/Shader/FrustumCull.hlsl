@@ -15,6 +15,16 @@ struct CSInput
 	uint3 dispatch : SV_DispatchThreadID;
 };
 
+struct CameraPlanes
+{
+	float4 Planes[6];
+};
+
+cbuffer CameraPlanes : register(b10)
+{
+	CameraPlanes CameraInfo;
+}
+
 StructuredBuffer<FrustumCullStructuredBuffer> SBuffer : register(t0);
 RWStructuredBuffer<int> Result : register(u0);
 

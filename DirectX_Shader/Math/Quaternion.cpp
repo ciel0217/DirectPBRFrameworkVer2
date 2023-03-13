@@ -105,3 +105,27 @@ D3DXQUATERNION FromToRotation(D3DXVECTOR3 from, D3DXVECTOR3 to)
 	return ret;
 }
 
+D3DXVECTOR3 QuaXVec3(D3DXQUATERNION qua, D3DXVECTOR3 vec)
+{
+	float x = qua.x * 2.0f;
+	float y = qua.y * 2.0f;
+	float z = qua.z * 2.0f;
+	float xx = qua.x * x;
+	float yy = qua.y * y;
+	float zz = qua.z * z;
+	float xy = qua.x * y;
+	float xz = qua.x * z;
+	float yz = qua.y * z;
+	float wx = qua.w * x;
+	float wy = qua.w * y;
+	float wz = qua.w * z;
+
+	D3DXVECTOR3 ret;
+	ret.x =(1.0f - (yy + zz)) * vec.x + (xy - wz) * vec.y + (xz + wy) * vec.z;
+	ret.y = (xy + wz) * vec.x + (1.0f - (xx + zz)) * vec.y + (yz - wx) * vec.z;
+	ret.z = (xz - wy) * vec.x + (yz + wx) * vec.y + (1.0f - (xx + yy)) * vec.z;
+
+
+	return ret;
+}
+

@@ -36,8 +36,9 @@ private:
 	static std::unique_ptr<CBuffer>		 m_CameraCBuffer;
 
 	static std::unique_ptr<StructuredBuffer>	m_FrustumStructuredBuffer;
-	static std::unique_ptr<CBuffer>				m_FrustumCullInfoCBuffer;
+	static std::unique_ptr<CBuffer>				m_FrustumCullCameraInfoCBuffer;
 	static std::unique_ptr<UnorderedAccessView> m_FrustumCullUAVBuffer;
+
 	static std::shared_ptr<CShader>				m_CSShader;
 
 	static const unsigned int MAX_CULLING_OBJECT = 1000;
@@ -130,4 +131,6 @@ public:
 	}
 
 	CAMERA_INFO GetCameraInfo() { return m_CameraInfoValue; }
+	void CalculateFrustumPlanes(D3DXVECTOR3 ret[6]);
+
 };
