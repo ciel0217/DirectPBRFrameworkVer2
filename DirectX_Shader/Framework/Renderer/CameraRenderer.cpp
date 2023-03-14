@@ -405,17 +405,17 @@ void CameraRenderer::CalculateFrustumPlanes(D3DXVECTOR3 ret[6])
 
 		if (i % 2 == 0)
 		{
-			a = m_CameraInfoValue.Projection._31 - m_CameraInfoValue.Projection.m[index][0];
-			b = m_CameraInfoValue.Projection._32 - m_CameraInfoValue.Projection.m[index][1];
-			c = m_CameraInfoValue.Projection._33 - m_CameraInfoValue.Projection.m[index][2];
-			d = m_CameraInfoValue.Projection._34 - m_CameraInfoValue.Projection.m[index][3];
-		}
-		else
-		{
-			a = m_CameraInfoValue.Projection._31 + m_CameraInfoValue.Projection.m[index][0];
-			b = m_CameraInfoValue.Projection._32 + m_CameraInfoValue.Projection.m[index][1];
-			c = m_CameraInfoValue.Projection._33 + m_CameraInfoValue.Projection.m[index][2];
-			d = m_CameraInfoValue.Projection._34 + m_CameraInfoValue.Projection.m[index][3];
+			a = m_CameraInfoValue.Projection._41 - m_CameraInfoValue.Projection.m[index][0];
+			b = m_CameraInfoValue.Projection._42 - m_CameraInfoValue.Projection.m[index][1];
+			c = m_CameraInfoValue.Projection._43 - m_CameraInfoValue.Projection.m[index][2];
+			d = m_CameraInfoValue.Projection._44 - m_CameraInfoValue.Projection.m[index][3];
+		}									 
+		else								 
+		{									 
+			a = m_CameraInfoValue.Projection._41 + m_CameraInfoValue.Projection.m[index][0];
+			b = m_CameraInfoValue.Projection._42 + m_CameraInfoValue.Projection.m[index][1];
+			c = m_CameraInfoValue.Projection._43 + m_CameraInfoValue.Projection.m[index][2];
+			d = m_CameraInfoValue.Projection._44 + m_CameraInfoValue.Projection.m[index][3];
 		}
 
 		ret[i] = -D3DXVECTOR3(a, b, c);
@@ -426,10 +426,10 @@ void CameraRenderer::CalculateFrustumPlanes(D3DXVECTOR3 ret[6])
 	{
 		float a, b, c, d;
 
-		a = m_CameraInfoValue.Projection._31 + m_CameraInfoValue.Projection.m[2][0];
-		b = m_CameraInfoValue.Projection._32 + m_CameraInfoValue.Projection.m[2][1];
-		c = m_CameraInfoValue.Projection._33 + m_CameraInfoValue.Projection.m[2][2];
-		d = m_CameraInfoValue.Projection._34 + m_CameraInfoValue.Projection.m[2][3];
+		a = m_CameraInfoValue.Projection._41 + m_CameraInfoValue.Projection._31;
+		b = m_CameraInfoValue.Projection._42 + m_CameraInfoValue.Projection._32;
+		c = m_CameraInfoValue.Projection._43 + m_CameraInfoValue.Projection._33;
+		d = m_CameraInfoValue.Projection._44 + m_CameraInfoValue.Projection._34;
 
 		ret[4] = -D3DXVECTOR3(a, b, c);
 		D3DXVec3Normalize(&ret[4], &ret[4]);
@@ -441,10 +441,10 @@ void CameraRenderer::CalculateFrustumPlanes(D3DXVECTOR3 ret[6])
 	{
 		float a, b, c, d;
 
-		a = m_CameraInfoValue.Projection._31 - m_CameraInfoValue.Projection.m[2][0];
-		b = m_CameraInfoValue.Projection._32 - m_CameraInfoValue.Projection.m[2][1];
-		c = m_CameraInfoValue.Projection._33 - m_CameraInfoValue.Projection.m[2][2];
-		d = m_CameraInfoValue.Projection._34 - m_CameraInfoValue.Projection.m[2][3];
+		a = m_CameraInfoValue.Projection._41 - m_CameraInfoValue.Projection._31;
+		b = m_CameraInfoValue.Projection._42 - m_CameraInfoValue.Projection._32;
+		c = m_CameraInfoValue.Projection._43 - m_CameraInfoValue.Projection._33;
+		d = m_CameraInfoValue.Projection._44 - m_CameraInfoValue.Projection._34;
 
 		ret[5] = -D3DXVECTOR3(a, b, c);
 		D3DXVec3Normalize(&ret[5], &ret[5]);

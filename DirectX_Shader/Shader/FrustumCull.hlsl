@@ -34,9 +34,69 @@ RWStructuredBuffer<int> Result : register(u0);
 
 [numthreads(SIZE_X, SIZE_Y, SIZE_Z)]
 
+float3 GetNegativePoint(uint obj_id, uint plane_id)
+{
+	FrustumCullStructuredBuffer obj = SBuffet[obj_id];
+	float4 plane = CameraInfo.Planes[plane_id];
+
+	float4 min = obj.Position - obj.Scale / 2.0;
+
+	float3 ret = min;
+	
+	if (plane.x < 0.0)
+	{
+		ret.x += obj.Scale.x;
+	}
+
+	if (plane.y < 0.0)
+	{
+		ret.y += obj.Scale.y;
+	}
+
+	if (plane.z < 0.0)
+	{
+		ret.z += obj.Scale.z;
+	}
+
+	return ret;
+}
+
+float3 GetPositivePoint(uint id)
+{
+	FrustumCullStructuredBuffer obj = SBuffet[obj_id];
+	float4 plane = CameraInfo.Planes[plane_id];
+
+	float4 min = obj.Position - obj.Scale / 2.0;
+
+	float3 ret = float3(min);
+
+	if (plane.x > 0.0)
+	{
+		ret.x += obj.Scale.x;
+	}
+
+	if (plane.y > 0.0)
+	{
+		ret.y += obj.Scale.y;
+	}
+
+	if (plane.z > 0.0)
+	{
+		ret.z += obj.Scale.z;
+	}
+
+	return ret;
+}
+
+
 void CS_Main(const CSInput input)
 {
 	uint id = input.dispatch.x;
 
+	for (int i = 0; i < 6; i++)
+	{
+		float3 np = GetNegativePosition(id, i);
+	}
+	
 	Result[id] = id;
 }
