@@ -36,7 +36,7 @@ private:
 	static std::unique_ptr<CBuffer>		 m_CameraCBuffer;
 
 	static std::unique_ptr<StructuredBuffer>	m_FrustumStructuredBuffer;
-	static std::unique_ptr<CBuffer>				m_FrustumCullCameraInfoCBuffer;
+	static std::unique_ptr<StructuredBuffer>	m_FrustumCullCameraPlanesStructuredBuffer;
 	static std::unique_ptr<UnorderedAccessView> m_FrustumCullUAVBuffer;
 
 	static std::shared_ptr<CShader>				m_CSShader;
@@ -68,6 +68,7 @@ private:
 	void DrawPostEffectToOpacity();
 	void DrawPostEffectToAll();
 
+	D3DXVECTOR3 CalcPlane(D3DXVECTOR3 a, D3DXVECTOR3 b, D3DXVECTOR3 c);
 
 public:
 	static void SetUpCameraRenderer();
@@ -102,7 +103,6 @@ public:
 	}
 
 	void SetVPCBuffer(D3DXVECTOR3 pos, D3DXVECTOR3 lookat, D3DXVECTOR3 up);
-	void SetVPCIdentity();
 
 	template <typename T>
 	T* GetPostEffect(PostEffectType type)
@@ -131,6 +131,6 @@ public:
 	}
 
 	CAMERA_INFO GetCameraInfo() { return m_CameraInfoValue; }
-	void CalculateFrustumPlanes(D3DXVECTOR3 ret[6]);
+	void CalculateFrustumPlanes(PLANE ret[6]);
 
 };

@@ -6,9 +6,9 @@ UnorderedAccessView * UnorderedAccessView::CreateUnorderedAccessView(UINT ByteWi
 	D3D11_BUFFER_DESC desc = {};
 	desc.BindFlags = BindFlags;
 	desc.MiscFlags = MiscFlags;
-	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
 	desc.ByteWidth = ByteWidth * NumElements;
-	desc.Usage = D3D11_USAGE_DYNAMIC;
+	desc.Usage = D3D11_USAGE_DEFAULT;
 	desc.StructureByteStride = ByteWidth;
 
 	HRESULT hr;
@@ -33,7 +33,7 @@ UnorderedAccessView * UnorderedAccessView::CreateUnorderedAccessView(UINT ByteWi
 	}
 
 	D3D11_UNORDERED_ACCESS_VIEW_DESC uav_desc = {};
-	uav_desc.Format = DXGI_FORMAT_R16G16B16A16_UINT;
+	uav_desc.Format = DXGI_FORMAT_UNKNOWN;
 	uav_desc.ViewDimension = Dimension;
 	uav_desc.Buffer.FirstElement = 0;
 	uav_desc.Buffer.NumElements = NumElements;

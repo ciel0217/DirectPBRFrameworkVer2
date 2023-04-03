@@ -49,7 +49,7 @@ public:
 			for (auto camera : m_SceneCameras) {
 				camera->SetSkyBox((SkyBox*)obj);
 			}
-			//return obj;
+			return obj;
 		}
 
 		m_GameObjects[layer].push_back(obj);

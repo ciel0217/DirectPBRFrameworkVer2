@@ -38,7 +38,7 @@ void Test3D::Update()
 {
 	if (ManagerInput::GetInstance()->GetKeyboardPress(DIK_RETURN))
 	{
-		m_Position.z -= 0.5f;
+		m_Position.y -= 0.5f;
 	}
 	m_Collision->UpdateCollision();
 }

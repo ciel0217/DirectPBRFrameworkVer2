@@ -99,6 +99,18 @@ struct CAMERA_CBUFFER
 	D3DMATRIX TransWVP;
 };
 
+struct PLANE
+{
+	D3DXVECTOR4 Normal;
+	float Distance;
+	float Dummy[3];
+};
+
+struct CAMERA_PLANES
+{
+	PLANE Planes[6];
+};
+
 struct CAMERA_INFO
 {
 	D3DXVECTOR4 CameraPos;
@@ -138,7 +150,3 @@ struct FrustumCullStructuredBuffer
 	D3DXVECTOR4 Scale;
 };
 
-struct FrustumCullCameraCBuffer
-{
-	D3DXVECTOR4 Planes[6];
-};

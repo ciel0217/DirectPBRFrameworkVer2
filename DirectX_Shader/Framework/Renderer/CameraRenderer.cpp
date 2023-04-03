@@ -29,7 +29,7 @@ std::unique_ptr<ManagerLight>		      CameraRenderer::m_LightPass = nullptr;
 std::unique_ptr<GBufferPass>			  CameraRenderer::m_GBufferPass = nullptr;
 
 std::unique_ptr<StructuredBuffer>			CameraRenderer::m_FrustumStructuredBuffer = nullptr;
-std::unique_ptr<CBuffer>					CameraRenderer::m_FrustumCullCameraInfoCBuffer = nullptr;
+std::unique_ptr<StructuredBuffer>			CameraRenderer::m_FrustumCullCameraPlanesStructuredBuffer = nullptr;
 std::unique_ptr<UnorderedAccessView>		CameraRenderer::m_FrustumCullUAVBuffer = nullptr;
 std::shared_ptr<CShader>					CameraRenderer::m_CSShader = nullptr;
 
@@ -50,13 +50,13 @@ void CameraRenderer::SetUpCameraRenderer()
 	if (!m_FrustumStructuredBuffer)
 		m_FrustumStructuredBuffer.reset(StructuredBuffer::CreateStructuredBuffer(sizeof(FrustumCullStructuredBuffer), MAX_CULLING_OBJECT));
 
-	if (!m_FrustumCullCameraInfoCBuffer)
-		m_FrustumCullCameraInfoCBuffer.reset(new CBuffer(CBuffer::CreateBuffer(sizeof(FrustumCullCameraCBuffer), D3D11_BIND_CONSTANT_BUFFER, nullptr)));
+	if (!m_FrustumCullCameraPlanesStructuredBuffer)
+		m_FrustumCullCameraPlanesStructuredBuffer.reset(StructuredBuffer::CreateStructuredBuffer(sizeof(PLANE), 6));
 
 	if (!m_FrustumCullUAVBuffer)
 		m_FrustumCullUAVBuffer.reset(UnorderedAccessView::CreateUnorderedAccessView
 		(
-			m_FrustumStructuredBuffer->GetStructuredBuffer(),
+			sizeof(int),
 			MAX_CULLING_OBJECT
 		));
 
@@ -222,32 +222,31 @@ void CameraRenderer::CalcRenderingOrder(std::list<CGameObject *> gameobject[])
 
 void CameraRenderer::CalcCulling(std::list<std::tuple<CRenderer*, unsigned int, std::shared_ptr<CMaterial>>> gameobject, int* result)
 {
+	CDxRenderer::GetRenderer()->SetComputeShader(m_CSShader->GetShaderCS().Get());
+
 	std::vector<FrustumCullStructuredBuffer> str_buf;
 	str_buf.reserve(gameobject.size());
 
 	for (auto obj : gameobject)
 	{
-		D3DXVECTOR3 position3 = ((CommonProcess*)std::get<0>(obj))->GetPosition();
-		D3DXVECTOR3 scale3 = ((CommonProcess*)std::get<0>(obj))->GetScale();
+		CGameObject* a = std::get<0>(obj)->GetSelf();
+		D3DXVECTOR3 position3 = a->GetPosition();
+		//TODO : meshのboundsにする
+		D3DXVECTOR3 scale3 = D3DXVECTOR3(34.0f, 40.0f, 40.0f);
 
 		str_buf.push_back({D3DXVECTOR4(position3.x, position3.y, position3.z, 1.0f), D3DXVECTOR4(scale3.x, scale3.y, scale3.z, 1.0f) });
 	}
 
 	m_FrustumStructuredBuffer->UpdateBuffer(str_buf.data(), str_buf.size());
-	m_FrustumStructuredBuffer->CSSetStructuredBuffer(0);
+	m_FrustumStructuredBuffer->CSSetStructuredBuffer(3);
 
-	D3DXVECTOR3 planes[6];
+	PLANE	planes[6];
 	CalculateFrustumPlanes(planes);
 
-	D3DXVECTOR4 info[6];
-	for (int i = 0; i < 6; i++)
-	{
-		info[i] = D3DXVECTOR4(planes[i].x, planes[i].y, planes[i].z, 1.0f);
-	}
-	m_FrustumCullCameraInfoCBuffer->UpdateBuffer(info);
-	m_FrustumCullCameraInfoCBuffer->CSSetCBuffer(10);
+	m_FrustumCullCameraPlanesStructuredBuffer->UpdateBuffer(planes, 6);
+	m_FrustumCullCameraPlanesStructuredBuffer->CSSetStructuredBuffer(4);
 
-	CDxRenderer::GetRenderer()->SetComputeShader(m_CSShader->GetShaderCS().Get());
+	
 	m_FrustumCullUAVBuffer->CSSetUnorderedAccessView(0);
 	//コンピュートシェーダー実行
 	CDxRenderer::GetRenderer()->GetDeviceContext()->Dispatch(32, 1, 1);
@@ -273,11 +272,14 @@ void CameraRenderer::DrawGBuffer()
 
 	int index = 0;
 
-	for (auto obj : m_OpacityList) {
-		
-		std::get<0>(obj)->Draw(std::get<1>(obj));
-		
-		
+	for (auto obj : m_OpacityList) 
+	{
+		if (result[index] == 6)
+			std::get<0>(obj)->Draw(std::get<1>(obj));
+		else
+			int a = 0;
+
+		index++;
 	}
 
 	delete[] result;
@@ -292,13 +294,18 @@ void CameraRenderer::DrawTransparent()
 
 	int index = 0;
 
-	for (auto obj : m_TransparentList) {
-	
-		std::get<0>(obj)->Draw(std::get<1>(obj));
-		
-		
-	}
+	if (m_SkyBox)
+		m_SkyBox->Draw(0);
 
+	for (auto obj : m_TransparentList)
+	{
+		if (result[index] == 6)
+			std::get<0>(obj)->Draw(std::get<1>(obj));
+		else
+			int a = 0;
+
+		index++;
+	}
 
 	delete[] result;
 }
@@ -325,6 +332,17 @@ void CameraRenderer::DrawPostEffectToAll()
 	for (auto effect : m_PostEffectToAll) {
 		effect->Draw();
 	}
+}
+
+D3DXVECTOR3 CameraRenderer::CalcPlane(D3DXVECTOR3 a, D3DXVECTOR3 b, D3DXVECTOR3 c)
+{
+	D3DXVECTOR3 ab = b - a;
+	D3DXVECTOR3 ac = c - a;
+
+	D3DXVECTOR3 ret;
+	D3DXVec3Cross(&ret, &ab, &ac);
+
+	return ret;
 }
 
 
@@ -362,7 +380,7 @@ void CameraRenderer::SetVPCBuffer(D3DXVECTOR3 pos, D3DXVECTOR3 lookat, D3DXVECTO
 	D3DXMatrixInverse(&mtxInverseView, NULL, &mtxView);
 	camera_cbuffer.InverseView = mtxInverseView;
 
-	D3DXMatrixPerspectiveFovLH(&mtxProjection, 1.0f, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, VIEW_NEAR_Z, VIEW_FAR_Z);
+	D3DXMatrixPerspectiveFovLH(&mtxProjection, 1.04f, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, VIEW_NEAR_Z, VIEW_FAR_Z);
 	m_CameraInfoValue.Projection = mtxProjection;
 
 	D3DXMatrixTranspose(&mtxTransProj, &mtxProjection);
@@ -392,64 +410,120 @@ void CameraRenderer::SetVPCBuffer(D3DXVECTOR3 pos, D3DXVECTOR3 lookat, D3DXVECTO
 
 //戻り値: [0] = Left, [1] = Right, [2] = Down, [3] = Up, [4] = Near, [5] = Far
 //法線を返す
-void CameraRenderer::CalculateFrustumPlanes(D3DXVECTOR3 ret[6])
+void CameraRenderer::CalculateFrustumPlanes(PLANE ret[6])
 {
 
-	for (int i = 0; i < 4; i++)
+	D3DXMATRIX vp, view, proj;
+	view = m_CameraInfoValue.View;
+	proj = m_CameraInfoValue.Projection;
+	//D3DXMatrixTranspose(&view, &view);
+	//D3DXMatrixTranspose(&proj, &proj);
+	D3DXMatrixMultiply(&vp, &view, &proj);
+	D3DXMatrixInverse(&vp, NULL, &vp);
+	
+	D3DXVECTOR3 frustum_corners[8], normal[6];
+	frustum_corners[0] = D3DXVECTOR3(-1, -1, 0);
+	frustum_corners[1] = D3DXVECTOR3(1, -1, 0);
+	frustum_corners[2] = D3DXVECTOR3(-1, 1, 0);
+	frustum_corners[3] = D3DXVECTOR3(1, 1, 0);
+	frustum_corners[4] = D3DXVECTOR3(-1, -1, 1);
+	frustum_corners[5] = D3DXVECTOR3(1, -1, 1);
+	frustum_corners[6] = D3DXVECTOR3(-1, 1, 1);
+	frustum_corners[7] = D3DXVECTOR3(1, 1, 1);
+
+	for (int i = 0; i < 8; i++)
+		D3DXVec3TransformCoord(&frustum_corners[i], &frustum_corners[i], &vp);
+
+	normal[0] = CalcPlane(frustum_corners[4], frustum_corners[0], frustum_corners[2]);
+	normal[1] = CalcPlane(frustum_corners[1], frustum_corners[5], frustum_corners[7]);
+	normal[2] = CalcPlane(frustum_corners[4], frustum_corners[1], frustum_corners[0]);
+	normal[3] = CalcPlane(frustum_corners[2], frustum_corners[3], frustum_corners[6]);
+	normal[4] = CalcPlane(frustum_corners[0], frustum_corners[1], frustum_corners[2]);
+	normal[5] = CalcPlane(frustum_corners[6], frustum_corners[7], frustum_corners[5]);
+
+	for (int i = 0; i < 6; i++)
 	{
-		//平面の方程式参照
-		//ax * by + cz + d = 0
-		float a, b, c, d;
-		
-		int index = i / 2;
-
-		if (i % 2 == 0)
-		{
-			a = m_CameraInfoValue.Projection._41 - m_CameraInfoValue.Projection.m[index][0];
-			b = m_CameraInfoValue.Projection._42 - m_CameraInfoValue.Projection.m[index][1];
-			c = m_CameraInfoValue.Projection._43 - m_CameraInfoValue.Projection.m[index][2];
-			d = m_CameraInfoValue.Projection._44 - m_CameraInfoValue.Projection.m[index][3];
-		}									 
-		else								 
-		{									 
-			a = m_CameraInfoValue.Projection._41 + m_CameraInfoValue.Projection.m[index][0];
-			b = m_CameraInfoValue.Projection._42 + m_CameraInfoValue.Projection.m[index][1];
-			c = m_CameraInfoValue.Projection._43 + m_CameraInfoValue.Projection.m[index][2];
-			d = m_CameraInfoValue.Projection._44 + m_CameraInfoValue.Projection.m[index][3];
-		}
-
-		ret[i] = -D3DXVECTOR3(a, b, c);
-		D3DXVec3Normalize(&ret[i], &ret[i]);
+		D3DXVec3Normalize(&normal[i], &normal[i]);
+		ret[i].Normal = D3DXVECTOR4(normal[i].x, normal[i].y, normal[i].z, 1.0f);
+		if (i < 4)
+			ret[i].Distance = 0.0f;
+		else if (i == 4)
+			ret[i].Distance = VIEW_NEAR_Z;
+		else
+			ret[i].Distance = VIEW_FAR_Z;
+			
 	}
 
-	//near
-	{
-		float a, b, c, d;
+	//for (int i = 0; i < 4; i++)
+	//{
+	//	//平面の方程式参照
+	//	//ax * by + cz + d = 0
+	//	float a, b, c, d;
+	//	
+	//	int index = i / 2;
+	//	
+	//	
+	//	if (i % 2 == 0)
+	//	{
+	//	
+	//		a = proj._41 - proj.m[index][0];
+	//		b = proj._42 - proj.m[index][1];
+	//		c = proj._43 - proj.m[index][2];
+	//		d = proj._44 - proj.m[index][3];
+	//	}									 
+	//	else								 
+	//	{				
+	//	
+	//		a = proj._41 + proj.m[index][0];
+	//		b = proj._42 + proj.m[index][1];
+	//		c = proj._43 + proj.m[index][2];
+	//		d = proj._44 + proj.m[index][3];
+	//	}
+	//	
 
-		a = m_CameraInfoValue.Projection._41 + m_CameraInfoValue.Projection._31;
-		b = m_CameraInfoValue.Projection._42 + m_CameraInfoValue.Projection._32;
-		c = m_CameraInfoValue.Projection._43 + m_CameraInfoValue.Projection._33;
-		d = m_CameraInfoValue.Projection._44 + m_CameraInfoValue.Projection._34;
+	///*	D3DXVec4Normalize(&ret[i].Normal, &ret[i].Normal);
 
-		ret[4] = -D3DXVECTOR3(a, b, c);
-		D3DXVec3Normalize(&ret[4], &ret[4]);
-		
-		ret[4] = QuaXVec3(((Camera*)this)->GetRotation(), ret[4]);
-	}
+	//	D3DXVECTOR4 v = view.m[3];
+	//	ret[i].Distance = -D3DXVec4Dot(&ret[i].Normal, &v);*/
 
-	//far
-	{
-		float a, b, c, d;
+	//	D3DXVECTOR3 normal  = D3DXVECTOR3(a, b, c);
+	//	D3DXVec3Normalize(&normal, &normal);
+	//	ret[i].Normal = D3DXVECTOR4(normal.x, normal.y, normal.z, 1.0f);
+	//	ret[i].Distance = d;
+	//}
 
-		a = m_CameraInfoValue.Projection._41 - m_CameraInfoValue.Projection._31;
-		b = m_CameraInfoValue.Projection._42 - m_CameraInfoValue.Projection._32;
-		c = m_CameraInfoValue.Projection._43 - m_CameraInfoValue.Projection._33;
-		d = m_CameraInfoValue.Projection._44 - m_CameraInfoValue.Projection._34;
+	////near
+	//{
+	//	float a, b, c, d;
 
-		ret[5] = -D3DXVECTOR3(a, b, c);
-		D3DXVec3Normalize(&ret[5], &ret[5]);
+	//	a = proj._41 + proj._31;
+	//	b = proj._42 + proj._32;
+	//	c = proj._43 + proj._33;
+	//	d = proj._44 + proj._34;
 
-		ret[5] = QuaXVec3(((Camera*)this)->GetRotation(), ret[5]);
-	}
+	//	D3DXVECTOR3 normal = D3DXVECTOR3(a, b, c);
+	//	D3DXVec3Normalize(&normal, &normal);
+	//	
+	//	 normal = QuaXVec3(((Camera*)this)->GetRotation(), normal);
+	//	 ret[4].Normal = D3DXVECTOR4(normal.x, normal.y, normal.z, 1.0f);
+	//	 ret[4].Distance = VIEW_NEAR_Z;
+	//}
+	//int hh = 0;
+	////far
+	//{
+	//	float a, b, c, d;
+
+	//	a = proj._41 - proj._31;
+	//	b = proj._42 - proj._32;
+	//	c = proj._43 - proj._33;
+	//	d = proj._44 - proj._34;
+
+	//	D3DXVECTOR3 normal = D3DXVECTOR3(a, b, c);
+	//	D3DXVec3Normalize(&normal, &normal);
+
+	//	normal = QuaXVec3(((Camera*)this)->GetRotation(), normal);
+	//	ret[5].Normal = D3DXVECTOR4(normal.x, normal.y, normal.z, 1.0f);
+	//	ret[5].Distance = VIEW_FAR_Z;
+	//}
 }
 

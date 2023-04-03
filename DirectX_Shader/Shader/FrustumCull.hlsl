@@ -15,33 +15,28 @@ struct CSInput
 	uint3 dispatch : SV_DispatchThreadID;
 };
 
-struct CameraPlanes
+struct Plane
 {
-	float4 Planes[6];
+	float4 Normal;
+	float Distance;
+	float Dummy[3];
 };
 
-cbuffer CameraPlanes : register(b10)
-{
-	CameraPlanes CameraInfo;
-}
 
-StructuredBuffer<FrustumCullStructuredBuffer> SBuffer : register(t0);
+StructuredBuffer<FrustumCullStructuredBuffer> SBuffer : register(t3);
+StructuredBuffer<Plane> CameraPlaneSBuffer : register(t4);
 RWStructuredBuffer<int> Result : register(u0);
 
-#define SIZE_X    32
-#define SIZE_Y     1
-#define SIZE_Z     1
 
-[numthreads(SIZE_X, SIZE_Y, SIZE_Z)]
 
-float3 GetNegativePoint(uint obj_id, uint plane_id)
+//指定された平面に一番近い点を計算するための関数
+float3 GetNegativePoint(uint obj_id, float4 plane)
 {
-	FrustumCullStructuredBuffer obj = SBuffet[obj_id];
-	float4 plane = CameraInfo.Planes[plane_id];
+	FrustumCullStructuredBuffer obj = SBuffer[obj_id];
 
 	float4 min = obj.Position - obj.Scale / 2.0;
 
-	float3 ret = min;
+	float3 ret = min.xyz;
 	
 	if (plane.x < 0.0)
 	{
@@ -61,14 +56,14 @@ float3 GetNegativePoint(uint obj_id, uint plane_id)
 	return ret;
 }
 
-float3 GetPositivePoint(uint id)
+//指定された平面から一番遠い点を計算するための関数
+float3 GetPositivePoint(uint obj_id, float4 plane)
 {
-	FrustumCullStructuredBuffer obj = SBuffet[obj_id];
-	float4 plane = CameraInfo.Planes[plane_id];
+	FrustumCullStructuredBuffer obj = SBuffer[obj_id];
 
 	float4 min = obj.Position - obj.Scale / 2.0;
 
-	float3 ret = float3(min);
+	float3 ret = min.xyz;
 
 	if (plane.x > 0.0)
 	{
@@ -88,15 +83,38 @@ float3 GetPositivePoint(uint id)
 	return ret;
 }
 
+float GetDistanceToPoint(float3 obj_point, float4 normal, float distance)
+{
+	return dot(normal.xyz, obj_point) + distance;
+}
 
+#define SIZE_X    32
+#define SIZE_Y     1
+#define SIZE_Z     1
+
+[numthreads(SIZE_X, SIZE_Y, SIZE_Z)]
 void CS_Main(const CSInput input)
 {
 	uint id = input.dispatch.x;
-
+	int count = 0;
+	float3 np, pp;
 	for (int i = 0; i < 6; i++)
 	{
-		float3 np = GetNegativePosition(id, i);
+		int c = 0;
+		float4 normal = CameraPlaneSBuffer[i].Normal;
+		float distance = CameraPlaneSBuffer[i].Distance;
+		np = GetNegativePoint(id, normal);
+		pp = GetPositivePoint(id, normal);
+
+		if (GetDistanceToPoint(np, normal, distance) > 0)
+			c = 1;
+
+		if (GetDistanceToPoint(pp, normal, distance) > 0)
+			c= 1;
+		count += c;
 	}
 	
-	Result[id] = id;
+	Result[id] = count;
+	
+
 }

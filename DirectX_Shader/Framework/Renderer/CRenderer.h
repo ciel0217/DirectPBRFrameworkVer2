@@ -32,4 +32,5 @@ public:
 	virtual void Draw(unsigned int index) = 0;
 
 	std::vector<unsigned int> GetMaterialIds() { return m_MaterialIds; }
+	CGameObject* GetSelf() { return m_Self; }
 };

@@ -454,15 +454,19 @@ std::pair<std::shared_ptr<Mesh>, std::vector<unsigned int>> ManagerModel::Load(s
 		std::vector<unsigned int> material_nums;
 
 		material_nums.reserve(8);
+
+		std::vector<VERTEX_3D> vertex_copy{ &model.VertexArray[0], &model.VertexArray[0] + model.VertexNum };
+		mesh->SetVertexArray(vertex_copy);
+
 		for (unsigned int i = 0; i < model.SubsetNum; i++)
 		{
 			unsigned int start_index = model.SubsetArray[i].StartIndex;
 			unsigned int index_num = model.SubsetArray[i].IndexNum;
 
 			std::vector<unsigned int> index_copy{ &model.IndexArray[start_index], &model.IndexArray[start_index] + index_num };
-			std::vector<VERTEX_3D> vertex_copy{ &model.VertexArray[0], &model.VertexArray[0] + model.VertexNum };
+			
 			mesh->SetIndexArray(index_copy, i);
-			mesh->SetVertexArray(vertex_copy);
+			
 
 			MATERIAL_CBUFFER material_value = model.SubsetArray[i].Material.Material;
 
