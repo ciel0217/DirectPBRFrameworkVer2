@@ -51,7 +51,6 @@ Output_PS PS_main(Output_VS vs)
 	float reinhard = luminance / (luminance + 1);
 	output.color = float4(color * (reinhard / luminance), 1.0f);
 
-	
 
 	return output;
 

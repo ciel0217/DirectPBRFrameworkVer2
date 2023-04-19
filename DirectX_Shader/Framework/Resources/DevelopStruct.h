@@ -23,6 +23,8 @@ struct VERTEX_3D
 struct LIGHT {
 	D3DXVECTOR4 Direction;	// ライトの方向
 	D3DXVECTOR4 Position;	// ライトの位置
+	D3DXMATRIX	View;
+	D3DXMATRIX	Projection;
 	D3DXCOLOR	Diffuse;	// 拡散光の色
 	D3DXCOLOR   Ambient;	// 環境光の色
 	float		Attenuation;// 減衰率
@@ -63,7 +65,8 @@ struct LIGHTFLAGS
 struct LIGHT_CBUFFER
 {
 	D3DXCOLOR GlobalAmbient;
-	LIGHT Lights[10];
+	int LightCount;
+	int Dummy[3];
 };
 
 struct DEFERRED_CBUFFER

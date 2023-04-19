@@ -15,6 +15,8 @@ struct LIGHT
 {
 	float4		Direction;
 	float4		Position;
+	matrix		View;
+	matrix		Projection;
 	float4		Diffuse;
 	float4		Ambient;
 	float		Attenuation;
@@ -30,6 +32,7 @@ struct LIGHT
 cbuffer  LightSettingBuffer : register(b4)
 {
 	float4 GlobalAmbient;
-	LIGHT Lights[LIGHT_MAX];
+	int LightCount;
+	int Dummy[3];
 };
 

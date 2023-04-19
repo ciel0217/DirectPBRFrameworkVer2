@@ -46,9 +46,9 @@ private:
 	SkyBox*				  m_SkyBox;
 	RenderPattern			   m_RenderPattern;
 	
-	std::list<std::tuple<CRenderer*, unsigned int, std::shared_ptr<CMaterial>>> m_TransparentList;
-	std::list<std::tuple<CRenderer*, unsigned int, std::shared_ptr<CMaterial>>> m_SpriteList;
-	std::list<std::tuple<CRenderer*, unsigned int, std::shared_ptr<CMaterial>>> m_OpacityList;
+	std::list<std::tuple<CGameObject*, unsigned int, CMaterial*>> m_TransparentList;
+	std::list<std::tuple<CGameObject*, unsigned int, CMaterial*>> m_SpriteList;
+	std::list<std::tuple<CGameObject*, unsigned int, CMaterial*>> m_OpacityList;
 
 	std::list<CPostEffect *> m_PostEffectToOpacity;
 	std::list<CPostEffect *> m_PostEffectToAll;
@@ -58,7 +58,7 @@ private:
 	CAMERA_INFO m_CameraInfoValue;
 
 	void CalcRenderingOrder(std::list<CGameObject *> gameobject[]);
-	void CalcCulling(std::list<std::tuple<CRenderer*, unsigned int, std::shared_ptr<CMaterial>>> gameobject, int* result);
+	void CalcCulling(std::list<std::tuple<CGameObject*, unsigned int, CMaterial*>> gameobject, int* result);
 
 	void ClearGameObjectList();
 

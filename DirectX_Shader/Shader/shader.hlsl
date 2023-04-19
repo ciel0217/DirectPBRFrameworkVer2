@@ -1,5 +1,5 @@
 #include "common.hlsli"
-
+#include "Lighting.hlsli"
 
 struct Output_VS 
 {
@@ -7,6 +7,8 @@ struct Output_VS
 	float3 normal : NORMAL0;
 	float4 color : COLOR0;
 	float2 texcoord : TEXCOORD0;
+
+	float4 light_pos : POSITION4;
 };
 
 struct Output_PS {
@@ -14,8 +16,11 @@ struct Output_PS {
 	float4 normal : SV_Target1;
 	float4 rough_meta_spe : SV_Target2;
 	float4 emmision : SV_Target3;
+	float4 depth_shadow : SV_Target4;
 };
 
+
+StructuredBuffer<LIGHT> LightSBuffer : register(t12)
 //=============================================================================
 // 頂点シェーダ
 //=============================================================================
@@ -92,7 +97,6 @@ Output_PS PS_main(Output_VS a)
 	output.normal = float4(a.normal* 0.5f + 0.5f, 1);
 	//output.normal = float4(a.normal, 1);
 	output.rough_meta_spe = float4(Material.Roughness, Material.Metaric, Material.Specular, 1.0f);
-
 	//output.color = float4(Material.Roughness, Material.Roughness, Material.Roughness, 1.0f);
 	//output.color = float4(.0f, 0.0f, 1.0f, 1.0f);
 	return output;

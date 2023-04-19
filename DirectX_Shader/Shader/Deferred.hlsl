@@ -43,6 +43,8 @@ TextureCube		g_IrradianceTex		: register(t9);
 TextureCube		g_SpecularMap		: register(t10);
 Texture2D		g_BrdfLUTex			: register(t11);
 
+StructuredBuffer<LIGHT> LightSBuffer : register(t12);
+
 SamplerState	g_SamplerState	: register(s0);
 
 
@@ -81,6 +83,8 @@ Output_VS VS_main(
 }
 
 
+
+
 //=============================================================================
 // ピクセルシェーダ
 //=============================================================================
@@ -110,11 +114,11 @@ Output_PS PS_main(Output_VS vs)
 
 	F0 = lerp(F0, albedo, metalic);
 
-	for (int i = 0; i < LIGHT_MAX; i++) {
-		if (Lights[i].Status == LIGHT_DISABLE) 
+	for (int i = 0; i < LightCount; i++) {
+		if (LightSBuffer[i].Status == LIGHT_DISABLE)
 			continue;
 		LightingInfo light_info;
-		CalcLight(surf, Lights[i], light_info);
+		CalcLight(surf, LightSBuffer[i], light_info);
 
 		float d = NormalDistributionGGX(saturate(light_info.NdotH), roughness);
 		float g = GeometrySmith(saturate(surf.NdotV), saturate(light_info.NdotL), roughness);
@@ -127,7 +131,7 @@ Output_PS PS_main(Output_VS vs)
 		float denominator = 4.0f * saturate(surf.NdotV) * saturate(light_info.NdotL);
 		float3 specularBRDF = numerator / max(denominator, 0.001f);
 		//specularBRDF *= 0.1;
-		Lo += (kd * albedo / PI + specularBRDF) * Lights[i].Diffuse.rgb * light_info.Attenuation * saturate(light_info.NdotL);
+		Lo += (kd * albedo / PI + specularBRDF) * LightSBuffer[i].Diffuse.rgb * light_info.Attenuation * saturate(light_info.NdotL);
 		
 	}
 

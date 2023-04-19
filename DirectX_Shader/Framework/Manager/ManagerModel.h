@@ -42,28 +42,18 @@ struct MODEL
 };
 
 
-
-
-
-struct DX11_MODEL
-{
-	Mesh* ModelMesh;
-	std::vector<unsigned int> MaterialNums;
-};
-
 class CBuffer;
 
 class ManagerModel {
 private:
-	static std::unordered_map <std::string, std::pair<std::shared_ptr<Mesh>, std::vector<unsigned int>>> m_ModelList;
+	static std::unordered_map <std::string, std::shared_ptr<Mesh>> m_ModelList;
 	static CBuffer* m_ModelCBuffer;
 
 	static void LoadObj(const char* FileName, MODEL *Model);
 	static void LoadMaterial(char* File, MODEL_MATERIAL **MaterialArray, unsigned int *MaterialNum);
 public:
 	static void Init();
-	static std::pair<std::shared_ptr<Mesh>, std::vector<unsigned int>> Load(std::string file);
-	static void Draw(DX11_MODEL *Model);
+	static std::shared_ptr<Mesh> Load(std::string file);
 	static void Unload();
 };
 

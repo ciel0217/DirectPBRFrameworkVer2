@@ -66,10 +66,9 @@ Output_PS PS_main(Output_VS a)
 	else
 	{
 		color = a.color;
-		color = float4(1.0f, 1.0f, 1.0f, 1.0f);
+		
 
 	}
-
 	output.color = color;
 	
 

@@ -3,8 +3,10 @@
 #include "../LowLevel/DirectX.h"
 #include "../Resources/DevelopStruct.h"
 #include "../Resources/DevelopEnum.h"
+#include "../Resources/DirectXTexture2D.h"
 
 #include <string>
+#include <memory>
 
 //1パス目に使用するテクスチャーの数
 #define RENDER_TARGET_NUM 4
@@ -46,6 +48,7 @@ private:
 	
 	ID3D11Texture2D* m_DepthTexture = NULL;
 
+	std::unique_ptr<DirectXTexture2D> m_DepthShadowTexture;
 	//0 : color 1 : Normal, 2 : r:roughness g:metaric b:specular 3:Emission + (lightmaps) 4 中間バッファー
 	RenderTarget m_RenderTargets[RENDER_TARGET_NUM + 1];
 
@@ -105,7 +108,6 @@ public:
 	};
 
 	ID3D11Buffer* CreateIndexBuffer(UINT IndexNum, UINT* Index);
-	ID3D11UnorderedAccessView* CreateUnorderedAccessView(D3D11_UNORDERED_ACCESS_VIEW_DESC Desc, const void *Data);
 
 
 	ID3D11Device* GetDevice() { return m_D3DDevice.Get(); }

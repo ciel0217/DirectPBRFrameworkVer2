@@ -43,8 +43,8 @@ void SpriteRenderer::SetUpMaterial(std::string texture_name, std::string shader_
 	CShader* shader = ManagerShader::GetShader(shader_name);
 	
 	unsigned int material_id = ManagerMaterial::CreateMaterial(e2D, shader, texture, material_name);
-	m_MaterialIds.reserve(1);
-	m_MaterialIds.push_back(material_id);
+	m_Materials[0] = new CMaterial();
+	ManagerMaterial::GetMaterial(material_id, m_Materials[0]);
 }
 
 void SpriteRenderer::SetUpMaterial(ID3D11ShaderResourceView * texture, std::string shader_name, std::string material_name)
@@ -52,8 +52,8 @@ void SpriteRenderer::SetUpMaterial(ID3D11ShaderResourceView * texture, std::stri
 	CShader* shader = ManagerShader::GetShader(shader_name);
 
 	unsigned int material_id = ManagerMaterial::CreateMaterial(e2D, shader, texture, material_name);
-	m_MaterialIds.reserve(1);
-	m_MaterialIds.push_back(material_id);
+	m_Materials[0] = new CMaterial();
+	ManagerMaterial::GetMaterial(material_id, m_Materials[0]);
 }
 
 void SpriteRenderer::Draw(unsigned int index)
@@ -62,7 +62,7 @@ void SpriteRenderer::Draw(unsigned int index)
 		D3DXVECTOR3 position = m_Self->GetPosition();
 		D3DXQUATERNION rot = m_Self->GetRotation();
 		D3DXVECTOR3 scale = m_Self->GetScale()/2.0f;
-		std::shared_ptr<CMaterial> renderer_material = ManagerMaterial::GetMaterial(m_MaterialIds[index]);
+		CMaterial* renderer_material = m_Materials[0];
 
 		MATERIAL_CBUFFER material = renderer_material->GetMaterialValue();
 		material.BaseColor = m_TextureColor;

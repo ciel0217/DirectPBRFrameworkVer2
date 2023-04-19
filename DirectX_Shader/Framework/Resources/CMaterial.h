@@ -43,7 +43,11 @@ public:
 		m_MaterialValue.UseAlbedoTex = 1;
 	}
 
-	void SetMaterialValue(MATERIAL_CBUFFER value) { m_MaterialValue = value; }
+	void SetAllMaterialValue(MATERIAL_CBUFFER value) { m_MaterialValue = value; }
+	void SetIntValue(std::string parameter_name, int value);
+	void SetFloatValue(std::string parameter_name, float value);
+	void SetColorValue(std::string parameter_name, D3DXCOLOR value);
+
 	MATERIAL_CBUFFER GetMaterialValue() { return m_MaterialValue; }
 	
 	unsigned int GetMaterialId() { return m_MaterialId; }

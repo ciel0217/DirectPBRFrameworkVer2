@@ -5,20 +5,14 @@
 
 void Test3D::Config()
 {
-	SetUpModel("Asset/model/enemy.obj", this);
+	std::vector<std::string> materials_name;
+	materials_name.push_back({ "enemy:lambert2SG" });
+	SetUpModel("Asset/model/enemy.obj", materials_name);
 	m_Collision = new ObbCollision(this);
-	
 
-	MATERIAL_CBUFFER value;
-	ZeroMemory(&value, sizeof(MATERIAL_CBUFFER));
-	value.Metaric = 0.5f;
-	value.Roughness = 0.5;
-	value.UseAlbedoTex = 1;
-	m_Material[0]->SetMaterialValue(value);
-	m_Count = 0;
-	m_Count2 = 0;
-	m_Count3 = 0;
-	m_Start = 0;
+	m_Materials[0]->SetFloatValue("Metaric", 0.5f);
+	m_Materials[0]->SetFloatValue("Roughness", 0.5f);
+
 }
 
 void Test3D::Init()

@@ -8,6 +8,7 @@
 #include "../LowLevel/CDxRenderer.h"
 #include "../Resources/StructuredBuffer.h"
 #include "../Resources/CShader.h"
+#include <algorithm>
 
 
 void ParticleRenderer::SetUpMaterial(int render_queue, std::string material_name, std::string shader_name, std::string texture_name, MATERIAL_CBUFFER material_value)
@@ -15,11 +16,12 @@ void ParticleRenderer::SetUpMaterial(int render_queue, std::string material_name
 	CShader* shader = ManagerShader::GetShader(shader_name);
 	ID3D11ShaderResourceView* texture = ManagerTexture::LoadTexture(texture_name);
 	unsigned int id = ManagerMaterial::CreateMaterial(render_queue, shader, texture, material_name);
-	m_MaterialIds.push_back(id);
 
-	m_CMaterial = new CMaterial();
-	memcpy(m_CMaterial, ManagerMaterial::GetMaterial(id).get(), sizeof(CMaterial));
-	m_CMaterial->SetMaterialValue(material_value);
+	CMaterial *a = new CMaterial();
+	ManagerMaterial::GetMaterial(id, a);
+	m_Materials.push_back(a);
+
+	m_Materials[0]->SetAllMaterialValue(material_value);
 
 }
 
@@ -29,11 +31,60 @@ void ParticleRenderer::CreateStructuredBuffer(UINT MaxNumElements)
 	m_StructuredBuffer.reset(StructuredBuffer::CreateStructuredBuffer(sizeof(ParticleStructuredBuffer), MaxNumElements));
 }
 
+D3DXVECTOR3 ParticleRenderer::GetBounds()
+{
+	std::vector<CParticle*> particle_list = ((ParticleSystem*)this)->GetParticleList();
+
+	auto x_bounds = std::minmax_element(particle_list.begin(), particle_list.end(),
+		[](CParticle* a, CParticle* b) 
+		{ 
+			if (a->GetIsDeath() || b->GetIsDeath())
+				return false;
+				
+			return a->GetPosition().x < b->GetPosition().x;
+		});
+
+	auto y_bounds = std::minmax_element(particle_list.begin(), particle_list.end(),
+		[](CParticle* a, CParticle* b)
+		{
+			if (a->GetIsDeath() || b->GetIsDeath())
+				return false;
+
+			return a->GetPosition().y < b->GetPosition().y;
+		});
+
+	auto z_bounds = std::minmax_element(particle_list.begin(), particle_list.end(),
+		[](CParticle* a, CParticle* b)
+		{
+			if (a->GetIsDeath() || b->GetIsDeath())
+				return false;
+
+			return a->GetPosition().z < b->GetPosition().z;
+		});
+
+
+	D3DXVECTOR3 min = D3DXVECTOR3
+	(
+		(*x_bounds.first)->GetPosition().x - (*x_bounds.first)->GetScale().x / 2.0f, 
+		(*y_bounds.first)->GetPosition().y - (*y_bounds.first)->GetScale().y / 2.0f,
+		(*z_bounds.first)->GetPosition().z - (*z_bounds.first)->GetScale().z / 2.0f
+	);
+
+	D3DXVECTOR3 max = D3DXVECTOR3
+	(
+		(*x_bounds.second)->GetPosition().x + (*x_bounds.second)->GetScale().x / 2.0f,
+		(*y_bounds.second)->GetPosition().y + (*y_bounds.second)->GetScale().y / 2.0f,
+		(*z_bounds.second)->GetPosition().z + (*z_bounds.second)->GetScale().z / 2.0f
+	);
+
+	return max-min;
+}
+
 void ParticleRenderer::Draw(unsigned int index)
 {
 	//このやり方よくないのかな...
 	std::vector<CParticle*> particle_list = ((ParticleSystem*)this)->GetParticleList();
-	CShader* shader = m_CMaterial->GetShader();
+	CShader* shader = m_Materials[0]->GetShader();
 	
 	Camera* camera = ManagerScene::GetInstance()->GetCurrentSceneCamera();
 
@@ -91,7 +142,7 @@ void ParticleRenderer::Draw(unsigned int index)
 	m_StructuredBuffer->UpdateBuffer(particle_buffer.data(), particle_buffer.size());
 	m_StructuredBuffer->GSSetStructuredBuffer(2);
 
-	m_MaterialCBuffer->UpdateBuffer(&m_CMaterial->GetMaterialValue());
+	m_MaterialCBuffer->UpdateBuffer(&m_Materials[0]->GetMaterialValue());
 	m_MaterialCBuffer->PSSetCBuffer(3);
 
 	// プリミティブトポロジ設定
@@ -99,7 +150,7 @@ void ParticleRenderer::Draw(unsigned int index)
 
 
 	CDxRenderer::GetRenderer()->SetCullingMode(CULL_MODE_NONE);
-	CDxRenderer::GetRenderer()->GetDeviceContext()->PSSetShaderResources(0, 1, m_CMaterial->GetAlbedoTexture().GetAddressOf());
+	CDxRenderer::GetRenderer()->GetDeviceContext()->PSSetShaderResources(0, 1, m_Materials[0]->GetAlbedoTexture().GetAddressOf());
 	CDxRenderer::GetRenderer()->GetDeviceContext()->DrawInstanced(4, particle_buffer.size(), 0, 0);
 
 	//カリングを元に戻す

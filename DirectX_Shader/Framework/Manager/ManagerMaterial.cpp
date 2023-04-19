@@ -6,12 +6,20 @@
 std::unordered_map<unsigned int, std::shared_ptr<CMaterial>> ManagerMaterial::m_MaterialList;
 
 
-std::shared_ptr<CMaterial> ManagerMaterial::GetMaterial(unsigned int material_id)
+void ManagerMaterial::GetMaterial(unsigned int material_id, CMaterial* material)
 {
 	if (m_MaterialList.count(material_id) != 0) {
-		return m_MaterialList[material_id];
+
+		memcpy(material, m_MaterialList[material_id].get(), sizeof(CMaterial));
 	}
-	return nullptr;
+	return;
+}
+
+void ManagerMaterial::GetMaterial(std::string name, CMaterial* material)
+{
+	unsigned int hash = std::hash<std::string>()(name);
+	GetMaterial(hash, material);
+	return;
 }
 
 //マテリアル名が一緒だと同じHash値になっちゃう
@@ -32,6 +40,7 @@ unsigned int ManagerMaterial::CreateMaterial(int render, MATERIAL_CBUFFER materi
 	bool can_set = SetMaterial(material, hash);
 
 	return can_set ? hash : 0;
+
 }
 
 

@@ -8,8 +8,8 @@
 //テキスト管理のほうがいいかも
 std::map<std::string, CShader*> ManagerShader:: m_ShaderList;
 const std::string ManagerShader::m_ShaderName[SHADER_MAX] =
-{  "Shader/FrustumCull.hlsl","Shader/ParticleRender.hlsl","Shader/Deferred.hlsl","Shader/2DTexture.hlsl", "Shader/DefaultModel.hlsl", "Shader/CubeMap.hlsl", "Shader/ToneMap.hlsl"
-, "Shader/IrradianceMap.hlsl", "Shader/SpecularMap.hlsl", "Shader/BrdfLUT.hlsl", "Shader/Ocean.hlsl", "Shader/shader.hlsl"};
+{  "Shader/ParticleRender.hlsl","Shader/Deferred.hlsl","Shader/2DTexture.hlsl", "Shader/DefaultModel.hlsl", "Shader/CubeMap.hlsl", "Shader/ToneMap.hlsl"
+, "Shader/IrradianceMap.hlsl", "Shader/SpecularMap.hlsl", "Shader/BrdfLUT.hlsl", "Shader/Ocean.hlsl", "Shader/shader.hlsl","Shader/FrustumCull.hlsl"};
 
 void ManagerShader::LoadVertexShader(std::string name)
 {

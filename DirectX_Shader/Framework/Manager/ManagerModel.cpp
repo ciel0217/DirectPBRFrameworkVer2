@@ -15,7 +15,7 @@
 #include "../Manager/ManagerShader.h"
 #include "../Resources/DevelopEnum.h"
 
-std::unordered_map <std::string , std::pair<std::shared_ptr<Mesh>, std::vector<unsigned int>>> ManagerModel::m_ModelList;
+std::unordered_map <std::string , std::shared_ptr<Mesh>> ManagerModel::m_ModelList;
 CBuffer* ManagerModel::m_ModelCBuffer;
 
 void ManagerModel::LoadObj(const char* FileName, MODEL * Model)
@@ -437,7 +437,7 @@ void ManagerModel::Init()
 	}
 }
 
-std::pair<std::shared_ptr<Mesh>, std::vector<unsigned int>> ManagerModel::Load(std::string  file)
+std::shared_ptr<Mesh> ManagerModel::Load(std::string  file)
 {
 	if (m_ModelList.count(file) != 0) {
 		return m_ModelList[file];
@@ -481,11 +481,9 @@ std::pair<std::shared_ptr<Mesh>, std::vector<unsigned int>> ManagerModel::Load(s
 			CShader* shader = ManagerShader::GetShader("Shader/shader.hlsl");
 
 			unsigned int material_id = ManagerMaterial::CreateMaterial(eOpacity, material_value, shader, texture, material_name);
-			if (material_id == 0)continue;
-
-			material_nums.push_back(material_id);
+			
 		}
-		m_ModelList[file] = std::make_pair(mesh, material_nums);
+		m_ModelList[file] = mesh;
 	}
 	
 	delete[] model.VertexArray;
@@ -496,71 +494,8 @@ std::pair<std::shared_ptr<Mesh>, std::vector<unsigned int>> ManagerModel::Load(s
 	return m_ModelList[file];
 }
 
-void ManagerModel::Draw(DX11_MODEL *Model)
-{
-	//// 頂点バッファ設定
-	//UINT stride = sizeof(VERTEX_3D);
-	//UINT offset = 0;
-	//CDxRenderer::GetRenderer()->GetDeviceContext()->IASetVertexBuffers(0, 1, &Model->VertexBuffer, &stride, &offset);
-
-	//// インデックスバッファ設定
-	//CDxRenderer::GetRenderer()->GetDeviceContext()->IASetIndexBuffer(Model->IndexBuffer, DXGI_FORMAT_R32_UINT, 0);
-
-	//// プリミティブトポロジ設定
-	//CDxRenderer::GetRenderer()->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	//for (unsigned int i = 0; i < Model->SubsetNum; i++)
-	//{
-	//	// マテリアル設定
-	//	//CDxRenderer::GetRenderer()->SetMaterial(Model->SubsetArray[i].Material.Material);
-	//	m_ModelCBuffer->UpdateBuffer(&(Model->SubsetArray[i].Material.Material));
-	//	m_ModelCBuffer->VSSetCBuffer(3);
-	//	m_ModelCBuffer->PSSetCBuffer(3);
-
-	//	// テクスチャ設定
-	//	if (Model->SubsetArray[i].Material.Material.noTexSampling == 0)
-	//		CDxRenderer::GetRenderer()->GetDeviceContext()->PSSetShaderResources(0, 1, &Model->SubsetArray[i].Material.Texture);
-	//	if(Model->SubsetArray[i].Material.Material.UseAlbedoMap == 1)
-	//		CDxRenderer::GetRenderer()->GetDeviceContext()->PSSetShaderResources(1, 1, &Model->SubsetArray[i].Material.AlbedoTexture);
-	//	if (Model->SubsetArray[i].Material.Material.UseOccMetalRough == 1)
-	//		CDxRenderer::GetRenderer()->GetDeviceContext()->PSSetShaderResources(2, 1, &Model->SubsetArray[i].Material.OccMetalRoughTexture);
-	//	if (Model->SubsetArray[i].Material.Material.UseAoMap == 1)
-	//		CDxRenderer::GetRenderer()->GetDeviceContext()->PSSetShaderResources(3, 1, &Model->SubsetArray[i].Material.AoTexture);
-	//	if (Model->SubsetArray[i].Material.Material.UseEmmisive == 1)
-	//		CDxRenderer::GetRenderer()->GetDeviceContext()->PSSetShaderResources(4, 1, &Model->SubsetArray[i].Material.EmissiveTexture);
-	//	if (Model->SubsetArray[i].Material.Material.NormalState != NORMAL_UNUSED)
-	//		CDxRenderer::GetRenderer()->GetDeviceContext()->PSSetShaderResources(5, 1, &Model->SubsetArray[i].Material.NormalTexture);
-
-	//	// ポリゴン描画
-	//	CDxRenderer::GetRenderer()->GetDeviceContext()->DrawIndexed(Model->SubsetArray[i].IndexNum, Model->SubsetArray[i].StartIndex, 0);
-	//}
-
-	
-	
-}
 
 void ManagerModel::Unload()
 {
-	/*for (auto obj : m_ModelList) {
-		obj.second->VertexBuffer->Release();
-		obj.second->IndexBuffer->Release();
-
-
-		for (unsigned int i = 0; i < obj.second->SubsetNum; i++) {
-			obj.second->SubsetArray[i].Material.Texture->Release();
-			obj.second->SubsetArray[i].Material.AlbedoTexture->Release();
-			obj.second->SubsetArray[i].Material.OccMetalRoughTexture->Release();
-			obj.second->SubsetArray[i].Material.AoTexture->Release();
-			obj.second->SubsetArray[i].Material.EmissiveTexture->Release();
-			obj.second->SubsetArray[i].Material.NormalTexture->Release();
-
-
-		}
-		delete[] obj.second->SubsetArray;
-
-		delete obj.second;
-	}*/
-
 	m_ModelList.clear();
-
 }

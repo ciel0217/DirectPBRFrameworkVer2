@@ -1,16 +1,21 @@
 #pragma once
 //#include "CLight.h"
 #include <list>
+#include <memory>
+#include "../Resources/StructuredBuffer.h"
+#include "../Resources/CBuffer.h"
 #include "../LowLevel/DirectX.h"
 
-class CBuffer;
+class StructuredBuffer;
 class CLight;
+class CBuffer;
 
 class ManagerLight {
 private:
 	std::list<CLight*> m_Lights;
 	D3DXCOLOR m_GlobalAmbient;
-	CBuffer* m_LightCBuffer;
+	std::unique_ptr<StructuredBuffer> m_LightSBuffer;
+	std::unique_ptr<CBuffer> m_LightCBuffer;
 
 public:
 	ManagerLight();

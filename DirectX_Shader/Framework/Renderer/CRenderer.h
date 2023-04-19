@@ -5,15 +5,17 @@
 #include "../Resources/CMaterial.h"
 #include "../Resources/CBuffer.h"
 #include <vector>
+#include "../Resources/CGameObject.h"
 
 class CGameObject;
+class CMaterial;
 
 class CRenderer {
 protected:
 	bool m_IsActive = true;
 	bool m_IsVisible;
 	//ƒ}ƒeƒŠƒAƒ‹
-	std::vector<unsigned int> m_MaterialIds;
+	std::vector<CMaterial*> m_Materials;
 	CGameObject* m_Self;//this‚ÌŽž‚Ç‚¤‚·‚ê‚Î‚¦‚¦‚ñ‚â...
 
 	std::vector<Microsoft::WRL::ComPtr<ID3D11Buffer>> m_VertexBuffer;
@@ -26,11 +28,13 @@ public:
 
 	static void SetUpRenderer();
 
-	CRenderer() {}
+	CRenderer(){}
 	virtual ~CRenderer() {}
 
 	virtual void Draw(unsigned int index) = 0;
+	virtual D3DXVECTOR3 GetBounds() { return D3DXVECTOR3(1.0f, 1.0f, 1.0f); }
 
-	std::vector<unsigned int> GetMaterialIds() { return m_MaterialIds; }
+	std::vector<CMaterial*> GetMaterials() { return m_Materials; }
+	void SetSelf(CGameObject* self) { m_Self = self; }
 	CGameObject* GetSelf() { return m_Self; }
 };

@@ -170,18 +170,19 @@ void CameraRenderer::CalcRenderingOrder(std::list<CGameObject *> gameobject[])
 
 			CRenderer* object = dynamic_cast<CRenderer*>(obj);
 			if (object) {
-				std::vector<unsigned int> material_ids = object->GetMaterialIds();
+				object->SetSelf(obj);
+				std::vector<CMaterial*> materials = object->GetMaterials();
 				unsigned int material_count = 0;
-				for (auto id : material_ids) {
-					std::shared_ptr<CMaterial> material = ManagerMaterial::GetMaterial(id);
-					if (material->GetRenderQueue() <= DrawObjectRenderQueue::eOpacity) {
-						m_OpacityList.push_back(std::make_tuple(object, material_count, material));
+				for (auto mat : materials) {
+	
+					if (mat->GetRenderQueue() <= DrawObjectRenderQueue::eOpacity) {
+						m_OpacityList.push_back(std::make_tuple(obj, material_count, mat));
 					}
-					else if (material->GetRenderQueue() == DrawObjectRenderQueue::e2D) {
-						m_SpriteList.push_back(std::make_tuple(object, material_count, material));
+					else if (mat->GetRenderQueue() == DrawObjectRenderQueue::e2D) {
+						m_SpriteList.push_back(std::make_tuple(obj, material_count, mat));
 					}
 					else {
-						m_TransparentList.push_back(std::make_tuple(object, material_count, material));
+						m_TransparentList.push_back(std::make_tuple(obj, material_count, mat));
 					}
 					material_count++;
 				}
@@ -191,7 +192,7 @@ void CameraRenderer::CalcRenderingOrder(std::list<CGameObject *> gameobject[])
 	D3DXVECTOR3 pos = m_CameraInfoValue.CameraPos;
 
 	//SortÇÃóDêÊèáà ( 1 : renderqueue   2 : ÉJÉÅÉâÇ∆ÇÃãóó£(âìÇ¢ÇŸÇ§Ç™êÊÇ…ï`âÊ))
-	m_TransparentList.sort([pos](std::tuple<CRenderer*, unsigned int, std::shared_ptr<CMaterial>> a, std::tuple<CRenderer*, unsigned int, std::shared_ptr<CMaterial>> b)
+	m_TransparentList.sort([pos](std::tuple<CGameObject*, unsigned int, CMaterial*> a, std::tuple<CGameObject*, unsigned int, CMaterial*> b)
 	{
 			int a_render = std::get<2>(a)->GetRenderQueue();
 			int b_render = std::get<2>(b)->GetRenderQueue();
@@ -200,19 +201,19 @@ void CameraRenderer::CalcRenderingOrder(std::list<CGameObject *> gameobject[])
 				return a_render < b_render;
 			else
 			{
-				D3DXVECTOR3 a_dis = pos - ((CommonProcess*)std::get<0>(a))->GetPosition();
-				D3DXVECTOR3 b_dis = pos - ((CommonProcess*)std::get<0>(b))->GetPosition();
+				D3DXVECTOR3 a_dis = pos - std::get<0>(a)->GetPosition();
+				D3DXVECTOR3 b_dis = pos - std::get<0>(b)->GetPosition();
 
 				return D3DXVec3LengthSq(&a_dis) > D3DXVec3LengthSq(&b_dis);
 			}
 			
 	});
-
+	
 	//ãﬂÇ¢ÇŸÇ§Ç©ÇÁï`âÊ
-	m_OpacityList.sort([pos](std::tuple<CRenderer*, unsigned int, std::shared_ptr<CMaterial>> a, std::tuple<CRenderer*, unsigned int, std::shared_ptr<CMaterial>> b)
+	m_OpacityList.sort([pos](std::tuple<CGameObject*, unsigned int, CMaterial*> a, std::tuple<CGameObject*, unsigned int, CMaterial*> b)
 	{
-			D3DXVECTOR3 a_dis = pos - ((CommonProcess*)std::get<0>(a))->GetPosition();
-			D3DXVECTOR3 b_dis = pos - ((CommonProcess*)std::get<0>(b))->GetPosition();
+			D3DXVECTOR3 a_dis = pos - std::get<0>(a)->GetPosition();
+			D3DXVECTOR3 b_dis = pos - std::get<0>(b)->GetPosition();
 
 			return D3DXVec3LengthSq(&a_dis) < D3DXVec3LengthSq(&b_dis);
 	});
@@ -220,7 +221,7 @@ void CameraRenderer::CalcRenderingOrder(std::list<CGameObject *> gameobject[])
 	
 }
 
-void CameraRenderer::CalcCulling(std::list<std::tuple<CRenderer*, unsigned int, std::shared_ptr<CMaterial>>> gameobject, int* result)
+void CameraRenderer::CalcCulling(std::list<std::tuple<CGameObject*, unsigned int, CMaterial*>> gameobject, int* result)
 {
 	CDxRenderer::GetRenderer()->SetComputeShader(m_CSShader->GetShaderCS().Get());
 
@@ -229,10 +230,10 @@ void CameraRenderer::CalcCulling(std::list<std::tuple<CRenderer*, unsigned int, 
 
 	for (auto obj : gameobject)
 	{
-		CGameObject* a = std::get<0>(obj)->GetSelf();
-		D3DXVECTOR3 position3 = a->GetPosition();
-		//TODO : meshÇÃboundsÇ…Ç∑ÇÈ
-		D3DXVECTOR3 scale3 = D3DXVECTOR3(34.0f, 40.0f, 40.0f);
+		D3DXVECTOR3 position3 = std::get<0>(obj)->GetPosition();
+		CRenderer* render = dynamic_cast<CRenderer*>(std::get<0>(obj));
+		
+		D3DXVECTOR3 scale3 = render->GetBounds();
 
 		str_buf.push_back({D3DXVECTOR4(position3.x, position3.y, position3.z, 1.0f), D3DXVECTOR4(scale3.x, scale3.y, scale3.z, 1.0f) });
 	}
@@ -275,10 +276,10 @@ void CameraRenderer::DrawGBuffer()
 	for (auto obj : m_OpacityList) 
 	{
 		if (result[index] == 6)
-			std::get<0>(obj)->Draw(std::get<1>(obj));
-		else
-			int a = 0;
-
+		{
+			CRenderer* render = dynamic_cast<CRenderer*>(std::get<0>(obj));
+			render->Draw(std::get<1>(obj));
+		}
 		index++;
 	}
 
@@ -300,9 +301,11 @@ void CameraRenderer::DrawTransparent()
 	for (auto obj : m_TransparentList)
 	{
 		if (result[index] == 6)
-			std::get<0>(obj)->Draw(std::get<1>(obj));
-		else
-			int a = 0;
+		{
+			CRenderer* render = dynamic_cast<CRenderer*>(std::get<0>(obj));
+			render->Draw(std::get<1>(obj));
+		}
+		
 
 		index++;
 	}
@@ -312,8 +315,12 @@ void CameraRenderer::DrawTransparent()
 
 void CameraRenderer::Draw2D()
 {
-	for (auto obj : m_SpriteList) {
-		std::get<0>(obj)->Draw(std::get<1>(obj));
+	for (auto obj : m_SpriteList)
+	{
+		{
+			CRenderer* render = dynamic_cast<CRenderer*>(std::get<0>(obj));
+			render->Draw(std::get<1>(obj));
+		}
 	}
 	/*for (auto obj : m_GameObjects2D) {
 		obj->Draw();

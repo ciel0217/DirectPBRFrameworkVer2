@@ -31,35 +31,31 @@ void MeshRenderer::CalcBuffer()
 	}
 }
 
-void MeshRenderer::SetMaterialCopy(unsigned int id)
-{
-	CMaterial* material = new CMaterial();
-
-	memcpy(material, ManagerMaterial::GetMaterial(id).get(), sizeof(CMaterial));
-	m_Material.push_back(material);
-}
-
-void MeshRenderer::SetMeshAndMaterial(Mesh * mesh, std::vector<unsigned int> material_ids)
+void MeshRenderer::SetMeshAndMaterial(Mesh * mesh, std::vector<CMaterial*> materials)
 {
 	m_ModelMesh.reset(mesh);
-	m_MaterialIds.clear();
-	m_MaterialIds = material_ids;
-	m_MaterialIds.shrink_to_fit();
+
+	for (int i = 0; i < m_Materials.size(); i++)
+		delete m_Materials[i];
+
+	m_Materials.clear();
+	m_Materials = materials;
+	m_Materials.shrink_to_fit();
 
 	CalcBuffer();
 }
 
-void MeshRenderer::SetUpModel(std::string model_name, CGameObject * self)
+void MeshRenderer::SetUpModel(std::string model_name, std::vector<std::string> material_name)
 {
-	m_Self = self;
+	
+	std::shared_ptr<Mesh> model = ManagerModel::Load(model_name);
+	m_ModelMesh = model;
 
-	std::pair<std::shared_ptr<Mesh>, std::vector<unsigned int>> model = ManagerModel::Load(model_name);
-	m_MaterialIds = model.second;
-	m_ModelMesh = model.first;
-
-	for (auto id : m_MaterialIds)
+	for (unsigned int i = 0; i < material_name.size(); i++)
 	{
-		SetMaterialCopy(id);
+		CMaterial* a = new CMaterial();
+		ManagerMaterial::GetMaterial(material_name[i], a);
+		m_Materials.push_back(a);
 	}
 
 	CalcBuffer();
@@ -67,29 +63,30 @@ void MeshRenderer::SetUpModel(std::string model_name, CGameObject * self)
 
 MeshRenderer::~MeshRenderer()
 {
-	for (unsigned int i = 0; i < m_Material.size(); i++)
-	{
-		delete m_Material[i];
-	}
+	for (unsigned int i = 0; i < m_Materials.size(); i++)
+		delete m_Materials[i];
+	
 }
 
-void MeshRenderer::AddMaterial(unsigned int material_id)
+void MeshRenderer::AddMaterial(CMaterial* material)
 {
-	m_MaterialIds.push_back(material_id);
-	SetMaterialCopy(material_id);
+	m_Materials.push_back(material);
 }
 
 void MeshRenderer::DeleteMaterial(unsigned int index)
 {
-	m_MaterialIds.erase(m_MaterialIds.begin() + index);
-	m_Material.erase(m_Material.begin() + index);
+	m_Materials.erase(m_Materials.begin() + index);
 }
 
-bool MeshRenderer::ChangeMaterial(unsigned int index, unsigned int change_material_id)
+D3DXVECTOR3 MeshRenderer::GetBounds()
 {
-	if (m_MaterialIds.size() - 1 < index)return false;
-	m_MaterialIds[index] = change_material_id;
-	memcpy(m_Material[index], ManagerMaterial::GetMaterial(change_material_id).get(), sizeof(CMaterial));
+	return m_ModelMesh->GetBounds();
+}
+
+bool MeshRenderer::ChangeMaterial(unsigned int index, CMaterial* material)
+{
+	if (m_Materials.size() - 1 < index)return false;
+	m_Materials[index] = material;
 
 	return true;
 }
@@ -99,7 +96,7 @@ void MeshRenderer::Draw(unsigned int index)
 {
 
 	if (m_IsActive) {
-		CMaterial* material = m_Material[index];
+		CMaterial* material = m_Materials[index];
 		std::vector<unsigned int> indices = m_ModelMesh->GetIndexArray(index);
 
 		CShader* shader = material->GetShader();

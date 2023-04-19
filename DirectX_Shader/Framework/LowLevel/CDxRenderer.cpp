@@ -129,6 +129,9 @@ HRESULT CDxRenderer::InitRenderer()
 		}
 	}
 
+	//DepthShadowTextureçÏê¨
+	m_DepthShadowTexture.reset(DirectXTexture2D::CreateTexture(sd.BufferDesc.Width, sd.BufferDesc.Height, ));
+
 	for (int i = 0; i < RENDER_TARGET_NUM; i++) {
 		m_Rtv[i] = m_RenderTargets[i].RenderTargetView.Get();
 	}

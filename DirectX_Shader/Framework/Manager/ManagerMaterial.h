@@ -18,7 +18,9 @@ public:
 	ManagerMaterial(){}
 	~ManagerMaterial() {}
 
-	static std::shared_ptr <CMaterial> GetMaterial(unsigned int material_id);
+	static void GetMaterial(unsigned int material_id, CMaterial* material);
+	static void GetMaterial(std::string name, CMaterial* material);
+
 	static unsigned int CreateMaterial(int render, CShader* shader, ID3D11ShaderResourceView* texture, std::string name);
 	static unsigned int CreateMaterial(int render, MATERIAL_CBUFFER material_value,CShader* shader, ID3D11ShaderResourceView* texture, std::string name);
 

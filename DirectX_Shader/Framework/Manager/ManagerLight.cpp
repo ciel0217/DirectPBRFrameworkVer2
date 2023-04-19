@@ -1,19 +1,24 @@
 #include "../Manager/ManagerLight.h"
-#include "../Resources/CBuffer.h"
+
 #include "../Resources/DevelopStruct.h"
 #include "../LowLevel/CDxRenderer.h"
 #include "../Resources/CLight.h"
 
+
 ManagerLight::ManagerLight()
 {
-	if (!m_LightCBuffer) {
-		m_LightCBuffer = new CBuffer(CBuffer::CreateBuffer(sizeof(LIGHT_CBUFFER), D3D11_BIND_CONSTANT_BUFFER, nullptr));
-	}
+	if (!m_LightSBuffer) 
+		m_LightSBuffer.reset(StructuredBuffer::CreateStructuredBuffer(sizeof(LIGHT), 10));
+	
+
+	if (!m_LightCBuffer) 
+		m_LightCBuffer.reset(new CBuffer(CBuffer::CreateBuffer(sizeof(LIGHT_CBUFFER), D3D11_BIND_CONSTANT_BUFFER, nullptr)));
+	
 }
 
 ManagerLight::~ManagerLight()
 {
-	delete m_LightCBuffer;
+	
 }
 
 void ManagerLight::Config()
@@ -54,16 +59,20 @@ void ManagerLight::SetLightCBuffer()
 {
 	LIGHT_CBUFFER light_cbuffer;
 	light_cbuffer.GlobalAmbient = D3DXCOLOR(0.1f, 0.1f, 0.1f, 1.0f);
-	for (int i = 0; i < LIGHT_MAX; i++) {
-		light_cbuffer.Lights[i].Status = LIGHT_DISABLE;
-	}
-	int count = 0;
-	for (auto light : m_Lights) {
-		light_cbuffer.Lights[count++] = light->GetLight();
-	}
+	light_cbuffer.LightCount = CLight::m_LightCount;
 
 	m_LightCBuffer->UpdateBuffer(&light_cbuffer);
+	m_LightCBuffer->VSSetCBuffer(4);
 	m_LightCBuffer->PSSetCBuffer(4);
+
+	std::vector<LIGHT> lights;
+	int count = 0;
+	for (auto light : m_Lights) {
+		lights.push_back(light->GetLight());
+	}
+
+	m_LightSBuffer->UpdateBuffer(lights.data(), light_cbuffer.LightCount);
+	m_LightSBuffer->PSSetStructuredBuffer(12);
 
 	m_Lights.clear();
 }
